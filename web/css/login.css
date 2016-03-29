@@ -1,0 +1,64 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+body{
+    background-image: url('../imagenes/cube.jpg');
+}
+
+.container header{
+    border-bottom: 1px solid silver;
+    margin-bottom: 15px;
+}
+
+.container header >h1{
+    color: white;
+    font-style: italic;
+    float: left;
+}
+
+.container >section {
+    background: rgba(47,79,79,0.8);
+}
+.container .row h3{
+    color:#fff;
+}
+
+.container .row .form-group >label{
+    color: white;
+    font-size: 17px;
+    font-family: arial;
+    font-style: italic;
+}
+
+section{
+    height: auto;
+    padding-bottom: 3px;
+}
+
+img{
+    width: 70px;
+    display: block;
+    float: right;
+}
+
+@media (min-width: 400px) and (max-width: 800px) {
+    body{
+        background: -webkit-linear-gradient(left,rgb(192,192,192),rgb(105,105,105), rgba(0,0,0,255)); /*Safari 5.1-6*/
+        background: -o-linear-gradient(right,rgb(192,192,192),rgb(105,105,105), rgba(0,0,0,255)); /*Opera 11.1-12*/
+        background: -moz-linear-gradient(right,rgb(192,192,192),rgb(105,105,105), rgba(0,0,0,255)); /*Fx 3.6-15*/
+        background: linear-gradient(to right, rgb(192,192,192),rgb(105,105,105), rgba(0,0,0,255)); /*Standard*/
+    }
+    .container header{display: none;}
+
+    .container section{margin-top: 5px;}
+
+    .container section h3{display: none;}	
+
+    .container section hr{display: none;}
+
+    .container section form{margin-top: 5px;}
+
+    .container section img{display: none;}
+}
