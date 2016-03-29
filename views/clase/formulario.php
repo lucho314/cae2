@@ -1,7 +1,6 @@
 <?php
 
 use yii\widgets\ActiveForm;
-use yii\helpers\Html;
 
 $this->title = 'SGD CAE: Nueva Clase';
 ?>
@@ -18,7 +17,7 @@ $this->title = 'SGD CAE: Nueva Clase';
                 "enableAjaxValidation" => true,
             ])
     ?>
-    <h3>Clase:</h3>
+    <h3>Crear Practica:</h3>
     <hr>
     <div class="row">
         <div class="col-xs-12 col-sm-3">
@@ -29,7 +28,7 @@ $this->title = 'SGD CAE: Nueva Clase';
         </div>
         <div class="col-xs-12 col-sm-3">
             <div class="form-group">
-                <label for="seleccionar comision">Categoria:</label>
+                <label for="seleccionar comision">Categorias:</label>
                 <?= $form->field($model, 'id_categoria')->dropDownList($categoria)->label(false) ?>
             </div>
         </div>

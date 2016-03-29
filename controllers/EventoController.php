@@ -5,9 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Evento;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\Profesor;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\Response;
@@ -16,6 +14,8 @@ use yii\helpers\Html;
 use yii\data\Pagination;
 use app\models\Convocados;
 use app\models\Deporte;
+use yii\filters\AccessControl;
+use app\models\User;
 
 require 'Imprimir.php';
 
@@ -23,12 +23,49 @@ include_once '../models/Tipo_de_menu.php';
 
 class EventoController extends Controller {
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['crear','buscar','eliminar','clista','agregar','quitar','conflista','verlista','modif_agregar','modificarlista','imprimir'],
+                'rules' => [
+                    [
+                        'actions' => ['crear','buscar','eliminar','clista','agregar','quitar','conflista','verlista','modif_agregar','modificarlista','imprimir'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                          return User::isUserAdmin(Yii::$app->user->identity->id);
+                        }
+                    ],
+                            
+                    [
+                        'actions' => ['crear','buscar','eliminar','clista','agregar','quitar','conflista','verlista','modif_agregar','modificarlista','imprimir'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                            return User::isUserProfe(Yii::$app->user->identity->id);
+                        }
+
+                    ],
+                    [
+                        'actions' => ['buscar'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                            return User::isUserSubcomision(Yii::$app->user->identity->id);
+                        }
+
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'logout' => ['post'],
                 ],
             ],
         ];

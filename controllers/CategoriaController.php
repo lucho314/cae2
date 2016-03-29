@@ -8,13 +8,13 @@ use app\models\CategoriaB;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\Profesor;
-use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\Response;
 use app\models\ValidarBusqueda;
 use yii\helpers\Html;
 use yii\data\Pagination;
+use yii\filters\AccessControl;
+use app\models\User;
 
 /**
  * CategoriaController implements the CRUD actions for Categoria model.
@@ -25,10 +25,40 @@ class CategoriaController extends Controller {
 
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['crear', 'modificar', 'eliminar', 'buscar'],
+                'rules' => [
+                    [
+                        'actions' => ['crear', 'modificar', 'eliminar', 'buscar'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserAdmin(Yii::$app->user->identity->id);
+                }
+                    ],
+                    [
+                        'actions' => ['buscar'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserProfe(Yii::$app->user->identity->id);
+                }
+                    ],
+                    [
+                        'actions' => ['buscar'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserSubcomision(Yii::$app->user->identity->id);
+                }
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -57,10 +87,10 @@ class CategoriaController extends Controller {
     public function actionView($id) {
         $model = Categoria::findOne($id);
         $alumnos = $model->getDnis()
-                ->select('nombre, persona.dni,telefono,email')
-                ->innerJoin("persona", "persona.dni=deportista.dni")
-                ->asArray()->all();
-        return $this->render("view",['model'=>$model,'alumnos'=>$alumnos]);
+                        ->select('nombre, persona.dni,telefono,email')
+                        ->innerJoin("persona", "persona.dni=deportista.dni")
+                        ->asArray()->all();
+        return $this->render("view", ['model' => $model, 'alumnos' => $alumnos]);
     }
 
     /**
@@ -91,7 +121,7 @@ class CategoriaController extends Controller {
                 $model->getErrors();
             }
         }
-        return $this->render('ncategoria', [
+        return $this->render('formulario', [
                     'model' => $model,
                     'msg' => $msg,
                     'profesor' => $model->getProfesorLista(),
@@ -128,7 +158,7 @@ class CategoriaController extends Controller {
                 }
             }
         }
-        return $this->render('ncategoria', [
+        return $this->render('formulario', [
                     'model' => $model,
                     'msg' => $msg,
                     'profesor' => $model->getProfesorLista(),

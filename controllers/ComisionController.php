@@ -5,17 +5,58 @@ namespace app\controllers;
 use Yii;
 use app\models\Comision;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\widgets\ActiveForm;
 use yii\web\Response;
 use app\models\ValidarBusqueda;
 use yii\helpers\Html;
 use yii\data\Pagination;
+use yii\filters\AccessControl;
+use app\models\User;
 
 class ComisionController extends Controller {
 
     public $layout = 'mainadmin';
+
+    public function behaviors() {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['crear', 'modificar', 'buscar'],
+                'rules' => [
+                    [
+                        'actions' => ['crear', 'modificar', 'buscar'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserAdmin(Yii::$app->user->identity->id);
+                }
+                    ],
+                    [
+                        'actions' => ['crear', 'modificar', 'buscar'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserProfe(Yii::$app->user->identity->id);
+                }
+                    ],
+                    [
+                        'actions' => ['buscar'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserSubcomision(Yii::$app->user->identity->id);
+                }
+                    ]
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
+            ],
+        ];
+    }
 
     public function actionCrear() {
         $msg = null;
@@ -75,7 +116,7 @@ class ComisionController extends Controller {
                 $search = Html::encode($form->q);
                 $table->where(['LIKE', 'nombre_comision', $search])
                         ->orWhere(['LIKE', 'dia', $search])
-                        ->orWhere(['LIKE','nombre_categoria',$search]);
+                        ->orWhere(['LIKE', 'nombre_categoria', $search]);
             }
         }
         $count = clone $table;

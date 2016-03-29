@@ -11,9 +11,7 @@ function activar_desactivar(campo,radio) {
         x.disabled = false;
     } else {
         x.value = null;
-        x.disabled = true;
-    }
-    
-    
+        x.readOnly=true;
+    }   
 
 }

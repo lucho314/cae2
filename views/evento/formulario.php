@@ -23,7 +23,7 @@ $this->title = 'SGD CAE: ' . $titulo;
         <div class="col-xs-12 col-md-6">
             <div class="form-group">
                 <label for="ingresar nombre:">Nombre:</label>
-                <?= $form->field($model, "nombre")->input("text", ["placeholder" => "Nombre del evento", "class" => "form-control", 'autofocus' => true])->label(false) ?>   
+                <?= $form->field($model,"nombre")->input("text",["placeholder"=>"Nombre del evento","class" => "form-control","autofocus"=>true])->label(false) ?>
             </div>
 
             <div class="form-group">

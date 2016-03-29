@@ -43,7 +43,7 @@ img{
     float: right;
 }
 
-@media (min-width: 400px) and (max-width: 800px) {
+@media screen and (max-width: 800px){
     body{
         background: -webkit-linear-gradient(left,rgb(192,192,192),rgb(105,105,105), rgba(0,0,0,255)); /*Safari 5.1-6*/
         background: -o-linear-gradient(right,rgb(192,192,192),rgb(105,105,105), rgba(0,0,0,255)); /*Opera 11.1-12*/

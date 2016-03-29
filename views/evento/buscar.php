@@ -20,22 +20,22 @@ $this->title = 'SGD CAE: Buscar Evento';
         ?>
         <div class="col-xs-12 col-sm-4 col-md-4">
             <label>Buscar:</label>
-            <?= $f->field($form, "q")->input("search",['class' => "form-control",'placeholder'=>'Nombre'])->label(false) ?>
+            <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'placeholder' => 'Nombre'])->label(false) ?>
         </div>
         <div class="col-xs-12 col-sm-3 col-md-3">
             <label>Desde:</label>
-            <?= $f->field($form, "desde")->input("date",['class' => "form-control"])->label(false) ?>
+            <?= $f->field($form, "desde")->input("date", ['class' => "form-control"])->label(false) ?>
         </div>
         <div class="col-xs-12 col-sm-3 col-md-3">
             <label>Hasta:</label>
-            <?= $f->field($form, "hasta")->input("date",['class' => "form-control"])->label(false) ?>
+            <?= $f->field($form, "hasta")->input("date", ['class' => "form-control"])->label(false) ?>
         </div>
         <div class="col-xs-12 col-sm-2">
             <input type="submit" value="Buscar" class="btn btn-default" style ="margin-top:28px;">
         </div>    
         <?php $f->end() ?>
     </div>
-      <?= $msg ?>
+    <?= $msg ?>
     <hr style="margin-top: 0px;">
     <div class="row">
         <div class="col-xs-12">
@@ -58,7 +58,29 @@ $this->title = 'SGD CAE: Buscar Evento';
                                 <td><?= $row['fecha_inicio'] ?></td>
                                 <td><?= $row['fecha_fin'] ?></td>
                                 <td><a href="<?= Url::toRoute(["evento/modificar", "id_evento" => $row['id_evento']]) ?>">Editar</a></td>
-                                <td><a href="<?= Url::toRoute(["evento/eliminar", "id_evento" => $row['id_evento']]) ?>">Eliminar</a></td>
+                                <td>
+                                    <a href="#" data-toggle="modal" data-target="#id_evento<?= $row['id_evento'] ?>">Eliminar</a>
+                                    <div class="modal fade" role="dialog" aria-hidden="true" id="id_evento<?= $row["id_evento"] ?>">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                    <h4 class="modal-title">Eliminar <?= $row["nombre"] ?></h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>¿Desea eliminar el evento <?=$row['nombre']?>?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <?= Html::beginForm(Url::toRoute("deporte/eliminar"), "POST") ?>
+                                                    <input type="hidden" name="deporte" value="<?= $row['id_deporte'] ?>">
+                                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                                    <?= Html::endForm() ?>
+                                                </div>
+                                            </div><!-- /.modal-content -->
+                                        </div><!-- /.modal-dialog -->
+                                    </div><!-- /.modal -->
+                                </td>
                                 <td><a href="<?= Url::toRoute(["evento/verlista", "id_evento" => $row['id_evento'], 'id_deporte' => $row['id_deporte']]) ?>">convocados</a></td>
                             </tr>                           
                         <?php endforeach; ?>

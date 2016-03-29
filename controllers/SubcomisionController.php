@@ -11,19 +11,57 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+use yii\filters\AccessControl;
+use app\models\User;
 
 /**
  * SubcomisionController implements the CRUD actions for SubComision model.
  */
 class SubcomisionController extends Controller
 {
-    public function behaviors()
+public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create','update','delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create','update','delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                          return User::isUserAdmin(Yii::$app->user->identity->id);
+                        }
+                    ],
+                            
+                    [
+                        'actions' => [''],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                            return User::isUserProfe(Yii::$app->user->identity->id);
+                        }
+
+                    ],
+                    [
+                        'actions' => [''],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                            return User::isUserSubcomision(Yii::$app->user->identity->id);
+                        }
+
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -103,7 +141,7 @@ class SubcomisionController extends Controller
         }
 
         $deporte = ArrayHelper::map(\app\models\Deporte::find()->all(), 'id_deporte', 'nombre_deporte');
-        return $this->render('create', [
+        return $this->render('nuevo', [
                     'model' => $model,
                     'sub' => $sub,
                     'deporte' => $deporte,

@@ -6,13 +6,14 @@ use Yii;
 use app\models\Deporte;
 use app\models\Deporteb;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\widgets\ActiveForm;
 use yii\web\Response;
 use app\models\ValidarBusqueda;
 use yii\data\Pagination;
 use yii\helpers\Html;
+use yii\filters\AccessControl;
+use app\models\User;
 
 /**
  * DeporteController implements the CRUD actions for Deporte model.
@@ -21,12 +22,49 @@ class DeporteController extends Controller {
 
     public $layout = 'mainadmin';
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['infodeportista','infocategoria','infoprofesores','buscar','infodeporte','eliminar','modificar','crear'],
+                'rules' => [
+                    [
+                        'actions' => ['infodeportista','infocategoria','infoprofesores','buscar','infodeporte','eliminar','modificar','crear'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                          return User::isUserAdmin(Yii::$app->user->identity->id);
+                        }
+                    ],
+                            
+                    [
+                        'actions' => [''],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                            return User::isUserProfe(Yii::$app->user->identity->id);
+                        }
+
+                    ],
+                    [
+                        'actions' => ['buscar'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                            return User::isUserSubcomision(Yii::$app->user->identity->id);
+                        }
+
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -77,7 +115,7 @@ class DeporteController extends Controller {
         }
         return $this->render('formulario', [
                     'model' => new Deporte(),
-                    'msg' => $msg
+                    'msg' => $msg, 'titulo' => 'Crear Deporte'
         ]);
     }
 
@@ -112,7 +150,8 @@ class DeporteController extends Controller {
         }
         return $this->render("formulario", [
                     "model" => $model,
-                    "msg" => $msg
+                    "msg" => $msg,
+                    'titulo' => 'Modificar Deporte'
         ]);
     }
 
@@ -215,7 +254,5 @@ class DeporteController extends Controller {
         $model = $deporte->getDeportistas()->asArray()->all();
         return $this->render("infodeportista", ['model' => $model, 'id' => $id]);
     }
-    
-  
 
 }

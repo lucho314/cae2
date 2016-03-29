@@ -21,7 +21,7 @@ $this->title = 'SGD CAE: Información';
 </head>
 
 <article class="col-xs-12 col-md-10">
-    <h3>Información Resumida</h3>
+    <h3>Información Resumida:</h3>
     <hr>
     <h4>Nombre del deporte:  <?= $datos['nombre_deporte'] ?> </h4>
     <h4>Cantidad de Profesores:  <?= $datos['cantidad_profesor'] ?>       <a href="<?= Url::toRoute(["infoprofesores",'id'=>$datos['id_deporte']])?>"><span class="glyphicon glyphicon-plus"></span></a></h4>

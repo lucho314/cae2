@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "persona".
  *
@@ -61,12 +59,12 @@ class Persona extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'dni' => 'DNI',
+            'dni' => 'Dni',
             'nombre' => 'Nombre',
             'apellido' => 'Apellido',
             'domicilio' => 'Domicilio',
             'telefono' => 'Telefono',
-            'email' => 'Hola',
+            'email' => 'Email',
         ];
     }
     

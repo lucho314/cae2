@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Yii;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -47,7 +46,7 @@ class Categoria extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['nombre_categoria', 'id_deporte', 'id_profesor_titular', 'edad_minima', 'edad_maxima'], 'required'],
-            [['id_deporte', 'id_profesor_titular', 'id_profesor_suplente', 'edad_minima', 'edad_maxima'],  'match','pattern' => " /^\d*$/" ,"message"=>'Solo numeros enteros'],
+            [['id_deporte', 'id_profesor_titular', 'id_profesor_suplente', 'edad_minima', 'edad_maxima'], 'match', 'pattern' => " /^\d*$/", "message" => 'Solo numeros enteros'],
             ['nombre_categoria', 'match', 'pattern' => "/^.{1,20}$/", 'message' => 'Ah superado el maximo de 20 caracteres'],
             [['nombre_categoria'], 'match', 'pattern' => "/^[0-9a-záéíóúñ\s]+$/i", 'message' => 'Sólo se aceptan letras y numeros'],
             ['edad_maxima', 'compare', 'compareAttribute' => 'edad_minima', 'operator' => '>='],
@@ -65,8 +64,8 @@ class Categoria extends \yii\db\ActiveRecord {
             'id_categoria' => 'Id Categoria',
             'nombre_categoria' => 'Nombre Categoria',
             'id_deporte' => 'Id Deporte',
-            'id_profesor_titular' => 'Profesor Titular',
-            'id_profesor_suplente' => 'Profesor Suplente',
+            'id_profesor_titular' => 'Id Profesor Titular',
+            'id_profesor_suplente' => 'Id Profesor Suplente',
             'edad_minima' => 'Edad Minima',
             'edad_maxima' => 'Edad Maxima',
         ];
@@ -148,8 +147,8 @@ class Categoria extends \yii\db\ActiveRecord {
         $droptions = Deporte::find()->all();
         return ArrayHelper::map($droptions, 'id_deporte', 'nombre_deporte');
     }
-    
-     public static function getCategoriasLista() {
+
+    public static function getCategoriasLista() {
         $droptions = Categoria::find()->all();
         return ArrayHelper::map($droptions, 'id_categoria', 'nombre_categoria');
     }
@@ -165,4 +164,5 @@ class Categoria extends \yii\db\ActiveRecord {
                                 ->all()
                         , 'dni', 'nombre');
     }
+
 }

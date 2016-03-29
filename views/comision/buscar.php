@@ -19,11 +19,11 @@ $this->title = 'SGD CAE: Buscar Practica';
         ]);
         ?>
 
-        <div class="col-xs-12 col-md-6">
+        <div class="col-xs-12 col-md-5">
             <label>Buscar:</label>
             <div class="input-group">
 
-                <?= $f->field($form, "q")->input("search", ['placeholder' => 'Nombre, Día, Hora de Inicio, Hora de Fin o Categoria', 'class' => "form-control",'autofocus'=>true,'style' => "margin-top:-10px;"])->label(false) ?>
+                <?= $f->field($form, "q")->input("search", ['placeholder' => 'Nombre, Día o Categoria', 'class' => "form-control",'autofocus'=>true,'style' => "margin-top:-10px;"])->label(false) ?>
 
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">Buscar</button>

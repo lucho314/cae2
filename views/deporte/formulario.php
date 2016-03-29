@@ -1,23 +1,23 @@
 <?php
-
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
-$this->title = 'SGD CAE: Nuevo Deporte';
+$this->title = 'SGD CAE: ' . $titulo;
 ?>
 
 <head>
-    <style>
-        .alert {
-            display:inline-block;
-        }
-    </style>
     <script type="text/javascript" src="../web/js/desaparecer.js"></script>
 </head>
 <article class="col-xs-12 col-md-10">
-    <h3>Crear Deporte:</h3>
-    <div class="content">       
-        <?= $msg ?>
+    <h3><?= $titulo ?>:</h3>
+    <div class="content">
+        <?php if ($msg != NULL) { ?>
+            <div class='alert alert-success' role='contentinfo'>
+                <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
+                <span class='sr-only'>Error:</span>
+                <?= $msg ?>
+            </div>
+        <?php } ?>
     </div>
     <hr>
     <?php
@@ -31,12 +31,9 @@ $this->title = 'SGD CAE: Nuevo Deporte';
     <div class="row col-xs-12 col-md-5">
         <div class="form-group">
             <label for="ingresar nombre del deporte">Nombre: </label>
-            <?= $form->field($model, "nombre_deporte")->input("text", ["placeholder" => "Nombre del Deporte", "class" => "form-control", "autofocus"])->label(false) ?>
-            <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'style' => "float:right;"]) ?>
+            <?= $form->field($model, "nombre_deporte")->input("text", ["placeholder" => "Nombre del Deporte", "class" => "form-control", "autofocus"=>true])->label(false) ?>
+            <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
         </div>
-    </div>
-    <div class="col-xs-12 col-md-6 content">
-
     </div>
     <?php $form->end() ?>
 </article>

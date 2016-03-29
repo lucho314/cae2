@@ -2,11 +2,20 @@
 
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+$this->title = 'SGD CAE: Crear Administrador';
 ?>
 
 <article class="col-xs-12 col-sm-9 col-md-10">
     <h3>Crear usuario Administrador: 2/2</h3>
-    <p><?= $msg ?></p>
+    <div class="content">
+        <?php if($msg!=NULL){ ?>
+        <div class='alert alert-success' role='contentinfo'>
+            <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
+            <span class='sr-only'>Error:</span>
+            <?=$msg?>
+        </div>
+        <?php } ?>
+    </div>
     <hr>
     <?php
     $form = ActiveForm::begin([
@@ -20,7 +29,7 @@ use yii\widgets\ActiveForm;
         <div class="col-xs-12 col-md-6">
             <div class="form-group">
                 <label for="ingresar nombre:">Nombre:</label>
-                <?= $form->field($model, "nombre")->input("text", ["placeholder" => "Nombre de Usuario", "class" => "form-control"])->label(false) ?>   
+                <?= $form->field($model, "nombre")->input("text", ["placeholder" => "Nombre", "class" => "form-control","autofocus"=>true])->label(false) ?>   
             </div>
 
             <div class="form-group">
@@ -30,7 +39,7 @@ use yii\widgets\ActiveForm;
 
             <div class="form-group">
                 <label for="ingresar dni">DNI:</label>
-                <?= $form->field($model, "dni")->input("number", ["placeholder" => "DNI", "class" => "form-control"])->label(false) ?>   
+                <?= $form->field($model, "dni")->input("text", ["placeholder" => "DNI", "class" => "form-control"])->label(false) ?>   
             </div>
 
             <div class="form-group">
@@ -63,7 +72,7 @@ use yii\widgets\ActiveForm;
             </div>
 
             <div class="botones">
-                <input type="submit" value="Guardar" class="btn btn-primary">
+                <input type="submit" value="Crear" class="btn btn-success">
                 <a href="<?= Url::toRoute("usuario/nuevo") ?>" class="btn btn-default">Cancelar</a>           </a>
             </div>
         </div>

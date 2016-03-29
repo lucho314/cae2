@@ -3,7 +3,6 @@
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 
-
 $this->title = 'SGD CAE:'.$titulo;
 ?>
 
@@ -47,16 +46,16 @@ $this->title = 'SGD CAE:'.$titulo;
         <div class="col-xs-12 col-md-2">
             <div class="form-group">
                 <label for="ingresar hora inicio">Hora de Inicio:</label>
-                <?= $form->field($model, 'hora_inicio')->input("time", ['class' => "form-control"])->label(false) ?>
+                <?= $form->field($model, 'hora_inicio')->input("text", ['class' => "form-control"])->label(false) ?>
             </div>
         </div>
 
         <div class="col-xs-12 col-md-2">
             <div class="form-group">
                 <label for="ingresar hora fin">Hora de Fin</label>
-                <?= $form->field($model, 'hora_fin')->input("time", ['class' => "form-control"])->label(false) ?>
+                <?= $form->field($model, 'hora_fin')->input("text", ['class' => "form-control"])->label(false) ?>
             </div>
-             <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'style'=>"float:right;"]) ?>
+             <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'style'=>"float:right;"]) ?>
         </div>
     </div>
     <?php $form->end() ?>

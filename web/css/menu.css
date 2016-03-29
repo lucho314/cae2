@@ -1,7 +1,7 @@
 *{
     margin:0px;
-    padding: 0px;
-    text-decoration: none;
+    padding:0px;
+    text-decoration:none;
 }
 
 html, body {
@@ -33,9 +33,7 @@ body{
     padding-left: 10px;
 }
 
-.menu >ul{
-    list-style: none;
-}
+.menu >ul{list-style: none;}
 
 a:hover{text-decoration: none;}
 
@@ -85,13 +83,9 @@ aside .container-fluid li a:hover{
     text-decoration:none;
 }
 
-aside .container-fluid li a span{
-    padding: 0px 5px;
-}
+aside .container-fluid li a span{padding: 0px 5px;}
 
-aside .container-fluid li a span:nth-child(2){
-    float: right;
-}
+aside .container-fluid li a span:nth-child(2){float: right;}
 
 .children{display: none;}
 
@@ -115,9 +109,7 @@ article label{
     font-style: italic;
 }
 
-h1{
-    color: #CEE7FF;
-}
+h1{color: #CEE7FF;}
 
 article h3{
     color: #fff;
@@ -133,9 +125,7 @@ article hr{
     display: none;
 }
 
-tbody>tr:nth-child(even)>td,tbody>tr:nth-child(even)>th{
-    background: #87CEEB;
-}
+tbody>tr:nth-child(even)>td,tbody>tr:nth-child(even)>th{background: #87CEEB;}
 
 #ver_planilla{
     color: orange;
@@ -146,9 +136,7 @@ article .row .col .form-group{
     font-size:16px;
 }
 
-article .row .col .form-group >label{
-    margin-right: 3px;
-}
+article .row .col .form-group >label{margin-right: 3px;}
 
 #perfil{
     height: 150px;
@@ -169,27 +157,43 @@ article .row .col .form-group >label{
 #modal{z-index: 2001;}
 
 .notif{
-    height:150px;
+    height:200px;
     margin-top: 25px;
     border: 1px solid #ffffff;
     border-radius: 7px;
     -moz-border-radius: 7px;
     -webkit-border-radius: 7px;
     background: #2c3e50;
+    font-size: 14px;
     color: white;
+    max-height: 200px;
 }
-.notif ul li a{
-    color: white;
-}
+
 .notif >p{
-    text-align: center;
-    margin-top: 10px;
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 2px;
     font-size: 18px;
 }
 
 .notif >a{
     font-size: 14px;
     color: white;
+}
+
+.notif >div{
+    margin-bottom: 2px;
+    height:139px;
+    border-bottom:1px solid #ffffff;
+    border-top:1px solid #ffffff;
+    overflow: auto;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.help-block{
+    background: #B0B0B0;
+    color: #D00000;
 }
 
 @media (max-width: 992px){
@@ -245,7 +249,7 @@ article .row .col .form-group >label{
         font-size:40px;
     }
 
-    .menu ul li {
+    .menu ul li{
         display:block;
         float:none;
         border-bottom:1px solid rgba(255,255,255,.3);

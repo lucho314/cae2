@@ -37,7 +37,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group">
                         <label for="ingrese foto de perfil">Foto:</label>
-                        <?= $form->field($model, "file[]", ['enableAjaxValidation' => false])->fileInput(['multiple' => true, "data-preview-file-type" => "any", "id" => "file-1", "class" => "file"])->label(false) ?>
+                        <?= $form->field($model, "file[]", ['enableAjaxValidation' => false])->fileInput(['multiple' => true, "data-preview-file-type" => "any", "id" => "file-1", "class" => "form-control"])->label(false) ?>
                     </div>
                     <div class="form-group">
                         <label for="ingresar nombre del deportista">Nombre:</label>
@@ -58,14 +58,15 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label for="ingresar domicilio del deportista">Domicilio:</label>
                         <?= $form->field($model, "domicilio")->input("text", ["placeholder" => "Domicilio", "class" => "form-control"])->label(false) ?>
                     </div>
-
-                </div>	
-                <div class="col-xs-12 col-md-6">
-
+                    
                     <div class="form-group">
                         <label for="ingresar telefono del deportista">Telefono:</label>
                         <?= $form->field($model, "telefono")->input("number", ["placeholder" => "Telefono eje:3434678950", "class" => "form-control"])->label(false) ?>
                     </div>
+                </div>	
+                <div class="col-xs-12 col-md-6">
+
+                    
                     <div class="form-group">
                         <label for="ingresar email del deportista">Email:</label>
                         <?= $form->field($model, "email")->input("text", ["placeholder" => "Email", "class" => "form-control"])->label(false) ?>

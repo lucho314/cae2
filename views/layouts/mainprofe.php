@@ -5,6 +5,7 @@
 use yii\helpers\Html;
 use app\assets\AppAsset;
 use yii\helpers\Url;
+use yii\bootstrap\NavBar;
 
 AppAsset::register($this);
 ?>
@@ -54,6 +55,14 @@ AppAsset::register($this);
     </head>
     <body>
         <?php $this->beginBody() ?>
+        <?php
+        NavBar::begin([
+            'options' => [
+                'class' => 'hidden',]
+        ]);
+
+        NavBar::end();
+        ?>
         <div class="container-fluid">
             <div class="row">
                 <header class="col-xs-12 cabecera">
@@ -67,21 +76,32 @@ AppAsset::register($this);
                 </header>
                 <aside class="col-xs-12 col-md-2 menu">
                     <ul class="container-fluid">
-                        <li class="row"><a href="<?=Url::toRoute("clase/crear")?>"><span class="glyphicon glyphicon-list-alt"></span>Asistencia</a></li>
+                        <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-list-alt"></span>Asistencia<span class="glyphicon glyphicon-menu-down"></span></a>
+                            <ul class="children">
+                                <li><a href="<?= Url::toRoute("clase/crear") ?>"><span class="glyphicon glyphicon-plus"></span>Alta</a></li>
+                                <li><a href="<?= url::toRoute("clase/buscar") ?>"><span class="glyphicon glyphicon-search"></span>Buscar</a></li>
+                            </ul>
+                        </li>
                         <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-calendar"></span>Eventos<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="children">
-                                <li><a href="<?=Url::toRoute("evento/crear")?>"><span class="glyphicon glyphicon-plus"></span>Alta</a></li>
-                                <li><a href="<?=Url::toRoute("evento/buscar")?>"><span class="glyphicon glyphicon-search"></span>Buscar</a></li>
+                                <li><a href="<?= Url::toRoute("evento/crear") ?>"><span class="glyphicon glyphicon-plus"></span>Alta</a></li>
+                                <li><a href="<?= Url::toRoute("evento/buscar") ?>"><span class="glyphicon glyphicon-search"></span>Buscar</a></li>
                             </ul>
                         </li>
                         <li class="row"><a href=""><span class="glyphicon glyphicon-align-left"></span>Estadisticas</a></li>
-                        <li class="row submenu"><a href=javascript:void(0);"><span class="glyphicon glyphicon-search"></span>Deportista<span class="glyphicon glyphicon-menu-down"></span></a>
+                        <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-search"></span>Deportista<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="children">
-                                <li><a href="<?=Url::toRoute("deportista/buscar")?>">Ver</a></li>
-                                <li><a href="<?=Url::toRoute(["deportista/buscar",'opcion'=>"agregar"])?>"><span class="glyphicon glyphicon-plus"></span>Agregar</a></li>
+                                <li><a href="<?= Url::toRoute("deportista/buscarprueba") ?>"><span class="glyphicon glyphicon-plus"></span>Agregar</a></li>
+                                <li><a href=""><span class="glyphicon glyphicon-eye-open"></span>Ver</a></li>
                             </ul>
                         </li>
-                        <li class="row"><a href="<?=Url::toRoute("usuario/logout")?>" data-method="post"><span class="glyphicon glyphicon-off"></span>Cerrar Sesion</a></li>
+                        <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-user"></span>Mi Cuenta<span class="glyphicon glyphicon-menu-down"></span></a>
+                            <ul class="children">
+                                <li><a href="<?= Url::toRoute("usuario/modificarcuenta") ?>" ><span class="glyphicon glyphicon-lock"></span>Contraseña</a></li>
+                                <li><a href="<?= Url::toRoute("usuario/modificar") ?>"><span class="glyphicon glyphicon-folder-open"></span>Datos</a></li>
+                            </ul>
+                        </li>
+                        <li class="row"><a href="<?= Url::toRoute("usuario/logout") ?>" data-method="post"><span class="glyphicon glyphicon-off"></span>Cerrar Sesion</a></li>
                     </ul>		
                 </aside>
                 <?= $content ?>

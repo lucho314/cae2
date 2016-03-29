@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Deportista;
-use app\models\Deportistab;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -16,6 +15,7 @@ use app\models\ValidarBusqueda;
 use yii\data\Pagination;
 use yii\helpers\Html;
 use app\models\Planilla;
+use yii\filters\AccessControl;
 use app\models\User;
 
 include_once '../models/Tipo_de_menu.php';
@@ -26,12 +26,49 @@ require 'Imprimir.php';
  */
 class DeportistaController extends Controller {
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['sessioncategoria','agregar','imprimir','buscar','opcion','delete','update','crear'],
+                'rules' => [
+                    [
+                        'actions' => ['sessioncategoria','agregar','imprimir','buscar','opcion','delete','update','crear'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                          return User::isUserAdmin(Yii::$app->user->identity->id);
+                        }
+                    ],
+                            
+                    [
+                        'actions' => ['buscar'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                            return User::isUserProfe(Yii::$app->user->identity->id);
+                        }
+
+                    ],
+                    [
+                        'actions' => ['buscar'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) 
+                        {
+                            return User::isUserSubcomision(Yii::$app->user->identity->id);
+                        }
+
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -84,7 +121,7 @@ class DeportistaController extends Controller {
      * @return mixed
      */
     public function actionCrear() {
-        $msg = "no llego";
+        $msg = null;
         $this->layout = "mainadmin";
         $persona = new \app\models\Persona();
         $planilla = new \app\models\Planilla();
@@ -139,7 +176,7 @@ class DeportistaController extends Controller {
                 }
             }
         }
-        return $this->render('ndeportista', [
+        return $this->render('formulario', [
                     'model' => $model, 'planilla' => $planilla, 'msg' => $msg
         ]);
     }
@@ -150,12 +187,12 @@ class DeportistaController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id) {
+    public function actionModificar($dni) {
         $msg = null;
         $model = Deportista::find()->select("persona.*,deportista.*")
                 ->from("persona,deportista")
                 ->where('persona.dni=deportista.dni')
-                ->andWhere("deportista.dni=$id")
+                ->andWhere("deportista.dni=$dni")
                 ->one();
         $planilla = $model->getIdPlanilla()->one();
         $cant = $model->getDeportistaCategorias()->count();

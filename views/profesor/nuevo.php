@@ -1,14 +1,12 @@
 <?php
-
-use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
-$this->title = 'SGD CAE: Nuevo SubComision';
+$this->title = 'SGD CAE: Nuevo Profesor';
 ?>
 
 <article class="col-xs-12 col-md-10">
-    <h3>Crear Usuario SubComision: 2/2</h3>
+    <h3>Crear Usuario Profesor: 2/2</h3>
     <?=$msg?>
     <hr>
     <?php
@@ -46,13 +44,13 @@ $this->title = 'SGD CAE: Nuevo SubComision';
                 <label for="ingresar telefono">Telefono:</label>
                 <?= $form->field($model, "telefono")->input("number", ["placeholder" => "Telefono eje:3434678950", "class" => "form-control"])->label(false) ?>   
             </div>
-            
+        </div>
+        <div class="col-xs-12 col-md-6">  
             <div class="form-group">
                 <label for="ingresar nombre de usuario">Nombre de Usuario:</label>
                 <?= $form->field($model, "nombre_usuario")->input("text", ["placeholder" => "Nombre de Usuario eje: pepito", "class" => "form-control"])->label(false) ?>   
             </div>
-        </div>
-        <div class="col-xs-12 col-md-6">        
+            
             <div class="form-group">
                 <label for="ingresar email">E-mail:</label>
                 <?= $form->field($model, "email")->input("email", ["placeholder" => "Email", "class" => "form-control"])->label(false) ?>   
@@ -67,17 +65,10 @@ $this->title = 'SGD CAE: Nuevo SubComision';
                 <label for="ingresar confirmacion contraseña">Confirmar:</label>
                 <?= $form->field($model, "conf_cont")->input("password", ["placeholder" => "Contraseña", "class" => "form-control"])->label(false) ?>   
             </div>
-
-            <div class="form-group">          
-                <label for="seleccionar deporte">Deportes:</label>
-                <?=$form->field($sub,'id_deporte')->dropDownList($deporte,['class'=>"form-control"])->label(false)?>
-            </div>
-          
+            
             <div class="botones">
-                <input type="submit" value="Guardar" class="btn btn-primary">
-                <a href="<?= Url::toRoute("usuario/nuevo") ?>" class="btn btn-default">
-                    <span class="glyphicon glyphicon-chevron-left"></span>Atras
-                </a>
+                <input type="submit" value="Crear" class="btn btn-success">
+                <a href="<?= Url::toRoute("usuario/nuevo") ?>" class="btn btn-default">Cancelar</a>
             </div>
         </div>
     </div>

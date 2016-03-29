@@ -32,11 +32,10 @@ class Comision extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['dia', 'hora_inicio', 'hora_fin', 'id_categoria', 'nombre_comision'], 'required'],
-            [['nombre_comision', 'dia'], 'match', 'pattern' => "/^[a-záéíóúñ\s]+$/i", 'message' => 'Sólo se aceptan letras'],
-            ['nombre_comision', 'match', 'pattern' => "/^.{1,30}$/", 'message' => 'Ah superado el maximo de 30 caracteres'],
-            ['hora_inicio', "match", 'pattern' => "/^((0+[0-9])|1\d|2+[0-3])+:+([0-5]\d)+:+([0-5]\d)$/", "message" => "Hora incorrecta"],
-            ['hora_fin', "match", 'pattern' => "/^((0+[0-9])|1\d|2+[0-3])+:+([0-5]\d)+:+([0-5]\d)$/", "message" => "Hora incorrecta"],
+            [['hora_inicio', 'hora_fin'], 'safe'],
             [['id_categoria'], 'integer'],
+            [['dia'], 'string', 'max' => 15],
+            [['nombre_comision'], 'string', 'max' => 30]
         ];
     }
 

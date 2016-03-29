@@ -13,7 +13,7 @@ $this->title = 'SGD CAE: Buscar Deportista';
     <div class="row" style="margin-top: 5px;">
         <?php
         $f = ActiveForm::begin([
-                    "method" => "get",
+                    "method" => "post",
                     "action" => Url::toRoute("deportista/buscar"),
                     "enableClientValidation" => true,
         ]);
@@ -23,7 +23,6 @@ $this->title = 'SGD CAE: Buscar Deportista';
             <label>Buscar:</label>
             <div class="input-group">
                 <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'style' => "margin-top:-10px;",'placeholder'=>'DNI,Nombre o Apellido'])->label(false) ?>
-
                 <span class="input-group-btn">
                     <?= Html::submitButton("Buscar",['class'=>'btn btn-default'])?>
                 </span>
@@ -43,7 +42,7 @@ $this->title = 'SGD CAE: Buscar Deportista';
                     <thead Style="background-color:#4682B4; color:white;">
                     <th>DNI</th>
                     <th>Nombre</th>
-                    <th>Ver</th>
+                    <th>Información</th>
                     <th>¿Modificar?</th>
                     <th>¿Eliminar?</th>
                     </thead>
@@ -52,7 +51,7 @@ $this->title = 'SGD CAE: Buscar Deportista';
                             <tr>
                                 <td><?= $row['dni'] ?></td>
                                 <td><?= $row['NyA'] ?></td>
-                                <td><a href="<?= Url::toRoute(["deportista/view",'id'=>$row['dni']])?>">Informacion</a>
+                                <td><a href="<?= Url::toRoute(["deportista/informacion", 'dni' => $row['dni']]) ?>">Ver</a>
                                 <td>
                                     <a href="<?= Url::toRoute(["deportista/modificar", "dni" => $row['dni']]) ?>">Editar</a>
                                 </td>

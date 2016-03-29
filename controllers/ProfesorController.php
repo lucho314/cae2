@@ -12,19 +12,52 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
+use app\models\User;
 
 /**
  * ProfesorController implements the CRUD actions for Profesor model.
  */
-    
 class ProfesorController extends Controller {
-public $layout = 'mainadmin';
+
+    public $layout = 'mainadmin';
+
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create','update','delete'],
+                'rules' => [
+                    [
+                        'actions' => ['create','update','delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserAdmin(Yii::$app->user->identity->id);
+                }
+                    ],
+                    [
+                        'actions' => [''],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserProfe(Yii::$app->user->identity->id);
+                }
+                    ],
+                    [
+                        'actions' => [''],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserSubcomision(Yii::$app->user->identity->id);
+                }
+                    ]
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -82,9 +115,9 @@ public $layout = 'mainadmin';
                     $connection->createCommand($sql1)->execute();
                     $connection->createCommand($sql2)->execute();
                     $connection->createCommand($sql3)->execute();
-                  
+
                     $transaction->commit();
-                    $dni=$model->dni;
+                    $dni = $model->dni;
                     $msg = "guardado";
                     foreach ($model as $clave => $val) {
                         $model->$clave = null;
@@ -95,12 +128,12 @@ public $layout = 'mainadmin';
                     $transaction->rollBack();
                     throw $e;
                 }
-            } 
+            }
             //return $this->redirect(['view', 'id' => $model->dni]);
         }
 
         $deporte = ArrayHelper::map(\app\models\Deporte::find()->all(), 'id_deporte', 'nombre_deporte');
-        return $this->render('nuevo_profesor', [
+        return $this->render('nuevo', [
                     'model' => $model,
                     'profesor' => $profesor,
                     'deporte' => $deporte,
@@ -146,7 +179,7 @@ public $layout = 'mainadmin';
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-       if (($model = Profesor::findOne($id)) !== null) {
+        if (($model = Profesor::findOne($id)) !== null) {
             $model = Profesor::find()
                     ->select('persona.*')
                     ->from('persona,profesor,usuario')
@@ -159,6 +192,5 @@ public $layout = 'mainadmin';
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
 
 }

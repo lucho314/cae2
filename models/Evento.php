@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use Yii;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -28,6 +27,7 @@ class Evento extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
+
     public static function tableName() {
         return 'evento';
     }
@@ -101,4 +101,5 @@ class Evento extends \yii\db\ActiveRecord {
         return ArrayHelper::map($dropciones, "id_deporte", "nombre_deporte");
     }
 
+    
 }
