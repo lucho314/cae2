@@ -27,10 +27,13 @@ $this->title = 'SGD CAE: Buscar Deporte';
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit">Buscar</button>
                 </span>
+                <?= Html::button("Nuevo",['class'=>'btn btn-success','style' => "margin-top:-10px; margin-left: 20px"])?>
             </div>
+            
         </div>
 
         <?php $f->end() ?> 
+       
     </div>
     <div class="col-xs-12 col-md-5 content">
         <?php if ($msg != NULL) { ?>

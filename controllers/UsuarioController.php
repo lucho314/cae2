@@ -15,6 +15,7 @@ use yii\data\Pagination;
 use yii\helpers\Html;
 use yii\filters\AccessControl;
 use app\models\User;
+use app\models\SubComision;
 
 include_once '../models/Tipo_de_menu.php';
 
@@ -25,42 +26,35 @@ class UsuarioController extends Controller {
 
     public $layout;
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','admin','profesor','subcomision','nuevo','view','createadmin','eliminar','modificar','modificarcuenta'],
+                'only' => ['index', 'admin', 'profesor', 'subcomision', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'modificarcuenta'],
                 'rules' => [
                     [
-                        'actions' => ['index','admin','profesor','subcomision','login','nuevo','view','createadmin','eliminar','modificar','logout','modificarcuenta'],
+                        'actions' => ['index', 'admin', 'profesor', 'subcomision', 'login', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'logout', 'modificarcuenta'],
                         'allow' => true,
                         'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) 
-                        {
-                          return User::isUserAdmin(Yii::$app->user->identity->id);
-                        }
-                    ],
-                            
-                    [
-                        'actions' => ['profesor','modificar','modificarcuenta'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) 
-                        {
-                            return User::isUserProfe(Yii::$app->user->identity->id);
-                        }
-
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserAdmin(Yii::$app->user->identity->id);
+                }
                     ],
                     [
-                        'actions' => ['index','modificar','modificarcuenta'],
+                        'actions' => ['profesor', 'modificar', 'modificarcuenta'],
                         'allow' => true,
                         'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) 
-                        {
-                            return User::isUserSubcomision(Yii::$app->user->identity->id);
-                        }
-
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserProfe(Yii::$app->user->identity->id);
+                }
+                    ],
+                    [
+                        'actions' => ['index', 'modificar', 'modificarcuenta'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserSubcomision(Yii::$app->user->identity->id);
+                }
                     ]
                 ],
             ],
@@ -84,17 +78,17 @@ class UsuarioController extends Controller {
         $notificacion = NotificacionesController::Notificacion('admin', $cantidad);
         return $this->render("inicio", ['nombre' => $nombre, 'noti' => $notificacion,
                     'notificacion' => $notificacion ? 'Usted posee ' . $cantidad['cantidad'] . ' notificaciones' : 'No posee notificaciones',
-                    'eventos'=> EventoController::evento($eventos) ? $eventos: null
+                    'eventos' => EventoController::evento($eventos) ? $eventos : null
         ]);
     }
 
     public function actionProfesor() {
         $this->layout = "mainprofe";
         $nombre = Yii::$app->user->identity->nombre_usuario;
-       // $notificacion = NotificacionesController::Notificacion('profesor', $cantidad);
-        return $this->render("inicio", ['nombre' => $nombre, 'noti' =>null, // $notificacion,
-                    'notificacion' =>null, //$notificacion ? 'Usted posee ' . $cantidad['cantidad'] . ' notificaciones' : 'No posee notificaciones',
-                    'eventos'=> EventoController::evento($eventos) ? $eventos: null
+        // $notificacion = NotificacionesController::Notificacion('profesor', $cantidad);
+        return $this->render("inicio", ['nombre' => $nombre, 'noti' => null, // $notificacion,
+                    'notificacion' => null, //$notificacion ? 'Usted posee ' . $cantidad['cantidad'] . ' notificaciones' : 'No posee notificaciones',
+                    'eventos' => EventoController::evento($eventos) ? $eventos : null
         ]);
     }
 
@@ -151,22 +145,9 @@ class UsuarioController extends Controller {
 
     public function actionNuevo() {
         $this->layout = "mainadmin";
-        if (isset($_REQUEST["tipo"])) {
-            switch ($_REQUEST['tipo']) {
-                case 1:
-                    $this->redirect(['usuario/createadmin']);
-                    break;
-                case 2:
-                    $this->redirect(['subcomision/create']);
-                    break;
-                case 3:
-                    $this->redirect(['profesor/create']);
-                    break;
-            }
-        }
-
-
-        return $this->render("nuevo_usuario");
+        $model= new usuario;
+        $sub= new SubComision;
+        return $this->render("nuevo_usuario",['model'=>$model]);
     }
 
     /**
@@ -186,11 +167,11 @@ class UsuarioController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreateadmin() {
+    public function actionCreate($tipo=null) {
         $this->layout = "mainadmin";
         $msg = null;
         $model = new Usuario();
-        $model->scenario=  Usuario::SCENARIO_NUEVO;
+        $model->scenario = Usuario::SCENARIO_NUEVO;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
@@ -207,6 +188,9 @@ class UsuarioController extends Controller {
             try {
                 $connection->createCommand($sql1)->execute();
                 $connection->createCommand($sql2)->execute();
+                if ($tipo == 3) {
+                      $connection->createCommand("insert into profesor (dni) value ('$model->dni')")->execute();
+                }
                 $transaction->commit();
                 $msg = "Registracion realizada con exito";
                 foreach ($model as $clave => $val) {
@@ -224,7 +208,7 @@ class UsuarioController extends Controller {
             }
             return $this->redirect(['view', 'id' => $dni]);
         } else {
-            return $this->render('nuevo_admin', [
+            return $this->render('nuevo_usuario', [
                         'model' => $model, 'msg' => $msg
             ]);
         }
@@ -354,7 +338,7 @@ class UsuarioController extends Controller {
 
     public function actionModificarcuenta() {
         $msg = null;
-        $this->layout=  menu();
+        $this->layout = menu();
         $model = Usuario::findOne(Yii::$app->user->identity->id);
         $model->scenario = Usuario::SCENARIO_MODIFICAR;
         $model->contrasenia = null;
