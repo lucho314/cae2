@@ -94,7 +94,6 @@ class ProfesorController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
-        $this->layout = "mainadmin";
         $profesor = new Profesor();
         $model = new \app\models\Usuario;
         $msg = null;
@@ -133,7 +132,7 @@ class ProfesorController extends Controller {
         }
 
         $deporte = ArrayHelper::map(\app\models\Deporte::find()->all(), 'id_deporte', 'nombre_deporte');
-        return $this->render('nuevo', [
+        return $this->renderAjax('nuevo', [
                     'model' => $model,
                     'profesor' => $profesor,
                     'deporte' => $deporte,

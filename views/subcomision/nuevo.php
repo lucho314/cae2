@@ -6,9 +6,6 @@ $this->title = 'SGD CAE: Nueva Subcomisión';
 ?>
 
 <article class="col-xs-12 col-md-10">
-    <h3>Crear Usuario Subcomisión: 2/2</h3>
-    <?= $msg ?>
-    <hr>
     <?php
     $form = ActiveForm::begin([
                 "id" => "nuevo",

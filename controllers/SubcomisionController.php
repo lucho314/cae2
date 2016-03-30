@@ -102,7 +102,6 @@ public function behaviors()
      */
     public function actionCreate()
     {
-       $this->layout = "mainadmin";
         $sub = new SubComision();
         $model = new \app\models\Usuario;
         $msg = null;
@@ -141,7 +140,7 @@ public function behaviors()
         }
 
         $deporte = ArrayHelper::map(\app\models\Deporte::find()->all(), 'id_deporte', 'nombre_deporte');
-        return $this->render('nuevo', [
+        return $this->renderAjax('nuevo', [
                     'model' => $model,
                     'sub' => $sub,
                     'deporte' => $deporte,

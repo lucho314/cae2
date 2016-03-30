@@ -6,17 +6,6 @@ $this->title = 'SGD CAE: Crear Administrador';
 ?>
 
 <article class="col-xs-12 col-sm-9 col-md-10">
-    <h3>Crear usuario Administrador: 2/2</h3>
-    <div class="content">
-        <?php if($msg!=NULL){ ?>
-        <div class='alert alert-success' role='contentinfo'>
-            <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
-            <span class='sr-only'>Error:</span>
-            <?=$msg?>
-        </div>
-        <?php } ?>
-    </div>
-    <hr>
     <?php
     $form = ActiveForm::begin([
                 "method" => "post",

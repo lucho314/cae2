@@ -168,7 +168,6 @@ class UsuarioController extends Controller {
      * @return mixed
      */
     public function actionCreate($tipo=null) {
-        $this->layout = "mainadmin";
         $msg = null;
         $model = new Usuario();
         $model->scenario = Usuario::SCENARIO_NUEVO;
@@ -208,7 +207,7 @@ class UsuarioController extends Controller {
             }
             return $this->redirect(['view', 'id' => $dni]);
         } else {
-            return $this->render('nuevo_usuario', [
+            return $this->renderAjax('nuevo_admin', [
                         'model' => $model, 'msg' => $msg
             ]);
         }
