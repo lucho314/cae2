@@ -12,7 +12,6 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
-use yii\filters\AccessControl;
 use app\models\User;
 
 /**
@@ -96,6 +95,7 @@ class ProfesorController extends Controller {
     public function actionCreate() {
         $profesor = new Profesor();
         $model = new \app\models\Usuario;
+        $model->scenario = \app\models\Usuario::SCENARIO_NUEVO;
         $msg = null;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;

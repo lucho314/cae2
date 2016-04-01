@@ -36,8 +36,8 @@ $this->title = 'SGD CAE: Nuevo Usuario';
             case '2':
                 url = '<?= Url::toRoute(['subcomision/create']) ?>';
                 break
-                url = '<?= Url::toRoute(['profesor/create']) ?>';
             case '3':
+                url = '<?= Url::toRoute(['profesor/create']) ?>';
                 break;
         }
         if (valor !== "") {

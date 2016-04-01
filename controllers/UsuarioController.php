@@ -145,9 +145,7 @@ class UsuarioController extends Controller {
 
     public function actionNuevo() {
         $this->layout = "mainadmin";
-        $model= new usuario;
-        $sub= new SubComision;
-        return $this->render("nuevo_usuario",['model'=>$model]);
+        return $this->render("nuevo_usuario");
     }
 
     /**
@@ -167,7 +165,7 @@ class UsuarioController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($tipo=null) {
+    public function actionCreate() {
         $msg = null;
         $model = new Usuario();
         $model->scenario = Usuario::SCENARIO_NUEVO;
@@ -187,9 +185,6 @@ class UsuarioController extends Controller {
             try {
                 $connection->createCommand($sql1)->execute();
                 $connection->createCommand($sql2)->execute();
-                if ($tipo == 3) {
-                      $connection->createCommand("insert into profesor (dni) value ('$model->dni')")->execute();
-                }
                 $transaction->commit();
                 $msg = "Registracion realizada con exito";
                 foreach ($model as $clave => $val) {
@@ -205,7 +200,7 @@ class UsuarioController extends Controller {
                 $transaction->rollBack();
                 throw $e;
             }
-            return $this->redirect(['view', 'id' => $dni]);
+            return $this->redirect(['nuevo']);
         } else {
             return $this->renderAjax('nuevo_admin', [
                         'model' => $model, 'msg' => $msg

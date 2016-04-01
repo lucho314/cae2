@@ -6,9 +6,6 @@ $this->title = 'SGD CAE: Nuevo Profesor';
 ?>
 
 <article class="col-xs-12 col-md-10">
-    <h3>Crear Usuario Profesor: 2/2</h3>
-    <?=$msg?>
-    <hr>
     <?php
     $form = ActiveForm::begin([
                 "method"=>"post",

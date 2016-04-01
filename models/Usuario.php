@@ -44,7 +44,6 @@ class Usuario extends \app\models\Persona {
             [['contrasenia'], 'string'],
             [['nombre_usuario'], 'string', 'max' => 9],
             ['conf_cont', 'compare', 'compareAttribute' => 'contrasenia', 'message' => 'Las contraseñas no coinciden', 'on' => self::SCENARIO_NUEVO],
-            ['conf_cont', 'compare', 'compareAttribute' => 'nueva_cont', 'message' => 'Las contraseñas no coinciden', 'on' => self::SCENARIO_NUEVO],
             ['nombre_usuario', 'usuario_existe', 'on' => self::SCENARIO_NUEVO],
             ['nombre_usuario', 'usuario_existeM', 'on' => self::SCENARIO_MODIFICAR],
         ]);
