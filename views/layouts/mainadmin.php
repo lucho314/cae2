@@ -71,18 +71,9 @@ AppAsset::register($this);
                 </header>
                 <aside class="col-xs-12 col-md-2 menu">
                     <ul class="container-fluid">
-                        <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-globe"></span>Deportes<span class="glyphicon glyphicon-menu-down"></span></a>
-                            <ul class="children">
-                                <li><a href="<?= Url::toRoute("deporte/crear") ?>"><span class="glyphicon glyphicon-plus"></span>Alta</a></li>
-                                <li><a href="<?= Url::toRoute("deporte/buscar") ?>"><span class="glyphicon glyphicon-search"></span>Buscar</a></li>
-                            </ul>
+                        <li class="row"><a href="<?=Url::toRoute("deporte/buscar")?>"><span class="glyphicon glyphicon-globe"></span>Deportes</a>
                         </li>
-                        <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-folder-open"></span>Categorias<span class="glyphicon glyphicon-menu-down"></span></a>
-                            <ul class="children">
-                                <li><a href="<?= Url::toRoute("categoria/crear") ?>"><span class="glyphicon glyphicon-plus"></span>Alta</a></li>
-                                <li><a href="<?= Url::toRoute("categoria/buscar") ?>"><span class="glyphicon glyphicon-search"></span>Buscar</a></li>
-                            </ul>
-                        </li>
+                        <li class="row"><a href="<?=Url::toRoute("categoria/buscar")?>"><span class="glyphicon glyphicon-folder-open"></span>Categorias</a></li>
                         <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-user"></span>Usuarios<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="children">
                                 <li><a href="<?= Url::toRoute("usuario/nuevo") ?>"><span class="glyphicon glyphicon-plus"></span>Alta</a></li>
@@ -95,18 +86,8 @@ AppAsset::register($this);
                                 <li><a href="<?= Url::toRoute("deportista/buscar") ?>"><span class="glyphicon glyphicon-search"></span>Buscar</a></li>
                             </ul>
                         </li>
-                        <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-calendar"></span>Eventos<span class="glyphicon glyphicon-menu-down"></span></a>
-                            <ul class="children">
-                                <li><a href="<?= Url::toRoute("evento/crear") ?>"><span class="glyphicon glyphicon-plus"></span>Alta</a></li>
-                                <li><a href="<?= Url::toRoute("evento/buscar") ?>"><span class="glyphicon glyphicon-search"></span>Buscar</a></li>                              
-                            </ul>
-                        </li>
-                        <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-time"></span>Horarios<span class="glyphicon glyphicon-menu-down"></span></a>
-                            <ul class="children">
-                                <li><a href="<?= Url::toRoute("comision/crear") ?>"><span class="glyphicon glyphicon-plus"></span>Alta</a></li>
-                                <li><a href="<?= Url::toRoute("comision/buscar") ?>"><span class="glyphicon glyphicon-search"></span>Buscar</a></li>
-                            </ul>
-                        </li>
+                        <li class="row"><a href="<?= Url::toRoute("evento/buscar") ?>"><span class="glyphicon glyphicon-calendar"></span>Eventos</a></li>
+                        <li class="row"><a href="<?= Url::toRoute("comision/buscar") ?>"><span class="glyphicon glyphicon-time"></span>Horarios</a></li>
                         <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-user"></span>Mi Cuenta<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="children">
                                 <li><a href="<?= Url::toRoute("usuario/modificarcuenta") ?>" ><span class="glyphicon glyphicon-lock"></span>Contraseña</a></li>
