@@ -3,15 +3,14 @@
 $params = require(__DIR__ . '/params.php');
 
 $config = [
-	'language'=>'es',
-'sourceLanguage'=>'es',
+    'language'=>'es',
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'lX9y-nQJ53cGesxeiYaxPJ3bsrqs-ExF',
+            'cookieValidationKey' => '5_B_YLryDqihHOKsFuibYT5lKl0GCNUA',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -19,6 +18,7 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'loginUrl'=>['usuario/login']
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -40,14 +40,12 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
+        'urlManager' =>[
+            'enablePrettyUrl' => false,
+            'showScriptName' => true,
             'rules' => [
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
