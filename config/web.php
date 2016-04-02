@@ -4,13 +4,14 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'language'=>'es',
+'sourceLanguage'=>'es',
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => '5_B_YLryDqihHOKsFuibYT5lKl0GCNUA',
+            'cookieValidationKey' => 'lX9y-nQJ53cGesxeiYaxPJ3bsrqs-ExF',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
