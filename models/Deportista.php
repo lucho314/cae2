@@ -26,12 +26,8 @@ class Deportista extends \app\models\Persona {
      * @inheritdoc
      */
     public $file;
-    public $categoria1;
-    public $categoria2;
-    public $categoria3;
-    public $deporte1;
-    public $deporte2;
-    public $deporte3;
+    public $deporte;
+    public $categoria;
     public $NyA;
     public $email;
     public $edad;

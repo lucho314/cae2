@@ -6,7 +6,7 @@ use app\models\Deporte;
 
 $this->title = 'SGD CAE: Nuevo Deportista';
 $a = ['no' => 'NO', 'si' => 'SI'];
-$factor=  ArrayHelper::map(Yii::$app->db->createCommand("select codigo from factor order by codigo")->queryAll(),'codigo','codigo');
+$factor = ArrayHelper::map(Yii::$app->db->createCommand("select codigo from factor order by codigo")->queryAll(), 'codigo', 'codigo');
 $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deporte')
 ?>
 <head>
@@ -37,9 +37,9 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group">
                         <label for="ingrese foto de perfil">Foto:</label>
-                        <?= $form->field($model, "file[]",['enableAjaxValidation' => false])->fileInput(['multiple' => true,'class'=>'form-control','autofocus'=>true])->label(false) ?>
+                        <?= $form->field($model, "file[]", ['enableAjaxValidation' => false])->fileInput(['multiple' => true, 'class' => 'form-control', 'autofocus' => true])->label(false) ?>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="ingresar nombre del deportista">Nombre:</label>
                         <?= $form->field($model, "nombre")->input("text", ["placeholder" => "Nombre", "class" => "form-control"])->label(false) ?>
@@ -59,14 +59,14 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label for="ingresar domicilio del deportista">Domicilio:</label>
                         <?= $form->field($model, "domicilio")->input("text", ["placeholder" => "Domicilio", "class" => "form-control"])->label(false) ?>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="ingresar fecha nacimiento">Fecha de Nacimiento:</label>
                         <?= $form->field($model, "fecha_nac")->input("date", ["placeholder" => "Fecha de Nacimiento", "class" => "form-control"])->label(false) ?>
                     </div>
                 </div>	
                 <div class="col-xs-12 col-md-6">
-                    
+
                     <div class="form-group">
                         <label for="ingresar telefono del deportista">Telefono:</label>
                         <?= $form->field($model, "telefono")->input("number", ["placeholder" => "Telefono eje:3434678950", "class" => "form-control"])->label(false) ?>
@@ -78,7 +78,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
 
                     <div class="form-group">
                         <label for="ingresar grupo y factor sanguineo">Grupo y Factor Sanguineo:</label>
-                        <?= $form->field($planilla, "grupo_sanguineo")->dropDownList($factor)->label(false)?>
+                        <?= $form->field($planilla, "grupo_sanguineo")->dropDownList($factor)->label(false) ?>
                     </div>
 
                     <div class="form-group">
@@ -108,41 +108,41 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                     <div class="form-group">
                         <label for="toma medicamento" >¿Toma Medicamento de Forma Regular?:</label>
                         <label>                       
-                            <?= $form->field($planilla, "medicamento")->radioList($a, ['onclick'=>'activar_desactivar("desc_medicamento","Planilla[medicamento]")','style' => 'display:inline;','separator' => ' '])->label(false) ?> 
+                            <?= $form->field($planilla, "medicamento")->radioList($a, ['onclick' => 'activar_desactivar("desc_medicamento","Planilla[medicamento]")', 'style' => 'display:inline;', 'separator' => ' '])->label(false) ?> 
                         </label>                    
-                        <?= $form->field($planilla, "desc_medicamento")->input("text", ['id'=>'desc_medicamento',"disabled"=>"true","placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_medicamento")->input("text", ['id' => 'desc_medicamento', "disabled" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
                         <label for="alergia">Alergia:</label>
                         <label>                       
-                            <?= $form->field($planilla, "alergia")->radioList($a, ['onclick'=>'activar_desactivar("desc_alergia","Planilla[alergia]")','style' => 'display:inline','separator' => ' '])->label(false) ?> 
+                            <?= $form->field($planilla, "alergia")->radioList($a, ['onclick' => 'activar_desactivar("desc_alergia","Planilla[alergia]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_alergia")->input("text", ['id'=>'desc_alergia',"disabled"=>"true","placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_alergia")->input("text", ['id' => 'desc_alergia', "disabled" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
                         <label for="enfermedades cardiologica">Enfermedades Cardiológicas:</label>
                         <label>                       
-                            <?= $form->field($planilla, "enf_cardiologica")->radioList($a, ['onclick'=>'activar_desactivar("desc_cardiologica","Planilla[enf_cardiologica]")','style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
+                            <?= $form->field($planilla, "enf_cardiologica")->radioList($a, ['onclick' => 'activar_desactivar("desc_cardiologica","Planilla[enf_cardiologica]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_cardiologia")->input("text", ['id'=>'desc_cardiologica',"disabled"=>"true","placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_cardiologia")->input("text", ['id' => 'desc_cardiologica', "disabled" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
                         <label for="asma">Asma:</label>
                         <label>                       
-                            <?= $form->field($planilla, "asma")->radioList($a, ['onclick'=>'activar_desactivar("desc_asma","Planilla[asma]")','style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
+                            <?= $form->field($planilla, "asma")->radioList($a, ['onclick' => 'activar_desactivar("desc_asma","Planilla[asma]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_asma")->input("text", ['id'=>'desc_asma',"disabled"=>"true","placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_asma")->input("text", ['id' => 'desc_asma', "disabled" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
                         <label for="convulsiones">Convulsiones:</label>
                         <label>                       
-                            <?= $form->field($planilla, "convulsiones")->radioList($a, ['onclick'=>'activar_desactivar("ultima_convulsion","Planilla[convulsiones]")','style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
+                            <?= $form->field($planilla, "convulsiones")->radioList($a, ['onclick' => 'activar_desactivar("ultima_convulsion","Planilla[convulsiones]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "ultima_convulsion")->input("text", ['id'=>'ultima_convulsion',"disabled"=>"true","placeholder" => "¿Ultima vez?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "ultima_convulsion")->input("text", ['id' => 'ultima_convulsion', "disabled" => "true", "placeholder" => "¿Ultima vez?", "class" => "form-control"])->label(false) ?>
                     </div>
                     <div class="form-group">
                         <label for="trastornos hemorragicos">Trastornos Hemorragicos:</label>
@@ -156,33 +156,33 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                     <div class="form-group">
                         <label for="diabetes">Diabetes:</label>
                         <label>                       
-                            <?= $form->field($planilla, "diabetes")->radioList($a, ['onclick'=>'activar_desactivar("desc_diabetes","Planilla[diabetes]")','style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
+                            <?= $form->field($planilla, "diabetes")->radioList($a, ['onclick' => 'activar_desactivar("desc_diabetes","Planilla[diabetes]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_diabetes")->input("text", ['id'=>'desc_diabetes',"disabled"=>"true","placeholder" => "¿Cual?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_diabetes")->input("text", ['id' => 'desc_diabetes', "disabled" => "true", "placeholder" => "¿Cual?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
                         <label for="enfermedad que requiere atención medica">¿Tiene Alguna Enferm. que Req. Atención?:</label>
                         <label>                       
-                            <?= $form->field($planilla, "tratamiento")->radioList($a, ['onclick'=>'activar_desactivar("desc_tratamiento","Planilla[tratamiento]")','style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
+                            <?= $form->field($planilla, "tratamiento")->radioList($a, ['onclick' => 'activar_desactivar("desc_tratamiento","Planilla[tratamiento]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_tratamiento")->input("text", ['id'=>'desc_tratamiento',"disabled"=>"true","placeholder" => "¿Cual?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_tratamiento")->input("text", ['id' => 'desc_tratamiento', "disabled" => "true", "placeholder" => "¿Cual?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
                         <label for="internación">¿Sufrió Internaciones en los Ultimos 2 años?:</label>
                         <label>                       
-                            <?= $form->field($planilla, "internaciones")->radioList($a, ['onclick'=>'activar_desactivar("desc_internacion","Planilla[internaciones]")','style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
+                            <?= $form->field($planilla, "internaciones")->radioList($a, ['onclick' => 'activar_desactivar("desc_internacion","Planilla[internaciones]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_internacion")->input("text", ['id'=>'desc_internacion',"disabled"=>"true","placeholder" => "¿Porque?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_internacion")->input("text", ['id' => 'desc_internacion', "disabled" => "true", "placeholder" => "¿Porque?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
                         <label for="fuma">Fuma:</label>
                         <label>                       
-                            <?= $form->field($planilla, "fuma")->radioList($a, ['onclick'=>'activar_desactivar("cuanto_fuma","Planilla[fuma]")','style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
+                            <?= $form->field($planilla, "fuma")->radioList($a, ['onclick' => 'activar_desactivar("cuanto_fuma","Planilla[fuma]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "cuanto_fuma")->input("text", ['id'=>'cuanto_fuma',"disabled"=>"true","placeholder" => "¿Cuanto Fuma?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "cuanto_fuma")->input("text", ['id' => 'cuanto_fuma', "disabled" => "true", "placeholder" => "¿Cuanto Fuma?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
@@ -251,107 +251,46 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
         <div id="form_paso_d">
             <h3>Crear Deportista: 4/4</h3>
             <hr>
+
             <div class="row">
-                <div class="col-xs-6">
-                    <div class="form-group">
-                        <label for="seleccionar deporte">Deporte:</label>
-                        <?=
-                        $form->field($model, 'deporte1')->dropDownList(
-                                $deporte, [
-                            'prompt' => 'Seleccione Deporte',
-                            'onchange' => '
-                                        $.post( "index.php?r=deportista/opcion&id=' . '"+$(this).val(), function( data ) {
-                                            $( "select#validardeportista-categoria1" ).html( data );
-                                        });'
-                        ])->label(false);
-                        ?>
-                        <a href="javascript:mostrar(2)" id="boton1" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></a>
-                    </div>
+                <div id="clone">
 
-                    <div id="deporte2">
-                        <div class="form-group">
-                            <label for="seleccionar deporte">Deporte:</label>
-                            <?=
-                            $form->field($model, 'deporte2')->dropDownList(
-                                    $deporte, [
-                                'prompt' => 'Seleccione Deporte',
-                                'onchange' => '
-                                        $.post( "index.php?r=deportista/opcion&id=' . '"+$(this).val(), function( data ) {
-                                            $( "select#validardeportista-categoria2" ).html( data );
-                                        });'
-                            ])->label(false);
-                            ?>
-                            <a href="javascript:mostrar(3)" id="boton2" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></a>
-                        </div>
-                    </div>
-                    <div id="deporte3">
-                        <div class="form-group">
-                            <label for="seleccionar deporte">Deporte:</label>
-                            <?=
-                            $form->field($model, 'deporte3')->dropDownList(
-                                    $deporte, [
-                                'prompt' => 'Seleccione Deporte',
-                                'onchange' => '
-                                        $.post( "index.php?r=deportista/opcion&id=' . '"+$(this).val(), function( data ) {
-                                            $( "select#validardeportista-categoria3" ).html( data );
-                                        });'
-                            ])->label(false);
-                            ?>
-                        </div> 
-                    </div>
-                </div> 
-                <div class="col-xs-6">
-                    <div class="form-group">
-                        <label for="seleccionar categoria">categoria:</label>
-                        <?=
-                        $form->field($model, 'categoria1')->dropDownList(
-                                [], [
-                            'prompt' => 'Selecione Categoria',
-                        ])->label(false);
-                        ?>
-                    </div>
-
-                    <div id="categoria2">
-                        <div class="form-group">
-                            <label for="seleccionar deporte">categoria:</label>
-                            <?=
-                            $form->field($model, 'categoria2')->dropDownList(
-                                    [], [
-                                'prompt' => 'Selecione Categoria',
-                            ])->label(false);
-                            ?>
-
-                        </div> 
-                    </div>
-
-                    <div id="categoria3">
-                        <div class="form-group">
-                            <label for="seleccionar deporte">categoria:</label>
-                            <?=
-                            $form->field($model, 'categoria3')->dropDownList(
-                                    [], [
-                                'prompt' => 'Selecione Categoria',
-                            ])->label(false);
-                            ?>
-                        </div> 
-                    </div>
                 </div>
-                <div class="col-xs-12">
-                    <input type="submit" value="Guardar" class="btn btn-primary" style="float:right;">
-                    <a href="javascript:cambiar(3)"  class="btn btn-default" style="float:right;margin-right: 3px;"><span class="glyphicon glyphicon-chevron-left"></span>Atras</a>
-                </div>
+
+            </div>
+            <button class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+
+            <div class="col-xs-12">
+                <input type="submit" value="Guardar" class="btn btn-primary" style="float:right;">
+                <a href="javascript:cambiar(3)"  class="btn btn-default" style="float:right;margin-right: 3px;"><span class="glyphicon glyphicon-chevron-left"></span>Atras</a>
             </div>
         </div>
     </div>
-    <?php $form->end() ?>
+</div>
+
 </article>
 
 <?php
-function disable($val){
-    if($val=='si'){
+
+function disable($val) {
+    if ($val == 'si') {
         return false;
     }
-    
+
     return true;
 }
 ?>
+
+<script>
+    var counter = 0;
+    $(":button").click(function () {
+        var y = 'select' + '1';
+        var x = "$.post('index.php?r=deportista/opcion&id='+$(this).val(),function(data){$('#c" + counter + "').html(data);})"
+        $('#clone').append("<div class='col-xs-6'><div class='form-group'><label>Deporte</label><select class='form-control'name='deporte[]'  id=" + counter + " onchange=" + x + ";><?php foreach ($deporte as $clave => $a): ?><option value='<?= $clave ?>'><?= $a ?></option><?php endforeach; ?></select></div></div>");
+        $('#clone').append("<div class='col-xs-6'><div class='form-group'><label>Categoria</label><select class='form-control'name='categoria[]'id='c" + counter +"'><option value=''> Seleccione Categoria</option></select></div></div>");
+        counter++;
+    });
+
+</script>
+
+<?php $form->end() ?>
