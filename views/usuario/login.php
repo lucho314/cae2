@@ -16,7 +16,7 @@ $this->title = 'SGD: Login';
 <div class="container">
     <header class="row col-xs-12">
         <img src="../web/imagenes/cae.png">
-        <h1>Sistema de Gestión Deportica</h1>	
+        <h1>Sistema de Gestión Deportiva</h1>	
     </header>
     <section class="row col-xs-12 col-md-6">
         <h3>Bienvenido</h3>

@@ -12,6 +12,7 @@ use yii\helpers\Html;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use app\models\User;
+use yii\filters\VerbFilter;
 
 class ComisionController extends Controller {
 
