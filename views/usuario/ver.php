@@ -53,7 +53,7 @@ $this->title = 'SGD CAE: Ver Usuario';
         </div>
     </div>
     <div class="botones">
-        <a href="<?=Url::toRoute(['modificar', 'id' => $model->dni])?>" class="btn btn-primary">Modificar</a>
+        <a href="<?=Url::toRoute(['modifica', 'id' => $model->dni])?>" class="btn btn-primary">Modificar</a>
         <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#dni<?= $model->dni ?>">Eliminar</a>
     </div>
     <div class="modal fade" role="dialog" aria-hidden="true" id="dni<?= $model->dni ?>">

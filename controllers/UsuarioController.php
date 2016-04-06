@@ -30,10 +30,10 @@ class UsuarioController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'admin', 'profesor', 'subcomision', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'modificarcuenta'],
+                'only' => ['index', 'admin', 'profesor', 'subcomision', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar','modifica', 'modificarcuenta'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'admin', 'profesor', 'subcomision', 'login', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'logout', 'modificarcuenta'],
+                        'actions' => ['index', 'admin','modifica', 'profesor', 'subcomision', 'login', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'logout', 'modificarcuenta'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -308,11 +308,21 @@ class UsuarioController extends Controller {
         return $this->render("buscar", [ "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
     }
 
-    public function actionModificar($id=null) {
-        if(empty($id))
-        {
-            $id=Yii::$app->user->identity->id;
+    public function actionModificar() {
+        $this->layout = "mainadmin";
+        $model = $this->findModel($id=Yii::$app->user->identity->id);
+        $msg = null;
+        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
         }
+        if ($model->load(Yii::$app->request->post())) {
+            Yii::$app->db->createCommand("update persona set nombre='$model->nombre', apellido='$model->apellido',email='$model->email',telefono='$model->telefono',domicilio='$model->domicilio' where dni=$model->dni")->execute();
+        }
+        return $this->render("modificar_usuario", ['msg' => $msg, 'model' => $model]);
+    }
+    
+        public function actionModifica($id=null) {
         $this->layout = "mainadmin";
         $model = $this->findModel($id);
         $msg = null;
