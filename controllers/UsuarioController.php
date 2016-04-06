@@ -153,9 +153,9 @@ class UsuarioController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id) {
+    public function actionVer($id) {
         $this->layout = "mainadmin";
-        return $this->render('view', [
+        return $this->render('ver', [
                     'model' => $this->findModel($id),
         ]);
     }
@@ -254,7 +254,7 @@ class UsuarioController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if (($model = Usuario::findOne($id)) !== null) {
+        if ((Usuario::findOne($id)) !== null) {
             $model = Usuario::find()
                     ->select('persona.*,nombre_usuario,privilegio')
                     ->from('persona,usuario')
@@ -308,12 +308,13 @@ class UsuarioController extends Controller {
         return $this->render("buscar", [ "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
     }
 
-    public function actionModificar() {
+    public function actionModificar($id=null) {
+        if(empty($id))
+        {
+            $id=Yii::$app->user->identity->id;
+        }
         $this->layout = "mainadmin";
-        $model = Usuario::find()->select("nombre,apellido,persona.dni,persona.email,telefono,domicilio")
-                ->innerJoin("persona", 'persona.dni=usuario.dni')
-                ->where(['usuario.dni' => 37224491])
-                ->one();
+        $model = $this->findModel($id);
         $msg = null;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -350,5 +351,7 @@ class UsuarioController extends Controller {
         }
         return $this->render("modificar_cuenta", ['model' => $model, 'msg' => $msg]);
     }
+    
+    
 
 }
