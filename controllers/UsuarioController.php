@@ -30,40 +30,20 @@ class UsuarioController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'admin', 'profesor', 'subcomision', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar','modifica', 'modificarcuenta'],
+                'only' => ['index', 'admin', 'profesor', 'subcomision', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'modifica', 'modificarcuenta'],
                 'rules' => [
-                    [
-                        'actions' => ['index', 'admin','modifica', 'profesor', 'subcomision', 'login', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'logout', 'modificarcuenta'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                    ['actions' => ['index', 'admin', 'modifica', 'profesor', 'subcomision', 'login', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'logout', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserAdmin(Yii::$app->user->identity->id);
-                }
-                    ],
-                    [
-                        'actions' => ['profesor', 'modificar', 'modificarcuenta'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                }],
+                    ['actions' => ['profesor', 'modificar', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserProfe(Yii::$app->user->identity->id);
-                }
-                    ],
-                    [
-                        'actions' => ['index', 'modificar', 'modificarcuenta'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                }],
+                    ['actions' => ['index', 'modificar', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserSubcomision(Yii::$app->user->identity->id);
-                }
-                    ]
+                }]
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+            'verbs' => ['class' => VerbFilter::className(), 'actions' => ['logout' => ['post']]]
         ];
     }
 
@@ -76,10 +56,7 @@ class UsuarioController extends Controller {
         $nombre = Yii::$app->user->identity->nombre_usuario;
         $notificacion = NULL;
         $notificacion = NotificacionesController::Notificacion('admin', $cantidad);
-        return $this->render("inicio", ['nombre' => $nombre, 'noti' => $notificacion,
-                    'notificacion' => $notificacion ? 'Usted posee ' . $cantidad['cantidad'] . ' notificaciones' : 'No posee notificaciones',
-                    'eventos' => EventoController::evento($eventos) ? $eventos : null
-        ]);
+        return $this->render("inicio", ['nombre' => $nombre, 'noti' => $notificacion,'notificacion' => $notificacion ? 'Usted posee ' . $cantidad['cantidad'] . ' notificaciones' : 'No posee notificaciones','eventos' => EventoController::evento($eventos) ? $eventos : null]);
     }
 
     public function actionProfesor() {
@@ -94,14 +71,12 @@ class UsuarioController extends Controller {
 
     public function actionSubcomision() {
         $this->layout = "mainsubcomision";
-        $nombre = Yii::$app->user->identity->nombre_usuario;
-        return $this->render("inicio", ['nombre' => $nombre]);
+        return $this->render("inicio", ['nombre' =>Yii::$app->user->identity->nombre_usuario]);
     }
 
     public function actionLogin() {
         $nombre = null;
         if (!\Yii::$app->user->isGuest) {
-            $nombre = $nombre = Yii::$app->user->identity->nombre_usuario;
             if (User::isUserAdmin(Yii::$app->user->identity->id)) {
                 $this->redirect(['usuario/admin']);
             }
@@ -114,7 +89,6 @@ class UsuarioController extends Controller {
         }
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            $nombre = Yii::$app->user->identity->nombre_usuario;
             if (User::isUserAdmin(Yii::$app->user->identity->id)) {
                 $this->redirect(['usuario/admin']);
             }
@@ -125,11 +99,7 @@ class UsuarioController extends Controller {
                 $this->redirect(['usuario/subcomision']);
             }
         }
-
-
-        return $this->render('login', [
-                    'model' => $model,
-        ]);
+        return $this->render('login', ['model' => $model]);
     }
 
     private function randKey($str = '', $long = 0) {
@@ -147,12 +117,7 @@ class UsuarioController extends Controller {
         $this->layout = "mainadmin";
         return $this->render("nuevo_usuario");
     }
-
-    /**
-     * Displays a single Usuario model.
-     * @param integer $id
-     * @return mixed
-     */
+    
     public function actionVer($id) {
         $this->layout = "mainadmin";
         return $this->render('ver', [
@@ -310,7 +275,7 @@ class UsuarioController extends Controller {
 
     public function actionModificar() {
         $this->layout = "mainadmin";
-        $model = $this->findModel($id=Yii::$app->user->identity->id);
+        $model = $this->findModel($id = Yii::$app->user->identity->id);
         $msg = null;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -321,8 +286,8 @@ class UsuarioController extends Controller {
         }
         return $this->render("modificar_usuario", ['msg' => $msg, 'model' => $model]);
     }
-    
-        public function actionModifica($id=null) {
+
+    public function actionModifica($id = null) {
         $this->layout = "mainadmin";
         $model = $this->findModel($id);
         $msg = null;
@@ -361,7 +326,5 @@ class UsuarioController extends Controller {
         }
         return $this->render("modificar_cuenta", ['model' => $model, 'msg' => $msg]);
     }
-    
-    
 
 }

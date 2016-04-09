@@ -27,7 +27,7 @@ $this->title = 'SGD CAE: Buscar usuario';
             </div>
         </div>
         <div class="col-xs-2">
-            <a href="<?=Url::toRoute("usuario/crear")?>" class="btn btn-success" style="margin-top:29px;">Nuevo</a>
+            <a href="<?=Url::toRoute("usuario/nuevo")?>" class="btn btn-success" style="margin-top:29px;">Nuevo</a>
         </div>
         <?php $f->end() ?> 
     </div>
