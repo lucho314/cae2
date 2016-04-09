@@ -37,7 +37,7 @@ class Persona extends \yii\db\ActiveRecord
         return [
             [[ 'dni','telefono','email','nombre', 'apellido', 'domicilio'], 'required'],
             ['nombre', 'match', 'pattern' => "/^.{3,20}$/", 'message' => 'Mínimo 3 y máximo 20 caracteres'],
-            [['dni','telefono'], 'match','pattern' => " /^\d*$/" ,"message"=>'Solo numeros enteros'],
+            //[['dni','telefono'], 'match','pattern' => " /^\d*$/" ,"message"=>'Solo numeros enteros'],
             ['telefono', 'match', 'pattern' => "/^.{10,10}$/", 'message' => 'Numero de telefono incorrecto'],
             [['nombre','apellido'], 'match', 'pattern' => "/^[a-záéíóúñ\s]+$/i", 'message' => 'Sólo se aceptan letras'],
             ['domicilio', 'match', 'pattern' => "/^.{1,50}$/", 'message' => 'Ah superado el maximo de 50 caracteres'],

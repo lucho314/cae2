@@ -258,10 +258,10 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                 </div>
 
             </div>
-            <button class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+            <button class="btn btn-default" id="agregar"><span class="glyphicon glyphicon-plus"></span></button>
 
             <div class="col-xs-12">
-                <input type="submit" value="Guardar" class="btn btn-primary" style="float:right;">
+                <input type="submit" id="submit" value="Guardar" class="btn btn-primary" style="float:right;">
                 <a href="javascript:cambiar(3)"  class="btn btn-default" style="float:right;margin-right: 3px;"><span class="glyphicon glyphicon-chevron-left"></span>Atras</a>
             </div>
         </div>
@@ -283,14 +283,29 @@ function disable($val) {
 
 <script>
     var counter = 0;
-    $(":button").click(function () {
+    $("#agregar").click(function () {
         var y = 'select' + '1';
         var x = "$.post('index.php?r=deportista/opcion&id='+$(this).val(),function(data){$('#c" + counter + "').html(data);})"
-        $('#clone').append("<div class='col-xs-6'><div class='form-group'><label>Deporte</label><select class='form-control'name='deporte[]'  id=" + counter + " onchange=" + x + ";><?php foreach ($deporte as $clave => $a): ?><option value='<?= $clave ?>'><?= $a ?></option><?php endforeach; ?></select></div></div>");
-        $('#clone').append("<div class='col-xs-6'><div class='form-group'><label>Categoria</label><select class='form-control'name='categoria[]'id='c" + counter +"'><option value=''> Seleccione Categoria</option></select></div></div>");
+        $('#clone').append("<div class='col-xs-6'><div class='form-group'><label>Deporte</label><select class='form-control deporte'name='deporte[]'  id=" + counter + " onchange=" + x + ";><option value=''>Seleccione Deporte</option><?php foreach ($deporte as $clave => $a): ?><option value='<?= $clave ?>'><?= $a ?></option><?php endforeach; ?></select><div id='error" + counter + "'style='display: none'>debe seleciconar deporte</div></div></div>");
+        $('#clone').append("<div class='col-xs-6'><div class='form-group'><label>Categoria</label><select class='form-control'name='categoria[]'id='c" + counter + "'><option value=''> Seleccione Categoria</option></select></div></div>");
         counter++;
     });
-
+    $('#submit').click(function () {
+        validacion = true;
+        $(".deporte").each(function () {
+            if ($(this).val() === "")
+            {
+              $('#error'+$(this).attr('id')).show();
+                validacion = false;
+                return false;
+            }
+           if(validacion) return true;
+           else return false;
+        });
+    });
+   $('#clone').on("change", '.deporte' ,function(){
+        ($(this).val()!=="") ? $('#error'+$(this).attr('id')).hide() : $('#error'+$(this).attr('id')).show();
+   });
 </script>
 
 <?php $form->end() ?>
