@@ -67,15 +67,12 @@ class EventoController extends Controller {
     public function actionCrear($msg = null) {
         $this->layout = menu();
         $model = new Evento;
-        unset($_SESSION['dni']);
-        unset($_SESSION['deporte']);
-
+        unset($_SESSION['dni'],$_SESSION['id_evento'],$_SESSION['deporte']);
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
         if ($model->load(Yii::$app->request->post())) {
-
             if ($model->validate()) {
                 if ($model->insert()) {
                     if ($model->convocados) {
@@ -184,7 +181,7 @@ class EventoController extends Controller {
         if (isset($_SESSION['deporte'])) {
             $deporte = $_SESSION['deporte'];
         } else {
-            $this->redirect(['evento/crear']);
+            return $this->redirect(['evento/crear']);
         }
         $sql = "select nombre, dni,nombre_categoria from vdep_cat where id_deporte=$deporte";
         if (empty($_SESSION['dni'])) {
@@ -220,7 +217,7 @@ class EventoController extends Controller {
         $evento=$_SESSION['id_evento'];
         $sql = "INSERT INTO convocados (id_evento, dni,nombre) SELECT $evento ,dni,nombre FROM persona WHERE dni in ($dni)";
         Yii::$app->db->createCommand($sql)->execute();
-        echo "guardo";
+        $this->redirect(["crear"]);
     }
 
     public function actionVerlista($id_evento, $id_deporte) {

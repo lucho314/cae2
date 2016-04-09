@@ -46,7 +46,7 @@ $this->title = 'SGD CAE: Crear Lista';
                     </thead>
                     <tbody>
 
-                        <?php if (!empty($convocados)): foreach ($convocados as $valor):  var_dump( $_SESSION['dni']);?>
+                        <?php if (!empty($convocados)): foreach ($convocados as $valor): ?>
                                 <tr>
                                     <td> <?= $valor['nombre'] ?></td>
                                     <td><?= $valor['dni'] ?> </td>
@@ -54,11 +54,12 @@ $this->title = 'SGD CAE: Crear Lista';
                                     <td><a href="#" class="quitar">quitar</a></td>
                                 </tr>   
                             <?php endforeach;
-                        endif; ?>
+                        endif;
+                        ?>
                     </tbody>
                 </table>
             </div>
-            <a href="<?= Url::toRoute(["evento/conflista"]) ?>"  class="btn btn-default" style="float:right;" id="go_paso_b">Confirmar<span class="glyphicon glyphicon-chevron-right"></span></a>
+            <a href="#"  class="btn btn-default" style="float:right;" id="confirmar">Confirmar<span class="glyphicon glyphicon-chevron-right"></span></a>
         </div>
     </div>
 
@@ -66,14 +67,14 @@ $this->title = 'SGD CAE: Crear Lista';
 
 
 <script type="text/javascript">
-    $('.agregar').click(function () {
+    $('#original').on("click", "a.agregar", function () {
         var nombre = $(this).parents("tr").find("td").eq(0).html();
         var dni = $(this).parents("tr").find("td").eq(1).html();
         var categoria = $(this).parents("tr").find("td").eq(2).html();
         var nuevaFila = "<tr><td>" + nombre + "</td>";
         nuevaFila += "<td>" + dni + "</td>";
         nuevaFila += "<td>" + categoria + "</td>";
-        nuevaFila += "<td><a href='#' class='quitar'>quitar</a></td></tr>";
+        nuevaFila += "<td><a href='#'class='quitar'>quitar</a></td></tr>";
         var dataString = 'id=' + dni;
         $.ajax({
             type: "get",
@@ -84,14 +85,14 @@ $this->title = 'SGD CAE: Crear Lista';
         $('#tabla').append(nuevaFila);
     })
 
-    $('.quitar').click(function () {
+    $('#tabla').on("click", "a.quitar", function () {
         var nombre = $(this).parents("tr").find("td").eq(0).html();
         var dni = $(this).parents("tr").find("td").eq(1).html();
         var categoria = $(this).parents("tr").find("td").eq(2).html();
         var nuevaFila = "<tr><td>" + nombre + "</td>";
         nuevaFila += "<td>" + dni + "</td>";
         nuevaFila += "<td>" + categoria + "</td>";
-        nuevaFila += "<td><a href='#' class='agregar'>agregar</a></td></tr>";
+        nuevaFila += '<td><a href="#"class="agregar">agregar</a></td></tr>';
         var dataString = 'id=' + dni;
         $.ajax({
             type: "get",
@@ -100,5 +101,14 @@ $this->title = 'SGD CAE: Crear Lista';
         });
         $(this).parent().parent().remove();
         $('#original').append(nuevaFila);
-    })
+    });
+    $('#confirmar').click(function () {
+        if ($('#tabla >tbody >tr').length === 0)
+        {
+            alert('no hay datos para guardar');
+        } else {
+            window.location = "<?= Url::toRoute(["evento/conflista"]) ?>";
+        }
+    });
+
 </script>
