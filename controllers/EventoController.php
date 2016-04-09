@@ -191,9 +191,9 @@ class EventoController extends Controller {
             $model = Yii::$app->db->createCommand($sql)->queryAll();
         } else {
             $dni = implode(",", $_SESSION['dni']);
-            $sql1 = $sql . " where dni not in (" . $dni . ")";
+            $sql1 = $sql . " and dni not in (" . $dni . ")";
             $model = \Yii::$app->db->createCommand($sql1)->queryAll();
-            $sql2 = $sql . " where dni in (" . $dni . ")";
+            $sql2 = $sql . " and dni in (" . $dni . ")";
             $convocados = \Yii::$app->db->createCommand($sql2)->queryAll();
         }
         return $this->render('clista', ['model' => $model, 'msg' => $msg, 'convocados' => $convocados]);
