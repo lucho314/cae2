@@ -78,7 +78,7 @@ class ComisionController extends Controller {
                 $model->getErrors();
             }
         }
-        return $this->render("formulario", ['model' => new Comisionl, 'titulo' => "Crear Horario", 'opciones' => $model->getListaCategorias()]);
+        return $this->render("formulario", ['model' => new Comision, 'titulo' => "Crear Horario", 'opciones' => $model->getListaCategorias()]);
     }
 
     public function actionModificar($id_comision) {
