@@ -29,38 +29,16 @@ class CategoriaController extends Controller {
                 'class' => AccessControl::className(),
                 'only' => ['crear', 'modificar', 'eliminar', 'buscar'],
                 'rules' => [
-                    [
-                        'actions' => ['crear', 'modificar', 'eliminar', 'buscar'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                    ['actions' => ['crear', 'modificar', 'eliminar', 'buscar'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserAdmin(Yii::$app->user->identity->id);
-                }
-                    ],
-                    [
-                        'actions' => ['buscar'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                }],
+                    ['actions' => ['buscar'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserProfe(Yii::$app->user->identity->id);
-                }
-                    ],
-                    [
-                        'actions' => ['buscar'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                }],
+                    ['actions' => ['buscar'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserSubcomision(Yii::$app->user->identity->id);
-                }
-                    ]
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+                }]]],
+            'verbs' => ['class' => VerbFilter::className(), 'actions' => ['logout' => ['post']]]
         ];
     }
 
@@ -121,13 +99,7 @@ class CategoriaController extends Controller {
                 $model->getErrors();
             }
         }
-        return $this->render('formulario', [
-                    'model' => $model,
-                    'msg' => $msg,
-                    'profesor' => $model->getProfesorLista(),
-                    'deporte' => $model->getDeporteLista(),
-                    'titulo' => 'Crear Categoria'
-        ]);
+        return $this->render('formulario', ['model' => $model,'msg' => $msg,'profesor' => $model->getProfesorLista(),'deporte' => $model->getDeporteLista(),'titulo' => 'Crear Categoria']);
     }
 
     /**
@@ -158,13 +130,7 @@ class CategoriaController extends Controller {
                 }
             }
         }
-        return $this->render('formulario', [
-                    'model' => $model,
-                    'msg' => $msg,
-                    'profesor' => $model->getProfesorLista(),
-                    'deporte' => $model->getDeporteLista(),
-                    'titulo' => 'Modificar Categoria'
-        ]);
+        return $this->render('formulario', ['model' => $model,'msg' => $msg,'profesor' => $model->getProfesorLista(),'deporte' => $model->getDeporteLista(),'titulo' => 'Modificar Categoria']);
     }
 
     /**

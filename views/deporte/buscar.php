@@ -17,23 +17,24 @@ $this->title = 'SGD CAE: Buscar Deporte';
                     "enableClientValidation" => true,
         ]);
         ?>
-
-        <div class="col-xs-12 col-md-5">
+        <div class="col-xs-10 col-md-5">
             <label for="buscar deporte">Buscar:</label>
             <div class="input-group">
 
-                <?= $f->field($form, "q")->input("search", ['placeholder'=>'Nombre del Deporte','class' => "form-control",'autofocus'=>true,'style' => "margin-top:-10px;"])->label(false) ?>
+                <?= $f->field($form, "q")->input("search", ['placeholder' => 'Nombre del Deporte', 'class' => "form-control", 'autofocus' => true, 'style' => "margin-top:-10px;"])->label(false) ?>
 
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">Buscar</button>
+                    <?= Html::submitButton("buscar", ["class" => "btn btn-default"]) ?>
                 </span>
-                <?= Html::button("Nuevo",['class'=>'btn btn-success','style' => "margin-top:-10px; margin-left: 20px"])?>
             </div>
-            
+        </div>
+        
+        <div class="col-xs-2 col-md-5">
+            <a href="<?= Url::toRoute("deporte/crear") ?>" class="btn btn-success" style="margin-top:29px;">Nuevo</a>
         </div>
 
         <?php $f->end() ?> 
-       
+
     </div>
     <div class="col-xs-12 col-md-5 content">
         <?php if ($msg != NULL) { ?>
@@ -60,7 +61,7 @@ $this->title = 'SGD CAE: Buscar Deporte';
                         <?php foreach ($model as $row): ?>
                             <tr>
                                 <td><?= $row['nombre_deporte'] ?></td>
-                                <td><a href="<?= Url::toRoute(["deporte/modificar","id" => $row['id_deporte']]) ?>">Editar</a></td>
+                                <td><a href="<?= Url::toRoute(["deporte/modificar", "id" => $row['id_deporte']]) ?>">Editar</a></td>
                                 <td>
                                     <a href="#" data-toggle="modal" data-target="#id_deporte<?= $row['id_deporte'] ?>">Eliminar</a>
                                     <div class="modal fade" role="dialog" aria-hidden="true" id="id_deporte<?= $row["id_deporte"] ?>">
@@ -86,13 +87,13 @@ $this->title = 'SGD CAE: Buscar Deporte';
                                         </div><!-- /.modal-dialog -->
                                     </div><!-- /.modal -->
                                 </td>
-                                <td><a href="<?=Url::toRoute(["deporte/infodeporte","id" => $row['id_deporte']])?>">Ver</a></td>
+                                <td><a href="<?= Url::toRoute(["deporte/infodeporte", "id" => $row['id_deporte']]) ?>">Ver</a></td>
                             </tr>
                         <?php endforeach ?>
                     </tbody>
                 </table>
             </div>
-            <?= LinkPager::widget(["pagination" => $pages,]); ?>
+            <?= LinkPager::widget(["pagination" => $pages]); ?>
         </div>
     </div>
 </article>

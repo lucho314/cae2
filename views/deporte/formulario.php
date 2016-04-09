@@ -1,6 +1,7 @@
 <?php
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'SGD CAE: ' . $titulo;
 ?>
@@ -33,6 +34,7 @@ $this->title = 'SGD CAE: ' . $titulo;
             <label for="ingresar nombre del deporte">Nombre: </label>
             <?= $form->field($model, "nombre_deporte")->input("text", ["placeholder" => "Nombre del Deporte", "class" => "form-control", "autofocus"=>true])->label(false) ?>
             <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+            <a href="<?=Url::toRoute("deporte/buscar")?>" class="btn btn-default">Cancelar</a>
         </div>
     </div>
     <?php $form->end() ?>

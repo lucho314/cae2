@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "comision".
@@ -33,9 +32,12 @@ class Comision extends \yii\db\ActiveRecord {
         return [
             [['dia', 'hora_inicio', 'hora_fin', 'id_categoria', 'nombre_comision'], 'required'],
             [['hora_inicio', 'hora_fin'], 'safe'],
-            [['id_categoria'], 'integer'],
-            [['dia'], 'string', 'max' => 15],
-            [['nombre_comision'], 'string', 'max' => 30]
+            ['hora_inicio','compare','compareAttribute' => 'hora_fin','operator' => '<='],
+            ['id_categoria','match', 'pattern' =>'/^[0-9]$|^[0-9]+[0-9]$/'],
+            ['dia', 'match', 'pattern' => "/^[a-záéíóúñ\s]+$/i"],
+            ['dia','match','pattern'=>"/^.{5,10}$/"],
+            ['nombre_comision', 'match', 'pattern' => "/^[0-9a-záéíóúñ\s]+$/i",'message' => 'Sólo se aceptan letras y números'],
+            ['nombre_comision','match','pattern'=>"/^.{5,20}$/"]
         ];
     }
 
@@ -44,12 +46,12 @@ class Comision extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'id_comision' => 'Id Comision',
+            'id_comision' => 'Comisión',
             'dia' => 'Dia',
             'hora_inicio' => 'Hora Inicio',
             'hora_fin' => 'Hora Fin',
             'id_categoria' => 'Categoria',
-            'nombre_comision' => 'Nombre Comision',
+            'nombre_comision' => 'Nombre Comisión',
         ];
     }
 

@@ -13,6 +13,7 @@ use yii\data\Pagination;
 use yii\filters\AccessControl;
 use app\models\User;
 use yii\filters\VerbFilter;
+use app\models\Validar;
 
 class ComisionController extends Controller {
 
@@ -77,16 +78,15 @@ class ComisionController extends Controller {
                 $model->getErrors();
             }
         }
-        return $this->render("formulario", ['model' => $model, 'msg' => $msg, 'titulo' => "Crear Horario", 'opciones' => $model->getListaCategorias()]);
+        return $this->render("formulario", ['model' => new Comisionl, 'titulo' => "Crear Horario", 'opciones' => $model->getListaCategorias()]);
     }
 
-    public function actionModificar($id_comision = null) {
+    public function actionModificar($id_comision) {
         $msg = null;
-        if (preg_match("/^[0-9]+$/", $id_comision)) {
-            $model = Comision::findOne($id_comision);
-        } else {
-            $this->redirect(["buscar"]);
-        }
+        if (!Validar::num_positivo($id_comision)) {
+            return $this->redirect(["buscar"]);
+        } 
+        $model = Comision::findOne($id_comision);
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
@@ -95,6 +95,7 @@ class ComisionController extends Controller {
             if ($model->validate()) {
                 if ($model->update()) {
                     $msg = "Horario de practica modificado con exito";
+                    return $this->redirect(['buscar','msg'=>$msg]);
                 } else {
                     $msg = "Error al modificar horario";
                 }
@@ -102,7 +103,7 @@ class ComisionController extends Controller {
                 $model->getErrors();
             }
         }
-        return $this->render("formulario", ['model' => $model, 'msg' => $msg, 'opciones' => $model->getListaCategorias(), 'titulo' => 'mofificar Horario']);
+        return $this->render("formulario", ['model' => $model,'opciones' => $model->getListaCategorias(), 'titulo' => 'Modificar Horario']);
     }
 
     public function actionBuscar() {

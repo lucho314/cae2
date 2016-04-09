@@ -18,14 +18,17 @@ $this->title = 'SGD CAE: Buscar Categoria';
                         "enableClientValidation" => true,
             ]);
             ?>
-            <div class="col-xs-12 col-md-5">
+            <div class="col-xs-10 col-md-5">
                 <label for="buscar categoria">Buscar:</label>
                 <div class="input-group">
-                    <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'style' => "margin-top:-10px;", "placeholder" => "Deporte, Edad, Profesor o Nombre"])->label(false) ?>
+                    <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'style' => "margin-top:-10px;", "placeholder" => "Deporte, Edad, Profesor o Nombre","autofocus"=>true])->label(false) ?>
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit">Buscar</button>
+                        <?= Html::submitButton("buscar", ["class" => "btn btn-default"]) ?>
                     </span>
                 </div>
+            </div>
+            <div class="col-xs-2 col-md-5">
+                <a href="<?=Url::toRoute("categoria/crear")?>" class="btn btn-success" style="margin-top:29px;">Nueva</a>
             </div>
 
             <?php $f->end() ?> 

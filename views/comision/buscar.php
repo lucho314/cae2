@@ -5,7 +5,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\data\Pagination;
 use yii\widgets\LinkPager;
-use yii\bootstrap\Modal;
 
 $this->title = 'SGD CAE: Buscar Practica';
 ?>
@@ -19,18 +18,18 @@ $this->title = 'SGD CAE: Buscar Practica';
         ]);
         ?>
 
-        <div class="col-xs-12 col-md-5">
+        <div class="col-xs-10 col-md-5">
             <label>Buscar:</label>
             <div class="input-group">
-
-                <?= $f->field($form, "q")->input("search", ['placeholder' => 'Nombre, Día o Categoria', 'class' => "form-control",'autofocus'=>true,'style' => "margin-top:-10px;"])->label(false) ?>
-
+                <?= $f->field($form, "q")->input("search", ['placeholder' => 'Nombre, Día o Categoria', 'class' => "form-control", 'autofocus' => true, 'style' => "margin-top:-10px;"])->label(false) ?>
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">Buscar</button>
+                    <?= Html::submitButton("buscar", ["class" => "btn btn-default"]) ?>
                 </span>
             </div>
         </div>
-
+        <div class="col-xs-2 col-md-5">
+            <a href="<?= Url::toRoute("comision/crear") ?>" class="btn btn-success" style="margin-top:29px;">Nueva</a>
+        </div>
         <?php $f->end() ?> 
     </div>
     <hr>

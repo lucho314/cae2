@@ -5,7 +5,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\data\Pagination;
 use yii\widgets\LinkPager;
-use yii\bootstrap\Modal;
 
 $this->title = 'SGD CAE: Buscar Evento';
 ?>
@@ -18,21 +17,23 @@ $this->title = 'SGD CAE: Buscar Evento';
                     "enableClientValidation" => true,
         ]);
         ?>
-        <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="col-xs-12 col-md-4">
             <label>Buscar:</label>
-            <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'placeholder' => 'Nombre'])->label(false) ?>
+            <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'placeholder' => 'Nombre','autofocus'=>true])->label(false) ?>
         </div>
-        <div class="col-xs-12 col-sm-3 col-md-3">
+        <div class="col-xs-12 col-md-3">
             <label>Desde:</label>
             <?= $f->field($form, "desde")->input("date", ['class' => "form-control"])->label(false) ?>
         </div>
-        <div class="col-xs-12 col-sm-3 col-md-3">
+        <div class="col-xs-12 col-md-3">
             <label>Hasta:</label>
             <?= $f->field($form, "hasta")->input("date", ['class' => "form-control"])->label(false) ?>
         </div>
-        <div class="col-xs-12 col-sm-2">
-            <input type="submit" value="Buscar" class="btn btn-default" style ="margin-top:28px;">
-        </div>    
+        <div class="col-xs-6 col-md-2">
+            <input type="submit" value="Buscar" class="btn btn-default" style ="margin-top:29px;">
+            <a href="<?= Url::toRoute("evento/crear") ?>" class="btn btn-success" style="margin-top:29px; float: right;">Nuevo</a>
+        </div>   
+        
         <?php $f->end() ?>
     </div>
     <?= $msg ?>
@@ -68,7 +69,7 @@ $this->title = 'SGD CAE: Buscar Evento';
                                                     <h4 class="modal-title">Eliminar <?= $row["nombre"] ?></h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>¿Desea eliminar el evento <?=$row['nombre']?>?</p>
+                                                    <p>¿Desea eliminar el evento <?= $row['nombre'] ?>?</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <?= Html::beginForm(Url::toRoute("deporte/eliminar"), "POST") ?>

@@ -70,7 +70,7 @@ AppAsset::register($this);
                 </header>
                 <aside class="col-xs-12 col-md-2 menu">
                     <ul class="container-fluid">
-                        <li class="row"><a href="<?= Url::toRoute("categoria/buscar") ?>"><span class="glyphicon glyphicon-globe"></span>Deportes</a></li>
+                        <li class="row"><a href="<?= Url::toRoute("deporte/buscar") ?>"><span class="glyphicon glyphicon-globe"></span>Deportes</a></li>
                         <li class="row"><a href="<?= Url::toRoute("categoria/buscar") ?>"><span class="glyphicon glyphicon-folder-open"></span>Categorias</a></li>
                         <li class="row"><a href="<?= Url::toRoute("usuario/buscar") ?>"><span class="glyphicon glyphicon-user"></span>Usuarios</a></li>
                         <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-user"></span>Deportistas<span class="glyphicon glyphicon-menu-down"></span></a>

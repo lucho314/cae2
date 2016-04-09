@@ -2,6 +2,7 @@
 
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'SGD CAE: '.$titulo;
 ?>
@@ -56,8 +57,9 @@ $this->title = 'SGD CAE: '.$titulo;
                 <label for="seleccione un deporte">Deporte:</label>
                 <?= $form->field($model, 'id_deporte')->dropDownList($deporte, ['prompt' => 'Seleccione Deporte'])->label(false) ?>
             </div>
-            <div class="form-group">
+            <div class="form-group botones">
                 <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                <a href="<?=Url::toRoute("categoria/buscar")?>" class=" btn btn-default">Cancelar</a>
             </div>
         </div>
     </div>

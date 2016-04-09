@@ -1,6 +1,7 @@
 <?php
 
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 $this->title = 'SGD CAE: Crear Administrador';
 ?>
@@ -62,6 +63,7 @@ $form = ActiveForm::begin([
 
         <div class="botones">
             <input type="submit" value="Crear" class="btn btn-success">
+            <a href="<?=Url::toRoute("usuario/buscar")?>" class="btn btn-default">Cancelar</a>
         </div>
     </div>
     <?php $form->end() ?>
