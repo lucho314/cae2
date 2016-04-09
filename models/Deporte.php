@@ -35,7 +35,7 @@ class Deporte extends \yii\db\ActiveRecord {
         return [
             [['nombre_deporte'], 'required'],
             ['nombre_deporte', 'match', 'pattern' => "/^[a-záéíóúñ\s]+$/i", 'message' => 'Sólo se aceptan letras'],
-            ['nombre_deporte', 'match', 'pattern' => "/^.{3,10}$/", 'message' => 'Mínimo 3 y máximo 10 caracteres'],
+            ['nombre_deporte', 'match', 'pattern' => "/^.{3,30}$/", 'message' => 'Mínimo 3 y máximo 10 caracteres'],
             ['nombre_deporte', 'val_nombre']
         ];
     }
@@ -50,7 +50,7 @@ class Deporte extends \yii\db\ActiveRecord {
         ];
     }
 
-    public function val_nombre($attribute, $params) {
+    public function val_nombre($attribute) {
         $table = $this->find()->where(['nombre_deporte' => $this->nombre_deporte])->count();
         if ($table != 0) {
             $this->addError($attribute, "el deporte ingresado ya existe");

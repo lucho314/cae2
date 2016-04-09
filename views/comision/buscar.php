@@ -73,7 +73,7 @@ $this->title = 'SGD CAE: Buscar Practica';
                                                 <div class="modal-footer">
                                                     <?= Html::beginForm(Url::toRoute("comision/eliminar"), "POST") ?>
                                                     <input type="hidden" name="id_comision" value="<?= $row['id_comision'] ?>">
-                                                    <button type="submit" class="btn btn-primary">Eliminar</button>
+                                                    <button type="submit" class="btn btn-danger">Eliminar</button>
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                                                     <?= Html::endForm() ?>
                                                 </div>

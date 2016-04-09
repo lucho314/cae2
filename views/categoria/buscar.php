@@ -21,7 +21,7 @@ $this->title = 'SGD CAE: Buscar Categoria';
             <div class="col-xs-10 col-md-5">
                 <label for="buscar categoria">Buscar:</label>
                 <div class="input-group">
-                    <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'style' => "margin-top:-10px;", "placeholder" => "Deporte, Edad, Profesor o Nombre","autofocus"=>true])->label(false) ?>
+                    <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'style' => "margin-top:-10px;", "placeholder" => "Profesor o Nombre","autofocus"=>true])->label(false) ?>
                     <span class="input-group-btn">
                         <?= Html::submitButton("buscar", ["class" => "btn btn-default"]) ?>
                     </span>
@@ -50,11 +50,7 @@ $this->title = 'SGD CAE: Buscar Categoria';
                     <table class="table table-bordered table-striped table-condensed">
                         <thead Style="background-color:#4682B4; color:white;">
                         <th>Nombre</th>
-                        <th>Deporte</th>
                         <th>Prof. Titular</th>
-                        <th>Prof. Suplente</th>
-                        <th>Edad Minima</th>
-                        <th>Edad Maxima</th>
                         <th>¿Modificar?</th>
                         <th>¿Eliminar?</th>
                         <th>Información</th>
@@ -63,11 +59,7 @@ $this->title = 'SGD CAE: Buscar Categoria';
                             <?php foreach ($model as $row): ?>
                                 <tr>
                                     <td><?= $row['nombre_categoria'] ?></td>
-                                    <td><?= $row['nombre_deporte'] ?></td>
                                     <td><?= $row['nya_titular'] ?></td>
-                                    <td><?= $row['nya_suplente'] ?></td>
-                                    <td><?= $row['edad_minima'] ?></td>
-                                    <td><?= $row['edad_maxima'] ?></td>
                                     <td><a href="<?= Url::toRoute(["categoria/modificar", "id_categoria" => $row['id_categoria']]) ?>">Editar</a></td>
                                     <td>
                                         <a href="#" data-toggle="modal" data-target="#id_categoria<?= $row['id_categoria'] ?>">Eliminar</a>
@@ -79,7 +71,7 @@ $this->title = 'SGD CAE: Buscar Categoria';
                                                         <h4 class="modal-title">Eliminar <?= $row["nombre_categoria"] ?></h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p>Esta Operacíon Implica Eliminar Todos los Eventos y Practicas Asociados a la 
+                                                        <p>Esta Operación Implica Eliminar Todos los Eventos y Practicas Asociados a la 
                                                             Categoria.</p>
                                                         <p>¿Desea Continuar?</p>
                                                     </div>

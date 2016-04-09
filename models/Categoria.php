@@ -45,12 +45,12 @@ class Categoria extends \yii\db\ActiveRecord {
 
     public function rules() {
         return [
-            [['nombre_categoria', 'id_deporte', 'id_profesor_titular', 'edad_minima', 'edad_maxima'], 'required'],
-            [['id_deporte', 'id_profesor_titular', 'id_profesor_suplente', 'edad_minima', 'edad_maxima'], 'match', 'pattern' => " /^\d*$/", "message" => 'Solo numeros enteros'],
-            ['nombre_categoria', 'match', 'pattern' => "/^.{1,20}$/", 'message' => 'Ah superado el maximo de 20 caracteres'],
-            [['nombre_categoria'], 'match', 'pattern' => "/^[0-9a-záéíóúñ\s]+$/i", 'message' => 'Sólo se aceptan letras y numeros'],
+            [['nombre_categoria', 'id_deporte'], 'required'],
+            [['id_deporte', 'id_profesor_titular', 'id_profesor_suplente', 'edad_minima', 'edad_maxima'], 'match', 'pattern' => " /^\d*$/", "message" => 'Edad no valida.'],
+            ['nombre_categoria', 'match', 'pattern' => "/^.{1,20}$/", 'message' => 'Ah superado el maximo de 20 caracteres.'],
+            [['nombre_categoria'], 'match', 'pattern' => "/^[0-9a-záéíóúñ\s]+$/i", 'message' => 'Sólo se aceptan letras y números.'],
             ['edad_maxima', 'compare', 'compareAttribute' => 'edad_minima', 'operator' => '>='],
-            ['id_profesor_suplente', 'compare', 'compareValue' => 'id_profesor_titular', 'operator' => '=', 'message' => 'El profesor suplente deber ser diferente al Titular'],
+            ['id_profesor_suplente', 'compare', 'compareValue' => 'id_profesor_titular', 'operator' => '=', 'message' => 'El profesor suplente deber ser diferente al Titular.'],
             ['nombre_categoria', 'val_nom', 'on' => self::SCENARIO_NEW],
             ['nombre_categoria', 'val_nommodif', 'on' => self::SCENARIO_UPDATE]
         ];
@@ -61,11 +61,11 @@ class Categoria extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'id_categoria' => 'Id Categoria',
+            'id_categoria' => 'Categoria',
             'nombre_categoria' => 'Nombre Categoria',
-            'id_deporte' => 'Id Deporte',
-            'id_profesor_titular' => 'Id Profesor Titular',
-            'id_profesor_suplente' => 'Id Profesor Suplente',
+            'id_deporte' => 'Deporte',
+            'id_profesor_titular' => 'Profesor Titular',
+            'id_profesor_suplente' => 'Profesor Suplente',
             'edad_minima' => 'Edad Minima',
             'edad_maxima' => 'Edad Maxima',
         ];
@@ -161,8 +161,7 @@ class Categoria extends \yii\db\ActiveRecord {
                                 ->select(["profesor.dni,concat(persona.apellido,', ',persona.nombre) nombre"])
                                 ->from('persona,profesor')
                                 ->where("persona.dni=profesor.dni")
-                                ->all()
-                        , 'dni', 'nombre');
+                                ->all(), 'dni', 'nombre');
     }
 
 }
