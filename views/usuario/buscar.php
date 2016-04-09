@@ -55,7 +55,7 @@ $this->title = 'SGD CAE: Buscar usuario';
                                 <td><?= $row['privilegio'] ?> </td>
                                 </td>
                                 <td><a href="<?= Url::toRoute(["usuario/ver", "id" => $row['dni']]) ?>">Ver</a></td>                                
-                                <td><a href="<?= Url::toRoute(["usuario/modificar", "id" => $row['dni']]) ?>">Editar</a></td>
+                                <td><a href="<?= Url::toRoute(["usuario/modifica", "id" => $row['dni']]) ?>">Editar</a></td>
                                 <td>
                                     <a href="#" data-toggle="modal" data-target="#dni<?= $row['dni'] ?>">Eliminar</a>
                                     <div class="modal fade" role="dialog" aria-hidden="true" id="dni<?= $row["dni"] ?>">
