@@ -90,7 +90,7 @@ class CategoriaController extends Controller {
                 if ($op == 1) {
                     $this->redirect(['deporte/infocategoria', 'id' => $dep]);
                 } else {
-                    $this->redirect(['buscar','msg'=>$msg]);
+                    $this->redirect(['buscar', 'msg' => $msg]);
                 }
             }
         }
@@ -102,15 +102,15 @@ class CategoriaController extends Controller {
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
-    */
+     */
     public function actionEliminar() {
-        $msg=null;
-        if (isset($_POST["categoria"])&&Validar::num_positivo($_POST['categoria'])) {
+        $msg = null;
+        if (isset($_POST["categoria"]) && Validar::num_positivo($_POST['categoria'])) {
             $model = Categoria::findOne($_POST["categoria"]);
             if ($model->delete()) {
                 $msg = "Categoria eliminada con exito.";
-            }  else {
-                $msg="Categoria no eliminada.";
+            } else {
+                $msg = "Categoria no eliminada.";
             }
         }
         return $this->redirect(['buscar', 'msg' => $msg]);
@@ -123,23 +123,21 @@ class CategoriaController extends Controller {
      * @return Categoria the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    /*protected function findModel($id) {
-        if (($model = Categoria::findOne($id)) !== null) {
-            $sub1 = Categoria::find()
-                    ->select(["concat(nombre,' ',apellido)as Nyatitular, id_categoria"])
-                    ->from('persona,categoria')
-                    ->where("persona.nombre=categoria.nombre");
-            $model = Categoria::find()->where(['IN', 'id_categoria', $sub1]);
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }*/
+    /* protected function findModel($id) {
+      if (($model = Categoria::findOne($id)) !== null) {
+      $sub1 = Categoria::find()
+      ->select(["concat(nombre,' ',apellido)as Nyatitular, id_categoria"])
+      ->from('persona,categoria')
+      ->where("persona.nombre=categoria.nombre");
+      $model = Categoria::find()->where(['IN', 'id_categoria', $sub1]);
+      } else {
+      throw new NotFoundHttpException('The requested page does not exist.');
+      }
+      } */
 
-    public function actionBuscar($msg = null,$search = null) {
+    public function actionBuscar($msg = null, $search = null,$id=6) {
         $form = new ValidarBusqueda;
-        $tabla = Categoria::find()->select("categoria.id_categoria,vcat_titular.nya_titular,nombre_categoria")
-                ->innerJoin("vcat_titular", 'categoria.id_categoria=vcat_titular.id_categoria')
-                ->innerJoin("deporte", "categoria.id_deporte=deporte.id_deporte");
+        $tabla = $this->infocategoria($id);
         if ($form->load(Yii::$app->request->get())) {
             if ($form->validate()) {
                 $search = Html::encode($form->q);
@@ -150,9 +148,25 @@ class CategoriaController extends Controller {
             }
         }
         $count = clone $tabla;
-        $pages = new Pagination(["pageSize" => 10,"totalCount" => $count->count()]);
+        $pages = new Pagination(["pageSize" => 10, "totalCount" => $count->count()]);
         $model = $tabla->asArray()->offset($pages->offset)->limit($pages->limit)->all();
-        return $this->render("buscar", ['msg' => $msg, "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
+        return $this->render("buscar", ['id'=>$id,'msg' => $msg, "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
     }
+
     
+    public static function infocategoria($id = null) {
+        if (Validar::num_positivo($id)) {
+            $model = Categoria::find()
+                    ->select('nombre_categoria,edad_maxima,edad_minima,nya_titular,nya_suplente,categoria.id_categoria ')
+                    ->distinct()
+                    ->innerJoin('deporte', 'deporte.id_deporte=categoria.id_deporte')
+                    ->innerJoin('vcat_titular', 'categoria.id_deporte=vcat_titular.id_deporte')
+                    ->innerJoin('vcat_suplente', 'categoria.id_deporte=vcat_titular.id_deporte')
+                    ->where(['deporte.id_deporte' => $id]);
+            return $model;
+        } else {
+            
+        }
+    }
+
 }

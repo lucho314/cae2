@@ -25,6 +25,7 @@ $this->title = 'SGD CAE: Buscar Categoria';
                     <span class="input-group-btn">
                         <?= Html::submitButton("buscar", ["class" => "btn btn-default"]) ?>
                     </span>
+                    <input type="hidden" name="id" value='<?= $id?>'>
                 </div>
             </div>
             <div class="col-xs-2 col-md-5">
@@ -92,6 +93,7 @@ $this->title = 'SGD CAE: Buscar Categoria';
                         </tbody>
                     </table>
                 </div>
+                
                 <?= LinkPager::widget(["pagination" => $pages,]); ?>
             </div>
         </div>

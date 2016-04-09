@@ -150,17 +150,8 @@ class DeporteController extends Controller {
     }
 
     public function actionInfocategoria($id) {
-        if (!Validar::num_positivo($id)) {
-            return $this->redirect("deporte/buscar");
-        }
-        $deporte = Deporte::findOne($id);
-        $model = $deporte->getCategorias()
-                ->select('nombre_categoria,edad_maxima,edad_minima,nya_titular,nya_suplente,categoria.id_categoria ')
-                ->distinct()
-                ->innerJoin('vcat_titular', 'categoria.id_deporte=vcat_titular.id_deporte')
-                ->innerJoin('vcat_suplente', 'categoria.id_deporte=vcat_titular.id_deporte')
-                ->all();
-        return $this->render("infocategoria", ['model' => $model, 'id' => $id]);
+        
+        return $this->render("infocategoria", ['model' => CategoriaController::infocategoria($id)->all(), 'id' => $id]);
     }
 
     public function actionInfodeportista($id) {
