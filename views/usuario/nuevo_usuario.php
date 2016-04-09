@@ -6,6 +6,17 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'SGD CAE: Nuevo Usuario';
 ?>
+<head>
+    <style>
+        #cargar {
+            position: relative; /* podría ser relative */
+            width: 200px;
+            height: 200px;
+            left: 25%;
+            top: 80px;
+        }
+    </style>
+</head>
 <article class="col-xs-12 col-md-10">
     <div class="row">
         <div class="col-xs-2">
@@ -21,6 +32,9 @@ $this->title = 'SGD CAE: Nuevo Usuario';
         </div>
     </div>
     <hr>
+    <div>
+    </div>
+
     <div id="crear"></div>
 
 </article>
@@ -28,7 +42,7 @@ $this->title = 'SGD CAE: Nuevo Usuario';
 <script>
     $('select#tipo').on('change', function () {
         var valor = $(this).val();
-        $("#crear").empty();
+        $('#crear').html('<div id="cargar"><img src="../web/imagenes/reload.svg"/></div>');
         switch (valor) {
             case '1':
                 url = '<?= Url::toRoute(['usuario/create']) ?>';
@@ -39,13 +53,15 @@ $this->title = 'SGD CAE: Nuevo Usuario';
             case '3':
                 url = '<?= Url::toRoute(['profesor/create']) ?>';
                 break;
+            default:
+                $('#crear').empty();
         }
         if (valor !== "") {
             $.ajax({
                 'url': url,
                 'async': true
             }).done(function (html) {
-                $("#crear").append(html);
+                $('#crear').fadeIn(1000).html(html);
             });
         }
     });

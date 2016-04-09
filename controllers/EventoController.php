@@ -23,42 +23,35 @@ include_once '../models/Tipo_de_menu.php';
 
 class EventoController extends Controller {
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['crear','buscar','eliminar','clista','agregar','quitar','conflista','verlista','modif_agregar','modificarlista','imprimir'],
+                'only' => ['crear', 'buscar', 'eliminar', 'clista', 'agregar', 'quitar', 'conflista', 'verlista', 'modif_agregar', 'modificarlista', 'imprimir'],
                 'rules' => [
                     [
-                        'actions' => ['crear','buscar','eliminar','clista','agregar','quitar','conflista','verlista','modif_agregar','modificarlista','imprimir'],
+                        'actions' => ['crear', 'buscar', 'eliminar', 'clista', 'agregar', 'quitar', 'conflista', 'verlista', 'modif_agregar', 'modificarlista', 'imprimir'],
                         'allow' => true,
                         'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) 
-                        {
-                          return User::isUserAdmin(Yii::$app->user->identity->id);
-                        }
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserAdmin(Yii::$app->user->identity->id);
+                }
                     ],
-                            
                     [
-                        'actions' => ['crear','buscar','eliminar','clista','agregar','quitar','conflista','verlista','modif_agregar','modificarlista','imprimir'],
+                        'actions' => ['crear', 'buscar', 'eliminar', 'clista', 'agregar', 'quitar', 'conflista', 'verlista', 'modif_agregar', 'modificarlista', 'imprimir'],
                         'allow' => true,
                         'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) 
-                        {
-                            return User::isUserProfe(Yii::$app->user->identity->id);
-                        }
-
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserProfe(Yii::$app->user->identity->id);
+                }
                     ],
                     [
                         'actions' => ['buscar'],
                         'allow' => true,
                         'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) 
-                        {
-                            return User::isUserSubcomision(Yii::$app->user->identity->id);
-                        }
-
+                        'matchCallback' => function ($rule, $action) {
+                    return User::isUserSubcomision(Yii::$app->user->identity->id);
+                }
                     ]
                 ],
             ],
@@ -187,70 +180,47 @@ class EventoController extends Controller {
     public function actionClista() {
         $this->layout = menu();
         $msg = null;
+        $convocados = null;
         if (isset($_SESSION['deporte'])) {
             $deporte = $_SESSION['deporte'];
         } else {
             $this->redirect(['evento/crear']);
         }
         $sql = "select nombre, dni,nombre_categoria from vdep_cat where id_deporte=$deporte";
-        if (!isset($_SESSION['dni'])) {
+        if (empty($_SESSION['dni'])) {
             $model = Yii::$app->db->createCommand($sql)->queryAll();
         } else {
-
-            $datos = \Yii::$app->db->createCommand($sql)->queryAll();
-            foreach ($datos as $val) {
-
-                if (!in_array($val['dni'], $_SESSION['dni'])) {
-                    $model[] = array('nombre' => $val['nombre'], 'dni' => $val['dni'], 'nombre_categoria' => $val['nombre_categoria']);
-                }
-            }
+            $dni = implode(",", $_SESSION['dni']);
+            $sql1 = $sql . " where dni not in (" . $dni . ")";
+            $model = \Yii::$app->db->createCommand($sql1)->queryAll();
+            $sql2 = $sql . " where dni in (" . $dni . ")";
+            $convocados = \Yii::$app->db->createCommand($sql2)->queryAll();
         }
-        return $this->render('clista', ['model' => $model, 'msg' => $msg]);
+        return $this->render('clista', ['model' => $model, 'msg' => $msg, 'convocados' => $convocados]);
     }
 
     public function actionAgregar() {
-        session_start();
-        $_SESSION['dni'][] = $_POST['id'];
+        $_SESSION['dni'][] = (int) $_REQUEST['id'];
     }
 
     public function actionQuitar() {
-        session_start();
-        if (is_numeric($_POST['id'])) {
-            $aux[] = $_POST['id'];
-            $array = array_diff($_SESSION['dni'], $aux);
+        if (is_numeric($_REQUEST['id'])) {
+            $aux[] = $_REQUEST['id'];
+            $array = array_diff($aux, $_SESSION['dni']);
             unset($_SESSION['dni']);
             foreach ($array as $val) {
-                $_SESSION['dni'] = $val;
+                echo $val;
+                $_SESSION['dni'][] = $val;
             }
         }
     }
 
-    function actionConflista($id = null) {
-        $this->layout = menu();
-        $connection = \Yii::$app->db;
-        $deporte = $_SESSION['deporte'];
-        $dnis = implode(" ", $_SESSION['dni']);
-        $dnis = str_replace(" ", ',', $dnis);
-        $sql = "select * from vdep_cat where id_deporte=$deporte and dni in ($dnis) ";
-        if ($id == 'confirmar') {
-            $id_evento = $_SESSION['id_evento'];
-            $tabla = $connection->createCommand($sql)->queryAll();
-            $convocados = new Convocados();
-            $transaction = $connection->beginTransaction();
-            foreach ($tabla as $valor) {
-                $dni = $valor['dni'];
-                $nombre = $valor['nombre'];
-                $connection->createCommand("insert into convocados (dni,nombre,id_evento) VALUES ('$dni','$nombre','$id_evento')")->execute();
-            }
-            $transaction->commit();
-            unset($_SESSION['dni']);
-            unset($_SESSION['id_evento']);
-            unset($_SESSION['deporte']);
-            $this->redirect(['evento/crear']);
-        } else {
-            $model = $connection->createCommand($sql)->queryAll();
-            return $this->render('confirmar', ['model' => $model]);
-        }
+    function actionConflista() {
+        $dni = implode(",", $_SESSION['dni']);
+        $evento=$_SESSION['id_evento'];
+        $sql = "INSERT INTO convocados (id_evento, dni,nombre) SELECT $evento ,dni,nombre FROM persona WHERE dni in ($dni)";
+        Yii::$app->db->createCommand($sql)->execute();
+        echo "guardo";
     }
 
     public function actionVerlista($id_evento, $id_deporte) {
