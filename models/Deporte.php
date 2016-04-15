@@ -3,8 +3,6 @@
 namespace app\models;
 use yii\helpers\ArrayHelper;
 
-use Yii;
-
 /**
  * This is the model class for table "deporte".
  *
@@ -107,8 +105,6 @@ class Deporte extends \yii\db\ActiveRecord {
     }
 
     public function getDatosprofesor() {
-
-
         return Persona::find()->where(['IN', 'dni', $this->getDnis()])->asArray()->all();
     }
 
@@ -120,7 +116,7 @@ class Deporte extends \yii\db\ActiveRecord {
     }
 
     public static function getListadeporte() {
-        return ArrayHelper::map(Deporte::find()->all(), "id_deporte", "nombre_deporte");
+        return ArrayHelper::map(Deporte::find()->all(),'id_deporte','nombre_deporte');
     }
 
 }

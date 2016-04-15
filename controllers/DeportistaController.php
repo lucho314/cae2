@@ -26,51 +26,24 @@ require 'Imprimir.php';
  */
 class DeportistaController extends Controller {
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['sessioncategoria','agregar','imprimir','buscar','opcion','delete','update','crear'],
+                'only' => ['sessioncategoria', 'agregar', 'imprimir', 'buscar', 'opcion', 'delete', 'update', 'crear'],
                 'rules' => [
-                    [
-                        'actions' => ['sessioncategoria','agregar','imprimir','buscar','opcion','delete','update','crear'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) 
-                        {
-                          return User::isUserAdmin(Yii::$app->user->identity->id);
-                        }
-                    ],
-                            
-                    [
-                        'actions' => ['buscar'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) 
-                        {
-                            return User::isUserProfe(Yii::$app->user->identity->id);
-                        }
-
-                    ],
-                    [
-                        'actions' => ['buscar'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) 
-                        {
-                            return User::isUserSubcomision(Yii::$app->user->identity->id);
-                        }
-
-                    ]
+                    ['actions' => ['sessioncategoria', 'agregar', 'imprimir', 'buscar', 'opcion', 'delete', 'update', 'crear'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
+                    return User::isUserAdmin(Yii::$app->user->identity->id);
+                }],
+                    ['actions' => ['buscar'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
+                    return User::isUserProfe(Yii::$app->user->identity->id);
+                }],
+                    ['actions' => ['buscar'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
+                    return User::isUserSubcomision(Yii::$app->user->identity->id);
+                }]
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+            'verbs' => ['class' => VerbFilter::className(), 'actions' => ['logout' => ['post']]]
         ];
     }
 
@@ -107,12 +80,8 @@ class DeportistaController extends Controller {
         $info_deporte = $info->getDeportistaCategorias()->select('nombre_deporte,nombre_categoria')
                 ->innerJoin('categoria', 'categoria.id_categoria=deportista_categoria.id_categoria')
                 ->innerJoin('deporte', 'deporte.id_deporte=deportista_categoria.id_deporte')
-                ->asArray()
-                ->all();
-        return $this->render('informacion', [
-                    'informacion' => $info,
-                    'info_deporte' => $info_deporte
-        ]);
+                ->asArray()->all();
+        return $this->render('informacion', ['informacion' => $info,'info_deporte' => $info_deporte]);
     }
 
     /**
@@ -176,24 +145,12 @@ class DeportistaController extends Controller {
                 }
             }
         }
-        return $this->render('formulario', [
-                    'model' => $model, 'planilla' => $planilla, 'msg' => $msg
-        ]);
+        return $this->render('formulario', ['model' => $model, 'planilla' => $planilla, 'msg' => $msg]);
     }
 
-    /**
-     * Updates an existing Deportista model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
     public function actionModificar($dni) {
         $msg = null;
-        $model = Deportista::find()->select("persona.*,deportista.*")
-                ->from("persona,deportista")
-                ->where('persona.dni=deportista.dni')
-                ->andWhere("deportista.dni=$dni")
-                ->one();
+        $model = Deportista::find()->select("persona.*,deportista.*")->from("persona,deportista")->where('persona.dni=deportista.dni')->andWhere("deportista.dni=$dni")->one();
         $planilla = $model->getIdPlanilla()->one();
         $cant = $model->getDeportistaCategorias()->count();
         switch ($cant) {
@@ -211,7 +168,7 @@ class DeportistaController extends Controller {
                 $model->categoria2 = $table->id_categoria;
                 break;
             case 3:
-                $ $table = $model->getDeportistaCategorias()->offset(0)->one();
+                $table = $model->getDeportistaCategorias()->offset(0)->one();
                 $model->deporte1 = $table->id_deporte;
                 $model->categoria1 = $table->id_categoria;
                 $table = $model->getDeportistaCategorias()->offset(1)->one();
@@ -225,12 +182,7 @@ class DeportistaController extends Controller {
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->dni]);
         } else {
-            return $this->render('modificar_deportista', [
-                        'model' => $model,
-                        'planilla' => $planilla,
-                        'msg' => $msg,
-                        'cant' => $cant
-            ]);
+            return $this->render('modificar_deportista', ['model' => $model,'planilla' => $planilla,'msg' => $msg,'cant' => $cant]);
         }
     }
 
@@ -304,9 +256,8 @@ class DeportistaController extends Controller {
                 ->limit($pages->limit)
                 ->asArray()
                 ->all();
-        if(!empty($opcion))
-        {
-            return $this->render('agregar',[ "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
+        if (!empty($opcion)) {
+            return $this->render('agregar', [ "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
         }
         return $this->render(User::isUserAdmin(Yii::$app->user->identity->id) ? "buscar" : "buscar_restringido", [ "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
     }
@@ -351,19 +302,20 @@ class DeportistaController extends Controller {
         }
         return $model;
     }
-    
-        public function actionAgregar() {
+
+    public function actionAgregar() {
         session_start();
         if (isset($_SESSION['categoria']) && is_numeric($_REQUEST['id'])) {
             $id_categoria = $_SESSION['categoria'];
             $id_deporte = Categoria::findOne($id_categoria);
-            $dni=$_REQUEST['id'];
+            $dni = $_REQUEST['id'];
             Yii::$app->db->createCommand("insert into deportista_categoria (dni,id_categoria,id_deporte,activo) value('$dni','$id_categoria',$id_deporte->id_deporte,0)")->execute();
         }
     }
-    
-     public function actionSessioncategoria() {
+
+    public function actionSessioncategoria() {
         session_start();
         $_SESSION['categoria'] = $_REQUEST['categoria'];
     }
+
 }

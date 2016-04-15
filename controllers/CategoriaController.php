@@ -15,6 +15,7 @@ use yii\data\Pagination;
 use yii\filters\AccessControl;
 use app\models\User;
 use app\models\Validar;
+use app\models\Deporte;
 
 /**
  * CategoriaController implements the CRUD actions for Categoria model.
@@ -66,7 +67,7 @@ class CategoriaController extends Controller {
                 $model->getErrors();
             }
         }
-        return $this->render('formulario', ['model' => new Categoria, 'msg' => $msg, 'profesor' => $model->getProfesorLista(), 'deporte' => $model->getDeporteLista(), 'titulo' => 'Crear Categoria']);
+        return $this->render('formulario', ['model' => new Categoria, 'msg' => $msg, 'profesor' => $model->getProfesorLista(), 'deporte' =>Deporte::getListadeporte(), 'titulo' => 'Crear Categoria']);
     }
 
     /**
@@ -78,7 +79,6 @@ class CategoriaController extends Controller {
     public function actionModificar($id_categoria, $op = null) {
         $msg = null;
         $model = Categoria::findOne($id_categoria);
-        $dep = $model->id_deporte;
         $model->scenario = Categoria::SCENARIO_UPDATE;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -88,13 +88,13 @@ class CategoriaController extends Controller {
             if ($model->validate() && $model->save()) {
                 $msg = "Categoria Modificada con exito.";
                 if ($op == 1) {
-                    $this->redirect(['deporte/infocategoria', 'id' => $dep]);
+                    $this->redirect(['deporte/infocategoria', 'id' =>$model->id_deporte]);
                 } else {
-                    $this->redirect(['buscar', 'msg' => $msg]);
+                    $this->redirect(['buscar', 'msg' => $msg,'id'=>$model->id_deporte]);
                 }
             }
         }
-        return $this->render('formulario', ['model' => $model, 'msg' => $msg, 'profesor' => $model->getProfesorLista(), 'deporte' => $model->getDeporteLista(), 'titulo' => 'Modificar Categoria']);
+        return $this->render('formulario', ['model' => $model, 'msg' => $msg, 'profesor' => $model->getProfesorLista(), 'deporte' =>Deporte::getListadeporte(), 'titulo' => 'Modificar Categoria']);
     }
 
     /**
@@ -135,7 +135,7 @@ class CategoriaController extends Controller {
       }
       } */
 
-    public function actionBuscar($msg = null, $search = null,$id=6) {
+    public function actionBuscar($id, $msg = null, $search = null) {
         $form = new ValidarBusqueda;
         $tabla = $this->infocategoria($id);
         if ($form->load(Yii::$app->request->get())) {

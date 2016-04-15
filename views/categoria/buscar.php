@@ -3,7 +3,6 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\data\Pagination;
 use yii\widgets\LinkPager;
 
 $this->title = 'SGD CAE: Buscar Categoria';
@@ -23,13 +22,14 @@ $this->title = 'SGD CAE: Buscar Categoria';
                 <div class="input-group">
                     <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'style' => "margin-top:-10px;", "placeholder" => "Profesor o Nombre","autofocus"=>true])->label(false) ?>
                     <span class="input-group-btn">
-                        <?= Html::submitButton("buscar", ["class" => "btn btn-default"]) ?>
+                        <?= Html::submitButton("Buscar", ["class" => "btn btn-default"]) ?>
                     </span>
-                    <input type="hidden" name="id" value='<?= $id?>'>
+                    
                 </div>
+                <input type="hidden" name="id" value='<?= $id?>'>
             </div>
             <div class="col-xs-2 col-md-5">
-                <a href="<?=Url::toRoute("categoria/crear")?>" class="btn btn-success" style="margin-top:29px;">Nueva</a>
+                <a href="<?=Url::toRoute('categoria/crear')?>" class="btn btn-success" style="margin-top:29px;">Nueva</a>
             </div>
 
             <?php $f->end() ?> 
@@ -89,7 +89,7 @@ $this->title = 'SGD CAE: Buscar Categoria';
                                     </td>
                                     <td><a href="">Ver</a></td>
                                 </tr>
-                            <?php endforeach ?>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>

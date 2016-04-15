@@ -3,7 +3,6 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\data\Pagination;
 use yii\widgets\LinkPager;
 
 $this->title = 'SGD CAE: Buscar Practica';
@@ -23,7 +22,7 @@ $this->title = 'SGD CAE: Buscar Practica';
             <div class="input-group">
                 <?= $f->field($form, "q")->input("search", ['placeholder' => 'Nombre, Día o Categoria', 'class' => "form-control", 'autofocus' => true, 'style' => "margin-top:-10px;"])->label(false) ?>
                 <span class="input-group-btn">
-                    <?= Html::submitButton("buscar", ["class" => "btn btn-default"]) ?>
+                    <?= Html::submitButton("Buscar", ["class" => "btn btn-default"]) ?>
                 </span>
             </div>
         </div>

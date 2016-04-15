@@ -18,7 +18,7 @@ body{
     float: left;
 }
 
-.container >section {
+.container >#login {
     background: rgba(47,79,79,0.8);
 }
 .container .row h3{
@@ -32,9 +32,11 @@ body{
     font-style: italic;
 }
 
-section{
+#login{
+    margin-top: 0;
     height: auto;
     padding-bottom: 3px;
+    left: 0;
 }
 
 img{
@@ -52,13 +54,13 @@ img{
     }
     .container header{display: none;}
 
-    .container section{margin-top: 5px;}
+    .container #login{margin-top: 5px;}
 
-    .container section h3{display: none;}	
+    .container #login h3{display: none;}	
 
-    .container section hr{display: none;}
+    .container #login hr{display: none;}
 
-    .container section form{margin-top: 5px;}
+    .container #login form{margin-top: 5px;}
 
-    .container section img{display: none;}
+    .container #login img{display: none;}
 }

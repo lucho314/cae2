@@ -1,7 +1,6 @@
 <?php
 
 namespace app\models;
-use app\models\User;
 
 class User extends \yii\base\Object implements \yii\web\IdentityInterface
 {
@@ -23,11 +22,7 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
 
     public static function findIdentity($id)
     {
-        
-        $user = Usuario::find()
-                ->Where("dni=:dni", ["dni" => $id])
-                ->one();
-        
+        $user = Usuario::find()->Where("dni=:dni", ["dni" => $id])->one();
         return isset($user) ? new static($user) : null;
     }
 

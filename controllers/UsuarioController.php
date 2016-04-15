@@ -15,7 +15,7 @@ use yii\data\Pagination;
 use yii\helpers\Html;
 use yii\filters\AccessControl;
 use app\models\User;
-use app\models\SubComision;
+use app\models\Validar;
 
 include_once '../models/Tipo_de_menu.php';
 
@@ -55,8 +55,8 @@ class UsuarioController extends Controller {
         $this->layout = "mainadmin";
         $nombre = Yii::$app->user->identity->nombre_usuario;
         $notificacion = NULL;
-        $notificacion = NotificacionesController::Notificacion('admin', $cantidad);
-        return $this->render("inicio", ['nombre' => $nombre, 'noti' => $notificacion,'notificacion' => $notificacion ? 'Usted posee ' . $cantidad['cantidad'] . ' notificaciones' : 'No posee notificaciones','eventos' => EventoController::evento($eventos) ? $eventos : null]);
+        //$notificacion = NotificacionesController::Notificacion('admin', $cantidad);
+        return $this->render("inicio", ['nombre' => $nombre, 'noti' => $notificacion, 'notificacion' => $notificacion ? 'Usted posee ' . $cantidad['cantidad'] . ' notificaciones' : 'No posee notificaciones', 'eventos' => EventoController::evento($eventos) ? $eventos : null]);
     }
 
     public function actionProfesor() {
@@ -71,11 +71,10 @@ class UsuarioController extends Controller {
 
     public function actionSubcomision() {
         $this->layout = "mainsubcomision";
-        return $this->render("inicio", ['nombre' =>Yii::$app->user->identity->nombre_usuario]);
+        return $this->render("inicio", ['nombre' => Yii::$app->user->identity->nombre_usuario]);
     }
 
     public function actionLogin() {
-        $nombre = null;
         if (!\Yii::$app->user->isGuest) {
             if (User::isUserAdmin(Yii::$app->user->identity->id)) {
                 $this->redirect(['usuario/admin']);
@@ -117,12 +116,10 @@ class UsuarioController extends Controller {
         $this->layout = "mainadmin";
         return $this->render("nuevo_usuario");
     }
-    
+
     public function actionVer($id) {
         $this->layout = "mainadmin";
-        return $this->render('ver', [
-                    'model' => $this->findModel($id),
-        ]);
+        return $this->render('ver', ['model' => $this->findModel($id)]);
     }
 
     /**
@@ -130,8 +127,7 @@ class UsuarioController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
-        $msg = null;
+    public function actionCrear($msg = null) {
         $model = new Usuario();
         $model->scenario = Usuario::SCENARIO_NUEVO;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
@@ -146,49 +142,19 @@ class UsuarioController extends Controller {
             $transaction = $connection->beginTransaction();
             $sql1 = "insert into persona (dni,nombre,apellido,domicilio,telefono,email) value ('$model->dni','$model->nombre','$model->apellido','$model->domicilio','$model->telefono','$model->email')";
             $sql2 = "insert into usuario (dni,nombre_usuario,contrasenia,privilegio,authKey,accessToken) value ('$model->dni','$model->nombre_usuario','$password',1,'$authKey','$accessToken')";
-            $dni = $model->dni;
             try {
                 $connection->createCommand($sql1)->execute();
                 $connection->createCommand($sql2)->execute();
                 $transaction->commit();
                 $msg = "Registracion realizada con exito";
-                foreach ($model as $clave => $val) {
-                    $model->$clave = null;
-                }
-                $model->nombre = null;
-                $model->apellido = null;
-                $model->telefono = null;
-                $model->domicilio = null;
-                $model->conf_cont = null;
             } catch (\Exception $e) {
-                $msg = "Registracion realizada con exito";
+                $msg = "Registracion no realizada";
                 $transaction->rollBack();
                 throw $e;
             }
             return $this->redirect(['nuevo']);
-        } else {
-            return $this->renderAjax('nuevo_admin', [
-                        'model' => $model, 'msg' => $msg
-            ]);
         }
-    }
-
-    /**
-     * Updates an existing Usuario model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id) {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->dni]);
-        } else {
-            return $this->render('update', [
-                        'model' => $model,
-            ]);
-        }
+        return $this->renderAjax('nuevo_admin', ['model' => $model, 'msg' => $msg]);
     }
 
     /**
@@ -198,17 +164,14 @@ class UsuarioController extends Controller {
      * @return mixed
      */
     public function actionEliminar() {
-        if ((int) isset($_POST["dni"])) {
-            $id = $_POST["dni"];
-            $model = Usuario::findOne($_POST["dni"]);
+        //$msg='Usuario no eliminado';
+        if (Validar::num_positivo($_POST['dni'])) {
+            $model = Usuario::findOne($_POST['dni']);
             if ($model->delete()) {
-                $msg = "<div class='alert alert-success' role='contentinfo'>
-                <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
-                <span class='sr-only'>Error:</span>
-               Usuario Eliminada con exito </div>";
+                //$msg='Usuario eliminado con exito';
             }
         }
-        return $this->redirect(['buscar', 'msg' => $msg]);
+        $this->redirect('usuario/buscar');
     }
 
     /**
@@ -219,7 +182,7 @@ class UsuarioController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id) {
-        if ((Usuario::findOne($id)) !== null) {
+        if (Validar::num_positivo($id)) {
             $model = Usuario::find()
                     ->select('persona.*,nombre_usuario,privilegio')
                     ->from('persona,usuario')
@@ -228,48 +191,28 @@ class UsuarioController extends Controller {
                     ->one();
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('La pagina requerida no existe.');
         }
     }
 
     public function actionBuscar() {
         $this->layout = "mainadmin";
+        $search=null;
         $form = new ValidarBusqueda;
-        $search = null;
-        if ($form->load(Yii::$app->request->post())) {
+        $table = Usuario::find();
+        if ($form->load(Yii::$app->request->get())) {
             if ($form->validate()) {
-
                 $search = Html::encode($form->q);
-
-                $table = Usuario::find()
-                        ->Where(['like', 'nombre_usuario', $search])
+                $table = $table->Where(['like', 'nombre_usuario', $search])
                         ->orWhere(['like', 'privilegio', $search])
                         ->orWhere(['dni' => $search]);
-                $count = clone $table;
-                $pages = new Pagination([
-                    "pageSize" => 10,
-                    "totalCount" => $count->count()
-                ]);
-                $model = $table
-                        ->offset($pages->offset)
-                        ->limit($pages->limit)
-                        ->all();
             } else {
                 $form->getErrors();
             }
-        } else {
-            $table = Usuario::find();
-
-            $count = clone $table;
-            $pages = new Pagination([
-                "pageSize" => 10,
-                "totalCount" => $count->count(),
-            ]);
-            $model = $table
-                    ->offset($pages->offset)
-                    ->limit($pages->limit)
-                    ->all();
         }
+        $count = clone $table;
+        $pages = new Pagination(["pageSize" => 10, "totalCount" => $count->count()]);
+        $model = $table->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render("buscar", [ "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
     }
 

@@ -39,10 +39,10 @@ class Usuario extends \app\models\Persona {
      */
     public function rules() {
         return array_merge(parent::rules(),[
-            [['nombre_usuario', 'contrasenia'], 'required'],
-            ['nueva_cont', 'required'],
-            [['contrasenia'], 'string'],
-            [['nombre_usuario'], 'string', 'max' => 9],
+            [['nombre_usuario', 'contrasenia','nueva_cont'], 'required'],
+            [['contrasenia','nueva_cont'], 'string'],
+            ['nombre_usuario','match', 'pattern' => "/^[a-záéíóúñ\s]+$/i", 'message' => 'Sólo se aceptan letras'],
+            ['nombre_usuario','match', 'pattern' => "/^.{1,20}$/",'message' => 'Ah superado el maximo de 20 caracteres'],
             ['conf_cont', 'compare', 'compareAttribute' => 'contrasenia', 'message' => 'Las contraseñas no coinciden', 'on' => self::SCENARIO_NUEVO],
             ['nombre_usuario', 'usuario_existe', 'on' => self::SCENARIO_NUEVO],
             ['nombre_usuario', 'usuario_existeM', 'on' => self::SCENARIO_MODIFICAR],
@@ -63,7 +63,7 @@ class Usuario extends \app\models\Persona {
      */
     public function attributeLabels() {
         return [
-            'dni' => 'Dni',
+            'dni' => 'DNI',
             'nombre_usuario' => 'Nombre Usuario',
             'contrasenia' => 'Contrasenia',
             'privilegio' => 'Privilegio',
@@ -88,7 +88,7 @@ class Usuario extends \app\models\Persona {
         return $this->hasOne(Persona::className(), ['dni' => 'dni']);
     }
 
-    public function usuario_existeM($attribute, $params) {
+    public function usuario_existeM($attribute) {
         $usuario = $this->findOne($this->dni);
         if ($usuario->nombre_usuario != $this->nombre_usuario) {
             $table = $this->find()->where(['nombre_usuario' => $this->nombre_usuario]);
@@ -101,7 +101,7 @@ class Usuario extends \app\models\Persona {
         return false;
     }
 
-    public function usuario_existe($attribute, $params) {
+    public function usuario_existe($attribute) {
         $table = $this->find()->where(['nombre_usuario' => $this->nombre_usuario]);
 
         if ($table->count() != 0) {

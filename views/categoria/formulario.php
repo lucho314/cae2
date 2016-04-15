@@ -59,7 +59,7 @@ $this->title = 'SGD CAE: '.$titulo;
             </div>
             <div class="form-group botones">
                 <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-                <a href="<?=Url::toRoute("categoria/buscar")?>" class=" btn btn-default">Cancelar</a>
+                <a href="<?=Url::toRoute(['categoria/buscar','id'=>$model->id_deporte])?>" class=" btn btn-default">Cancelar</a>
             </div>
         </div>
     </div>

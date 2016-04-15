@@ -43,13 +43,13 @@ $this->title = 'SGD CAE: Nuevo Usuario';
         $('#crear').html('<div id="cargar"><img src="../web/imagenes/reload.svg"/></div>');
         switch (valor) {
             case '1':
-                url = '<?= Url::toRoute(['usuario/create']) ?>';
+                url = '<?= Url::toRoute(['usuario/crear']) ?>';
                 break;
             case '2':
-                url = '<?= Url::toRoute(['subcomision/create']) ?>';
+                url = '<?= Url::toRoute(['subcomision/crear']) ?>';
                 break
             case '3':
-                url = '<?= Url::toRoute(['profesor/create']) ?>';
+                url = '<?= Url::toRoute(['profesor/crear']) ?>';
                 break;
             default:
                 $('#crear').empty();

@@ -3,9 +3,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\data\Pagination;
 use yii\widgets\LinkPager;
-use yii\bootstrap\Modal;
 
 $this->title = 'SGD CAE: Buscar Deportista';
 ?>
@@ -19,10 +17,10 @@ $this->title = 'SGD CAE: Buscar Deportista';
         ]);
         ?>
 
-        <div class="col-xs-12 col-md-5">
+        <div class="col-xs-10 col-md-5">
             <label>Buscar:</label>
             <div class="input-group">
-                <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'style' => "margin-top:-10px;",'placeholder'=>'DNI,Nombre o Apellido'])->label(false) ?>
+                <?= $f->field($form, "q")->input("search", ['class' => "form-control", 'style' => "margin-top:-10px;",'placeholder'=>'DNI, Nombre o Apellido'])->label(false) ?>
                 <span class="input-group-btn">
                     <?= Html::submitButton("Buscar",['class'=>'btn btn-default'])?>
                 </span>
@@ -30,6 +28,9 @@ $this->title = 'SGD CAE: Buscar Deportista';
         </div>
 
         <?php $f->end() ?> 
+        <div class="col-xs-2 col-md-5">
+            <a href="<?=Url::toRoute("deportista/crear")?>" class="btn btn-success" style="margin-top:29px;">Nuevo</a>
+        </div>
     </div>
     <hr>
     

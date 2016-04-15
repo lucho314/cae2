@@ -37,20 +37,29 @@ body{
 
 a:hover{text-decoration: none;}
 
-div,aside{height: inherit;}
+div,aside,section{height: inherit;}
 
 aside{
     max-height:calc(100% - 70px); 
     max-height:-webkit-calc(100% - 70px); 
     max-height:-moz-calc(100% - 70px);
     left: 0;
-}
-
-aside{
     background: #2c3e50;
     z-index: 1000;
     overflow: auto;
-    left: 0;
+}
+
+section{
+    margin-top: 70px;
+    max-height:calc(100% - 70px); 
+    max-height:-webkit-calc(100% - 70px); 
+    max-height:-moz-calc(100% - 70px);
+    left:-100%;
+    background: black;
+    position: fixed;
+    z-index: 1000;
+    width: 16.66666667%;
+    overflow: auto;
 }
 
 #cuerpo_planilla{
@@ -63,14 +72,14 @@ aside .container-fluid{
     padding:0px;
 }
 
-aside .container-fluid ul li{
+aside .container-fluid ul li, section li{
     list-style: none;
     font-size: 18px;
     font-family: arial;
     border-bottom:1px solid rgba(255,255,255,.5);
 }
 
-aside .container-fluid li a{
+aside .container-fluid li a, section ul li a{
     display:block;
     color: #fff;
     text-decoration: none;
@@ -78,16 +87,15 @@ aside .container-fluid li a{
     padding: 10px 0px 10px 0px;
 }
 
-aside .container-fluid li a:hover{
+aside .container-fluid li a:hover, section li a:hover{
     background:#1798af;
     text-decoration:none;
+    color: #fff;
 }
 
-aside .container-fluid li a span{padding: 0px 5px;}
+aside .container-fluid li a span, section li a span{padding: 0px 5px;}
 
 aside .container-fluid li a span:nth-child(2){float: right;}
-
-.children{display: none;}
 
 aside .container-fluid li .children{
     display: none;
@@ -95,12 +103,6 @@ aside .container-fluid li .children{
 }
 
 .menu_movil{display: none;}
-
-#lista_deportista{
-    max-height: 325px;
-    background: white;
-    overflow: auto;
-}
 
 article label{
     color: white;
@@ -264,6 +266,19 @@ article .row .col .form-group >label{margin-right: 3px;}
         left:-100%;
         overflow: auto;
         z-index: 2000;
+    }
+
+    section{
+        margin-top: 0px;
+        max-height:calc(100% - 55px); 
+        max-height:-webkit-calc(100% - 55px); 
+        max-height:-moz-calc(100% - 55px);
+        left:-100%;
+        background: black;
+        z-index: 2000;
+        min-width: 100%;
+        overflow: auto;
+        position: fixed;
     }
 
     .botones{float: right;}

@@ -3,7 +3,6 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\data\Pagination;
 use yii\widgets\LinkPager;
 
 $this->title = 'SGD CAE: Buscar Asistencia';
@@ -22,7 +21,7 @@ $this->title = 'SGD CAE: Buscar Asistencia';
             <div class="input-group">
                 <?= $f->field($form, "x")->input("date", ['class' => "form-control", 'autofocus' => true, 'style' => "margin-top:-10px;"])->label(false) ?>
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit">Buscar</button>
+                    <?= Html::submitButton("Buscar", ["class" => "btn btn-default"]) ?>
                 </span>
             </div>
         </div>

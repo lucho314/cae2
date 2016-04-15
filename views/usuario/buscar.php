@@ -3,7 +3,6 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\data\Pagination;
 use yii\widgets\LinkPager;
 
 $this->title = 'SGD CAE: Buscar usuario';
@@ -12,7 +11,7 @@ $this->title = 'SGD CAE: Buscar usuario';
     <div class="row" style="margin-top: 5px;">
         <?php
         $f = ActiveForm::begin([
-                "method" => "post",
+                "method" => "get",
                 "action" => Url::toRoute("usuario/buscar"),
                 "enableClientValidation" => true]);
         ?>
@@ -22,7 +21,7 @@ $this->title = 'SGD CAE: Buscar usuario';
             <div class="input-group">
                 <?= $f->field($form, "q")->input("search", ['class' => 'form-control', 'placeholder' => 'DNI o Nombre de Usuario', 'style' => "margin-top:-10px;",'autofocus'=>true])->label(false) ?>
                 <span class="input-group-btn">
-                    <?= Html::submitButton("buscar", ["class" => "btn btn-default"]) ?>
+                    <?= Html::submitButton("Buscar", ["class" => "btn btn-default"]) ?>
                 </span>
             </div>
         </div>

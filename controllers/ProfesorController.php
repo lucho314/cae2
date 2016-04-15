@@ -11,8 +11,8 @@ use app\models\ProfesorBuscar;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
-use yii\helpers\ArrayHelper;
 use app\models\User;
+use app\models\Usuario;
 
 /**
  * ProfesorController implements the CRUD actions for Profesor model.
@@ -25,40 +25,20 @@ class ProfesorController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create','update','delete'],
+                'only' => ['crear', 'update', 'delete'],
                 'rules' => [
-                    [
-                        'actions' => ['create','update','delete'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                    ['actions' => ['crear', 'update', 'delete'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserAdmin(Yii::$app->user->identity->id);
-                }
-                    ],
-                    [
-                        'actions' => [''],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                }],
+                    ['actions' => [''], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserProfe(Yii::$app->user->identity->id);
-                }
-                    ],
-                    [
-                        'actions' => [''],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                }],
+                    ['actions' => [''], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserSubcomision(Yii::$app->user->identity->id);
-                }
-                    ]
+                }]
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+            'verbs' => ['class' => VerbFilter::className(), 'actions' => ['logout' => ['post']]]
         ];
     }
 
@@ -92,52 +72,34 @@ class ProfesorController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate() {
-        $profesor = new Profesor();
-        $model = new \app\models\Usuario;
-        $model->scenario = \app\models\Usuario::SCENARIO_NUEVO;
-        $msg = null;
+    public function actionCrear() {
+        $model = new Usuario;
+        $model->scenario = Usuario::SCENARIO_NUEVO;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
-        if ($model->load(Yii::$app->request->post()) && $profesor->load(Yii::$app->request->post())) {
-            $msg = "paso";
-            if ($model->validate() && $profesor->validate()) {
-                $password = crypt($model->contrasenia, Yii::$app->params["salt"]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                $model->contrasenia = crypt($model->contrasenia, Yii::$app->params["salt"]);
                 $connection = \Yii::$app->db;
                 $transaction = $connection->beginTransaction();
                 $sql1 = "insert into persona (dni,nombre,apellido,domicilio,telefono,email) value ('$model->dni','$model->nombre','$model->apellido','$model->domicilio','$model->telefono','$model->email')";
-                $sql2 = "insert into usuario (dni,nombre_usuario,contrasenia,privilegio) value ('$model->dni','$model->nombre_usuario','$password',3)";
+                $sql2 = "insert into usuario (dni,nombre_usuario,contrasenia,privilegio) value ('$model->dni','$model->nombre_usuario','$model->contrasenia',3)";
                 $sql3 = "insert into profesor (dni) value ('$model->dni')";
                 try {
                     $connection->createCommand($sql1)->execute();
                     $connection->createCommand($sql2)->execute();
                     $connection->createCommand($sql3)->execute();
-
                     $transaction->commit();
-                    $dni = $model->dni;
-                    $msg = "guardado";
-                    foreach ($model as $clave => $val) {
-                        $model->$clave = null;
-                    }
-                    return $this->redirect(['view', 'id' => $dni]);
-                } catch (\Exception $e) {
-                    $msg = "Registracion realizada con exito";
+                } catch (Exception $e) {
                     $transaction->rollBack();
                     throw $e;
                 }
+                return $this->redirect('usuario/nuevo');
             }
-            //return $this->redirect(['view', 'id' => $model->dni]);
         }
-
-        $deporte = ArrayHelper::map(\app\models\Deporte::find()->all(), 'id_deporte', 'nombre_deporte');
-        return $this->renderAjax('nuevo', [
-                    'model' => $model,
-                    'profesor' => $profesor,
-                    'deporte' => $deporte,
-                    'msg' => $msg
-        ]);
+        return $this->renderAjax('nuevo', ['model' => $model]);
     }
 
     /**
@@ -158,17 +120,6 @@ class ProfesorController extends Controller {
         }
     }
 
-    /**
-     * Deletes an existing Profesor model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id) {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
 
     /**
      * Finds the Profesor model based on its primary key value.

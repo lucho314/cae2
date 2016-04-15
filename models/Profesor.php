@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "profesor".
  *
@@ -33,9 +31,7 @@ class Profesor extends \app\models\Usuario
      */
     public function rules()
     {
-        return [
-            [['deportes'], 'required']
-        ];
+        return ['deportes', 'required'];
     }
 
     /**
@@ -44,7 +40,7 @@ class Profesor extends \app\models\Usuario
     public function attributeLabels()
     {
         return [
-            'dni' => 'Dni',
+            'dni' => 'DNI',
         ];
     }
 

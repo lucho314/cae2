@@ -46,13 +46,14 @@ class Categoria extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['nombre_categoria', 'id_deporte'], 'required'],
-            [['id_deporte', 'id_profesor_titular', 'id_profesor_suplente', 'edad_minima', 'edad_maxima'], 'match', 'pattern' => " /^\d*$/", "message" => 'Edad no valida.'],
-            ['nombre_categoria', 'match', 'pattern' => "/^.{1,20}$/", 'message' => 'Ah superado el maximo de 20 caracteres.'],
+            [['edad_minima', 'edad_maxima'], 'match', 'pattern' => '/^[0-9]$|^[0-9]+[0-9]$/', "message" => 'Edad no valida.'],
+            ['nombre_categoria', 'match', 'pattern' => "/^.{1,21}$/", 'message' => 'Ah superado el maximo de 20 caracteres.'],
             [['nombre_categoria'], 'match', 'pattern' => "/^[0-9a-záéíóúñ\s]+$/i", 'message' => 'Sólo se aceptan letras y números.'],
             ['edad_maxima', 'compare', 'compareAttribute' => 'edad_minima', 'operator' => '>='],
             ['id_profesor_suplente', 'compare', 'compareValue' => 'id_profesor_titular', 'operator' => '=', 'message' => 'El profesor suplente deber ser diferente al Titular.'],
             ['nombre_categoria', 'val_nom', 'on' => self::SCENARIO_NEW],
-            ['nombre_categoria', 'val_nommodif', 'on' => self::SCENARIO_UPDATE]
+            ['nombre_categoria', 'val_nommodif', 'on' => self::SCENARIO_UPDATE],
+            [['id_deporte', 'id_profesor_titular', 'id_profesor_suplente'],'match', 'pattern'=>'/^[0-9]$|^[0-9]+[0-9]$/']
         ];
     }
 
@@ -71,11 +72,8 @@ class Categoria extends \yii\db\ActiveRecord {
         ];
     }
 
-    public function val_nom($attribute, $params) {
-        $cant = $this->find()
-                ->where(['id_deporte' => $this->id_deporte])
-                ->andWhere(['nombre_categoria' => $this->nombre_categoria])
-                ->count();
+    public function val_nom($attribute) {
+        $cant = $this->find()->where(['id_deporte' => $this->id_deporte])->andWhere(['nombre_categoria' => $this->nombre_categoria])->count();
         if ($cant != 0) {
             $this->addError($attribute, "El nobre de categoria seleccionado existe en ese deporte");
             return true;
@@ -83,13 +81,10 @@ class Categoria extends \yii\db\ActiveRecord {
         return false;
     }
 
-    public function val_nommodif($attribute, $params) {
+    public function val_nommodif($attribute) {
         $nombre = $this->findOne($this->id_categoria);
         if ($nombre->nombre_categoria != $this->nombre_categoria) {
-            $cant = $this->find()
-                    ->where(['id_deporte' => $this->id_deporte])
-                    ->andWhere(['nombre_categoria' => $this->nombre_categoria])
-                    ->count();
+            $cant = $this->find()->where(['id_deporte' => $this->id_deporte])->andWhere(['nombre_categoria' => $this->nombre_categoria])->count();
             if ($cant != 0) {
                 $this->addError($attribute, "El nobre de categoria seleccionado existe en ese deporte");
                 return true;
@@ -140,28 +135,17 @@ class Categoria extends \yii\db\ActiveRecord {
         return $this->hasMany(Deportista::className(), ['dni' => 'dni'])->viaTable('deportista_categoria', ['id_categoria' => 'id_categoria']);
     }
 
-    /**
-     * get lista de deportes para lista desplegable
-     */
-    public static function getDeporteLista() {
-        $droptions = Deporte::find()->all();
-        return ArrayHelper::map($droptions, 'id_deporte', 'nombre_deporte');
-    }
-
     public static function getCategoriasLista() {
-        $droptions = Categoria::find()->all();
-        return ArrayHelper::map($droptions, 'id_categoria', 'nombre_categoria');
+        return ArrayHelper::map(Categoria::find()->all(), 'id_categoria', 'nombre_categoria');
     }
 
     /**
      * get lista de profesores para lista desplegable
      */
     public static function getProfesorLista() {
-        return ArrayHelper::map(Profesor::find()
-                                ->select(["profesor.dni,concat(persona.apellido,', ',persona.nombre) nombre"])
+        return ArrayHelper::map(Profesor::find()->select(["profesor.dni,concat(persona.apellido,', ',persona.nombre) nombre"])
                                 ->from('persona,profesor')
-                                ->where("persona.dni=profesor.dni")
-                                ->all(), 'dni', 'nombre');
+                                ->where("persona.dni=profesor.dni")->all(), 'dni', 'nombre');
     }
 
 }

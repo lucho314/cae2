@@ -5,6 +5,7 @@
 use yii\helpers\Html;
 use app\assets\AppAsset;
 use yii\helpers\Url;
+use app\models\Deporte;
 use yii\bootstrap\NavBar;
 
 AppAsset::register($this);
@@ -24,10 +25,10 @@ AppAsset::register($this);
             $(document).ready(main);
 
             var contador = 1;
+            var aux = 1;
 
             function main() {
                 $('.menu_movil').click(function () {
-                    // $('nav').toggle(); Forma Sencilla de aparecer y desaparecer
 
                     if (contador == 1) {
                         $('aside').animate({
@@ -39,8 +40,24 @@ AppAsset::register($this);
                         $('aside').animate({
                             left: '-100%'
                         });
-                    };
+                    }
+                    ;
+                });
 
+                $('.cat').click(function () {
+                    if (aux == 1) {
+                        $('section').animate({
+                            left: '0'
+                        });
+                        aux = 0;
+                        
+                    } else {
+                        $('section').animate({
+                            left: '-100%'
+                        });
+                        aux = 1;
+                    }
+                    ;
                 });
 
                 // Mostramos y ocultamos submenus
@@ -61,7 +78,7 @@ AppAsset::register($this);
             <div class="row">
                 <header class="col-xs-12 cabecera">
                     <img src="../web/imagenes/cae.png" class="logo">
-                    <a href="<?=Url::toRoute("usuario/admin")?>"><h1>CAE: Club Atlético Estudiante</h1></a>
+                    <a href="<?= Url::toRoute("usuario/admin") ?>"><h1>CAE: Club Atlético Estudiante</h1></a>
                 </header>
                 <header class="col-xs-12 menu_movil">
                     <div class="row">
@@ -71,14 +88,9 @@ AppAsset::register($this);
                 <aside class="col-xs-12 col-md-2 menu">
                     <ul class="container-fluid">
                         <li class="row"><a href="<?= Url::toRoute("deporte/buscar") ?>"><span class="glyphicon glyphicon-globe"></span>Deportes</a></li>
-                        <li class="row"><a href="<?= Url::toRoute("categoria/buscar") ?>"><span class="glyphicon glyphicon-folder-open"></span>Categorias</a></li>
+                        <li class="row cat"><a href="javascript:void(0);"><span class="glyphicon glyphicon-folder-open"></span>Categorias<span class="glyphicon glyphicon-menu-right"></span></a></li>
                         <li class="row"><a href="<?= Url::toRoute("usuario/buscar") ?>"><span class="glyphicon glyphicon-user"></span>Usuarios</a></li>
-                        <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-user"></span>Deportistas<span class="glyphicon glyphicon-menu-down"></span></a>
-                            <ul class="children">
-                                <li><a href="<?= Url::toRoute("deportista/crear") ?>"><span class="glyphicon glyphicon-plus"></span>Alta</a></li>
-                                <li><a href="<?= Url::toRoute("deportista/buscar") ?>"><span class="glyphicon glyphicon-search"></span>Buscar</a></li>
-                            </ul>
-                        </li>
+                        <li class="row"><a href="<?= Url::toRoute("deportista/buscar") ?>"><span class="glyphicon glyphicon-user"></span>Deportistas</a></li>
                         <li class="row"><a href="<?= Url::toRoute("evento/buscar") ?>"><span class="glyphicon glyphicon-calendar"></span>Eventos</a></li>
                         <li class="row"><a href="<?= Url::toRoute("comision/buscar") ?>"><span class="glyphicon glyphicon-time"></span>Horarios</a></li>
                         <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-user"></span>Mi Cuenta<span class="glyphicon glyphicon-menu-down"></span></a>
@@ -93,6 +105,18 @@ AppAsset::register($this);
                         <li class="row"><a href="<?= Url::toRoute("usuario/logout") ?>" data-method="post"><span class="glyphicon glyphicon-off"></span>Cerrar Sesion</a></li>
                     </ul>		
                 </aside>
+                
+                <section>
+                    <ul>
+                        <li class="cat"><a href="javascript:void(0);"><span class="glyphicon glyphicon-remove"></span>Cerrar</a></li>
+                        <?php
+                           $deportes=Deporte::find()->asArray()->all();
+                           foreach($deportes as $val):
+                        ?>
+                        <li ><a href="<?=Url::toRoute(['categoria/buscar','id'=>$val['id_deporte']])?>"><span class="glyphicon glyphicon-tag"></span><?=$val['nombre_deporte']?></a></li>
+                        <?php endforeach;?>
+                    </ul>
+                </section>
                 <?= $content ?>
             </div>
         </div>
