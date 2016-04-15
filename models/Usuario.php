@@ -46,6 +46,7 @@ class Usuario extends \app\models\Persona {
             ['conf_cont', 'compare', 'compareAttribute' => 'contrasenia', 'message' => 'Las contraseñas no coinciden', 'on' => self::SCENARIO_NUEVO],
             ['nombre_usuario', 'usuario_existe', 'on' => self::SCENARIO_NUEVO],
             ['nombre_usuario', 'usuario_existeM', 'on' => self::SCENARIO_MODIFICAR],
+            ['email', 'email_modificado', 'on'=>self::SCENARIO_DATOS]
         ]);
     }
 
@@ -107,6 +108,20 @@ class Usuario extends \app\models\Persona {
         if ($table->count() != 0) {
             $this->addError($attribute, "El nobre de usuario seleccionado existe");
             return true;
+        }
+        return false;
+    }
+    
+    public function  email_modificado($attribute)
+    {
+        $usuario =  Persona::findOne($this->dni);
+        if ($usuario->email != $this->email) {
+            $table =Persona::find()->where(['email' => $this->email]);
+
+            if ($table->count() != 0) {
+                $this->addError($attribute, "El nobre de usuario seleccionado existe");
+                return true;
+            }
         }
         return false;
     }

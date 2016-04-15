@@ -24,7 +24,7 @@ class Persona extends \yii\db\ActiveRecord {
      * @inheritdoc
      */
     public $nombre, $apellido, $domicilio, $telefono;
-
+     const SCENARIO_NUEVO = 'nuevo';
     public static function tableName() {
         return 'persona';
     }
@@ -43,7 +43,8 @@ class Persona extends \yii\db\ActiveRecord {
             ['apellido', 'match', 'pattern' => "/^.{1,30}$/", 'message' => 'Ah superado el maximo de 30 caracteres'],
             ['email', 'match', 'pattern' => "/^.{1,30}$/", 'message' => 'Ah superado el maximo de 30 caracteres'],
             ['domicilio', 'match', 'pattern' => "/^[0-9a-z\s]+$/i", 'message' => 'Sólo se aceptan letras y números'],
-            ['dni', 'dni_existe'],['email', 'email_existe']
+            ['dni', 'dni_existe'],['email', 'email_existe','on'=>self::SCENARIO_NUEVO],
+            ['email', 'email']
         ];
     }
 

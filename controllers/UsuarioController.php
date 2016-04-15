@@ -219,6 +219,7 @@ class UsuarioController extends Controller {
     public function actionModificar() {
         $this->layout = "mainadmin";
         $model = $this->findModel($id = Yii::$app->user->identity->id);
+        $model->scenario=  Usuario::SCENARIO_MODIFICAR;
         $msg = null;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -233,6 +234,7 @@ class UsuarioController extends Controller {
     public function actionModifica($id = null) {
         $this->layout = "mainadmin";
         $model = $this->findModel($id);
+        $model->scenario=  Usuario::SCENARIO_DATOS;
         $msg = null;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;

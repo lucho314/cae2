@@ -96,7 +96,7 @@ class ProfesorController extends Controller {
                     $transaction->rollBack();
                     throw $e;
                 }
-                return $this->redirect('usuario/nuevo');
+                return $this->redirect(['usuario/nuevo']);
             }
         }
         return $this->renderAjax('nuevo', ['model' => $model]);
