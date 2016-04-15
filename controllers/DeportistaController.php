@@ -66,13 +66,13 @@ class DeportistaController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id) {
+    public function actionInformacion($dni) {
         $this->layout = "mainadmin";
         $info = Deportista::find()
                 ->select(['persona.dni,id_planilla,numero_socio,email,nombre,apellido,telefono,'
                     . 'domicilio,YEAR(CURDATE())-YEAR(fecha_nac)as edad'])
                 ->innerJoin("persona", 'persona.dni=deportista.dni')
-                ->where(['deportista.dni' => $id])
+                ->where(['deportista.dni' => $dni])
                 ->one();
         if (empty($info)) {
             throw new NotFoundHttpException('The requested page does not exist.');
