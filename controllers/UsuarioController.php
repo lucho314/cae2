@@ -30,9 +30,9 @@ class UsuarioController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'admin', 'profesor', 'subcomision', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'modifica', 'modificarcuenta'],
+                'only' => ['index', 'admin', 'profesor', 'subcomision', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'modifica', 'modificarcuenta','buscar'],
                 'rules' => [
-                    ['actions' => ['index', 'admin', 'modifica', 'profesor', 'subcomision', 'login', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'logout', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
+                    ['actions' => ['buscar','index', 'admin', 'modifica', 'profesor', 'subcomision', 'login', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'logout', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserAdmin(Yii::$app->user->identity->id);
                 }],
                     ['actions' => ['profesor', 'modificar', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
@@ -217,7 +217,7 @@ class UsuarioController extends Controller {
     }
 
     public function actionModificar() {
-        $this->layout = "mainadmin";
+        $this->layout = menu();
         $model = $this->findModel($id = Yii::$app->user->identity->id);
         $model->scenario=  Usuario::SCENARIO_MODIFICAR;
         $msg = null;
