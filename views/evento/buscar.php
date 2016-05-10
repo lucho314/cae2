@@ -65,14 +65,14 @@ $this->title = 'SGD CAE: Buscar Evento';
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                    <h4 class="modal-title">Eliminar <?= $row["nombre"] ?></h4>
+                                                    <h4 class="modal-title">Eliminar Evento</h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     <p>¿Desea eliminar el evento <?= $row['nombre'] ?>?</p>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <?= Html::beginForm(Url::toRoute("deporte/eliminar"), "POST") ?>
-                                                    <input type="hidden" name="deporte" value="<?= $row['id_deporte'] ?>">
+                                                    <?= Html::beginForm(Url::toRoute("evento/eliminar"), "POST") ?>
+                                                    <input type="hidden" name="id_evento" value="<?= $row['id_evento'] ?>">
                                                     <button type="submit" class="btn btn-danger">Eliminar</button>
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                                                     <?= Html::endForm() ?>

@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "comision".
  *
@@ -31,13 +29,14 @@ class Comision extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['dia', 'hora_inicio', 'hora_fin', 'id_categoria', 'nombre_comision'], 'required'],
-            [['hora_inicio', 'hora_fin'], 'safe'],
-            ['hora_inicio','compare','compareAttribute' => 'hora_fin','operator' => '<='],
+            [['hora_inicio', 'hora_fin'],'match','pattern'=>"/^([0-1]+[0-9]|[2]+[0-4])+:+[0-5]+[0-9]$|^([0-1]+[0-9]|[2]+[0-4])+:+[0-5]+[0-9]+:[0][0]$/",'message'=>'Hora no valida.'],
+            ['hora_fin','compare','compareAttribute' => 'hora_inicio','operator' => '>='],
             ['id_categoria','match', 'pattern' =>'/^[0-9]$|^[0-9]+[0-9]$/'],
             ['dia', 'match', 'pattern' => "/^[a-záéíóúñ\s]+$/i"],
             ['dia','match','pattern'=>"/^.{5,10}$/"],
-            ['nombre_comision', 'match', 'pattern' => "/^[0-9a-záéíóúñ\s]+$/i",'message' => 'Sólo se aceptan letras y números'],
-            ['nombre_comision','match','pattern'=>"/^.{5,20}$/"]
+            ['nombre_comision', 'match', 'pattern' => "/^[0-9a-záéíóúñ\s]+$/i",'message' => 'Sólo se aceptan letras y números.'],
+            ['nombre_comision','match','pattern'=>"/^.{1,20}$/",'message'=>'Ah superado el maximo de 20 caracteres.'],
+            [['hora_fin'],'validarcomision']
         ];
     }
 
@@ -47,7 +46,7 @@ class Comision extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id_comision' => 'Comisión',
-            'dia' => 'Dia',
+            'dia' => 'Día',
             'hora_inicio' => 'Hora Inicio',
             'hora_fin' => 'Hora Fin',
             'id_categoria' => 'Categoria',
@@ -75,5 +74,19 @@ class Comision extends \yii\db\ActiveRecord {
         }
         return $opciones;
     }
+    
+    public function validarcomision($attribute){
+        $tabla=  Comision::find()->where(['id_categoria'=>  $this->id_categoria])
+                ->andWhere(['dia'=>  $this->dia])
+                ->andWhere(['hora_inicio'=>  $this->hora_inicio])
+                ->andWhere(['hora_fin'=>  $this->hora_fin]);
+        if($tabla->count()!=0){
+            $this->addError($attribute,'Ya existe una practica con estos datos.');
+            return true;
+        }
+        return false;
+    }
+    
+   
 
 }

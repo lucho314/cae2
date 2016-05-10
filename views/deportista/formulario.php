@@ -62,14 +62,14 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
 
                     <div class="form-group">
                         <label for="ingresar fecha nacimiento">Fecha de Nacimiento:</label>
-                        <?= $form->field($model, "fecha_nac")->input("date", ["placeholder" => "Fecha de Nacimiento", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($model, "fecha_nac")->input("text", ["placeholder" => "Fecha de Nacimiento eje: 01/01/1950", "class" => "form-control"])->label(false) ?>
                     </div>
                 </div>	
                 <div class="col-xs-12 col-md-6">
 
                     <div class="form-group">
                         <label for="ingresar telefono del deportista">Telefono:</label>
-                        <?= $form->field($model, "telefono")->input("number", ["placeholder" => "Telefono eje:3434678950", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($model, "telefono")->input("number", ["placeholder" => "Telefono eje: 3434678950", "class" => "form-control"])->label(false) ?>
                     </div>
                     <div class="form-group">
                         <label for="ingresar email del deportista">Email:</label>
@@ -93,7 +93,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
 
                     <div class="form-group">
                         <label for="ingresar número de socio">Número de Socio:</label>
-                        <?= $form->field($model, "numero_socio")->input("number", ["placeholder" => "Número de Socio", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($model, "numero_socio")->input("text", ["placeholder" => "Número de Socio", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <a href="javascript:cambiar(2)"  class="btn btn-default" style="float:right;" id="go_paso_b">Continuar<span class="glyphicon glyphicon-chevron-right"></span></a>
@@ -110,7 +110,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label>                       
                             <?= $form->field($planilla, "medicamento")->radioList($a, ['onclick' => 'activar_desactivar("desc_medicamento","Planilla[medicamento]")', 'style' => 'display:inline;', 'separator' => ' '])->label(false) ?> 
                         </label>                    
-                        <?= $form->field($planilla, "desc_medicamento")->input("text", ['id' => 'desc_medicamento', "disabled" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_medicamento")->input("text", ['id' => 'desc_medicamento', "readOnly" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
@@ -118,7 +118,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label>                       
                             <?= $form->field($planilla, "alergia")->radioList($a, ['onclick' => 'activar_desactivar("desc_alergia","Planilla[alergia]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_alergia")->input("text", ['id' => 'desc_alergia', "disabled" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_alergia")->input("text", ['id' => 'desc_alergia', "readOnly" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
@@ -126,7 +126,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label>                       
                             <?= $form->field($planilla, "enf_cardiologica")->radioList($a, ['onclick' => 'activar_desactivar("desc_cardiologica","Planilla[enf_cardiologica]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_cardiologia")->input("text", ['id' => 'desc_cardiologica', "disabled" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_cardiologia")->input("text", ['id' => 'desc_cardiologica', "readOnly" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
@@ -134,7 +134,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label>                       
                             <?= $form->field($planilla, "asma")->radioList($a, ['onclick' => 'activar_desactivar("desc_asma","Planilla[asma]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_asma")->input("text", ['id' => 'desc_asma', "disabled" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_asma")->input("text", ['id' => 'desc_asma', "readOnly" => "true", "placeholder" => "¿Cuales?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
@@ -142,7 +142,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label>                       
                             <?= $form->field($planilla, "convulsiones")->radioList($a, ['onclick' => 'activar_desactivar("ultima_convulsion","Planilla[convulsiones]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "ultima_convulsion")->input("text", ['id' => 'ultima_convulsion', "disabled" => "true", "placeholder" => "¿Ultima vez?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "ultima_convulsion")->input("text", ['id' => 'ultima_convulsion', "readOnly" => "true", "placeholder" => "¿Ultima vez?", "class" => "form-control"])->label(false) ?>
                     </div>
                     <div class="form-group">
                         <label for="trastornos hemorragicos">Trastornos Hemorragicos:</label>
@@ -158,7 +158,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label>                       
                             <?= $form->field($planilla, "diabetes")->radioList($a, ['onclick' => 'activar_desactivar("desc_diabetes","Planilla[diabetes]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_diabetes")->input("text", ['id' => 'desc_diabetes', "disabled" => "true", "placeholder" => "¿Cual?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_diabetes")->input("text", ['id' => 'desc_diabetes', "readOnly" => "true", "placeholder" => "¿Cual?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
@@ -166,7 +166,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label>                       
                             <?= $form->field($planilla, "tratamiento")->radioList($a, ['onclick' => 'activar_desactivar("desc_tratamiento","Planilla[tratamiento]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_tratamiento")->input("text", ['id' => 'desc_tratamiento', "disabled" => "true", "placeholder" => "¿Cual?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_tratamiento")->input("text", ['id' => 'desc_tratamiento', "readOnly" => "true", "placeholder" => "¿Cual?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
@@ -174,7 +174,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label>                       
                             <?= $form->field($planilla, "internaciones")->radioList($a, ['onclick' => 'activar_desactivar("desc_internacion","Planilla[internaciones]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "desc_internacion")->input("text", ['id' => 'desc_internacion', "disabled" => "true", "placeholder" => "¿Porque?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "desc_internacion")->input("text", ['id' => 'desc_internacion', "readOnly" => "true", "placeholder" => "¿Porque?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">
@@ -182,7 +182,7 @@ $deporte = ArrayHelper::map(Deporte::find()->all(), 'id_deporte', 'nombre_deport
                         <label>                       
                             <?= $form->field($planilla, "fuma")->radioList($a, ['onclick' => 'activar_desactivar("cuanto_fuma","Planilla[fuma]")', 'style' => 'display:inline', 'separator' => ' '])->label(false) ?> 
                         </label>
-                        <?= $form->field($planilla, "cuanto_fuma")->input("text", ['id' => 'cuanto_fuma', "disabled" => "true", "placeholder" => "¿Cuanto Fuma?", "class" => "form-control"])->label(false) ?>
+                        <?= $form->field($planilla, "cuanto_fuma")->input("text", ['id' => 'cuanto_fuma', "readOnly" => "true", "placeholder" => "¿Cuanto Fuma?", "class" => "form-control"])->label(false) ?>
                     </div>
 
                     <div class="form-group">

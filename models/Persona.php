@@ -24,7 +24,9 @@ class Persona extends \yii\db\ActiveRecord {
      * @inheritdoc
      */
     public $nombre, $apellido, $domicilio, $telefono;
-     const SCENARIO_NUEVO = 'nuevo';
+
+    const SCENARIO_NUEVO = 'nuevo';
+
     public static function tableName() {
         return 'persona';
     }
@@ -34,16 +36,16 @@ class Persona extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['dni', 'telefono', 'email', 'nombre', 'apellido', 'domicilio'], 'required'],
-            [['dni','telefono'], 'match','pattern' => "/^[0-9]$|^[0-9]+[0-9]$/" ,"message"=>'Solo números enteros'],
-            ['telefono', 'match', 'pattern' => "/^.{10,10}$/", 'message' => 'Numero de telefono incorrecto'],
+            [['dni', 'nombre', 'apellido', 'domicilio'], 'required'],
+            [['dni', 'telefono'], 'match', 'pattern' => "/^[0-9]$|^[0-9]+[0-9]$/", "message" => 'Solo se aceptan números.'],
+            ['telefono', 'match', 'pattern' => "/^.{10,10}$/", 'message' => 'Número de telefono incorrecto.'],
             [['nombre', 'apellido'], 'match', 'pattern' => "/^[a-záéíóúñ\s]+$/i", 'message' => 'Sólo se aceptan letras'],
             ['domicilio', 'match', 'pattern' => "/^.{1,50}$/", 'message' => 'Ah superado el maximo de 50 caracteres'],
             ['nombre', 'match', 'pattern' => "/^.{1,20}$/", 'message' => 'Ah superado el maximo de 20 caracteres'],
             ['apellido', 'match', 'pattern' => "/^.{1,30}$/", 'message' => 'Ah superado el maximo de 30 caracteres'],
             ['email', 'match', 'pattern' => "/^.{1,30}$/", 'message' => 'Ah superado el maximo de 30 caracteres'],
-            ['domicilio', 'match', 'pattern' => "/^[0-9a-z\s]+$/i", 'message' => 'Sólo se aceptan letras y números'],
-            ['dni', 'dni_existe'],['email', 'email_existe','on'=>self::SCENARIO_NUEVO],
+            ['domicilio', 'match', 'pattern' => "/^[0-9a-záéíóúñ\s]+$/i", 'message' => 'Sólo se aceptan letras y números'],
+            ['dni', 'dni_existe'], ['email', 'email_existe', 'on' => self::SCENARIO_NUEVO],
             ['email', 'email']
         ];
     }

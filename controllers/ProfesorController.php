@@ -7,7 +7,6 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\Profesor;
-use app\models\ProfesorBuscar;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -40,31 +39,6 @@ class ProfesorController extends Controller {
             ],
             'verbs' => ['class' => VerbFilter::className(), 'actions' => ['logout' => ['post']]]
         ];
-    }
-
-    /**
-     * Lists all Profesor models.
-     * @return mixed
-     */
-    public function actionIndex() {
-        $searchModel = new ProfesorBuscar();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Profesor model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id) {
-        return $this->render('view', [
-                    'model' => $this->findModel($id),
-        ]);
     }
 
     /**
@@ -102,23 +76,6 @@ class ProfesorController extends Controller {
         return $this->renderAjax('nuevo', ['model' => $model]);
     }
 
-    /**
-     * Updates an existing Profesor model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id) {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->dni]);
-        } else {
-            return $this->render('update', [
-                        'model' => $model,
-            ]);
-        }
-    }
 
 
     /**
@@ -139,8 +96,7 @@ class ProfesorController extends Controller {
                     ->one();
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('La pagina requerida no existe.');
         }
     }
-
 }

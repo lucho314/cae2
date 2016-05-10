@@ -2,7 +2,7 @@
 <article class="row col-xs-12 col-md-8">
     <div class="col-xs-12">
         <h1>Bienvenido  <?= $nombre ?></h1>
-        <h3> Sistema de administracion deportiva CAE</h3>
+        <h3> Sistema de administración deportiva C.A.E.</h3>
     </div>
 
 </article>

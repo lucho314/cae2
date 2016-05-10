@@ -2,7 +2,6 @@
 
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 $this->title = 'SGD CAE:' . $titulo;
 ?>
@@ -22,7 +21,7 @@ $this->title = 'SGD CAE:' . $titulo;
         <div class="col-xs-12 col-md-3">
             <div class="form-group">
                 <label for="ingresar nombre">Nombre:</label>
-                <?= $form->field($model, "nombre_comision")->input("text", ['placeholder' => "Nombre de la Comision", 'autofocus' => true])->label(false) ?>
+                <?= $form->field($model, "nombre_comision")->input("text", ['placeholder' => "Nombre de la Practica", 'autofocus' => true])->label(false) ?>
             </div>
         </div>
 
@@ -46,21 +45,18 @@ $this->title = 'SGD CAE:' . $titulo;
         <div class="col-xs-12 col-md-2">
             <div class="form-group">
                 <label for="ingresar hora inicio">Hora de Inicio:</label>
-                <?= $form->field($model, 'hora_inicio')->input("text", ['class' => "form-control"])->label(false) ?>
+                <?= $form->field($model, 'hora_inicio')->input("text", ['class' => "form-control", 'placeholder' => "Ej: 00:00"])->label(false) ?>
             </div>
         </div>
 
         <div class="col-xs-12 col-md-2">
             <div class="form-group">
                 <label for="ingresar hora fin">Hora de Fin</label>
-                <?= $form->field($model, 'hora_fin')->input("text", ['class' => "form-control"])->label(false) ?>
+                <?= $form->field($model, 'hora_fin')->input("text", ['class' => "form-control", 'placeholder' => "Ej: 00:00"])->label(false) ?>
             </div>   
         </div>
         <div class="col-xs-12 col-md-3" style="float:right;">
-            <div class="botones">
-                <a href="<?= Url::toRoute("comision/buscar") ?>" class="btn btn-default" style='float:right; margin-left: 4px;'>Cancelar</a>
-                <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'style' => 'float:right;']) ?>
-            </div>  
+            <?= Html::submitButton($model->isNewRecord ? 'Crear' : 'Modificar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'style' => 'float:right;']) ?>
         </div>
     </div>
     <?php $form->end() ?>

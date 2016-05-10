@@ -16,12 +16,13 @@ use app\models\Convocados;
 use app\models\Deporte;
 use yii\filters\AccessControl;
 use app\models\User;
+use app\models\Validar;
 
 require 'Imprimir.php';
 
-include_once '../models/Tipo_de_menu.php';
-
 class EventoController extends Controller {
+
+    private $msg = null;
 
     public function behaviors() {
         return [
@@ -29,45 +30,25 @@ class EventoController extends Controller {
                 'class' => AccessControl::className(),
                 'only' => ['crear', 'buscar', 'eliminar', 'clista', 'agregar', 'quitar', 'conflista', 'verlista', 'modif_agregar', 'modificarlista', 'imprimir'],
                 'rules' => [
-                    [
-                        'actions' => ['crear', 'buscar', 'eliminar', 'clista', 'agregar', 'quitar', 'conflista', 'verlista', 'modif_agregar', 'modificarlista', 'imprimir'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                    ['actions' => ['crear', 'buscar', 'eliminar', 'clista', 'agregar', 'quitar', 'conflista', 'verlista', 'modif_agregar', 'modificarlista', 'imprimir'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserAdmin(Yii::$app->user->identity->id);
-                }
-                    ],
-                    [
-                        'actions' => ['crear', 'buscar', 'eliminar', 'clista', 'agregar', 'quitar', 'conflista', 'verlista', 'modif_agregar', 'modificarlista', 'imprimir'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                }],
+                    ['actions' => ['crear', 'buscar', 'eliminar', 'clista', 'agregar', 'quitar', 'conflista', 'verlista', 'modif_agregar', 'modificarlista', 'imprimir'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserProfe(Yii::$app->user->identity->id);
-                }
-                    ],
-                    [
-                        'actions' => ['buscar'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
+                }],
+                    ['actions' => ['crear','modificar','eliminar','buscar'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserSubcomision(Yii::$app->user->identity->id);
-                }
-                    ]
+                }]
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+            'verbs' => ['class' => VerbFilter::className(), 'actions' => ['logout' => ['post']]]
         ];
     }
 
     public function actionCrear($msg = null) {
-        $this->layout = menu();
+        $this->layout = Validar::menu();
         $model = new Evento;
-        unset($_SESSION['dni'],$_SESSION['id_evento'],$_SESSION['deporte']);
+        unset($_SESSION['dni'], $_SESSION['id_evento'], $_SESSION['deporte']);
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
@@ -80,12 +61,6 @@ class EventoController extends Controller {
                         $_SESSION['id_evento'] = Yii::$app->db->getLastInsertID('evento');
                         $model->id_deporte = null;
                         $this->redirect(["evento/clista"]);
-                        foreach ($model as $clave => $valor) {
-                            $model->$clave = null;
-                        }
-                    }
-                    foreach ($model as $clave => $valor) {
-                        $model->$clave = null;
                     }
                 } else {
                     $msg = "No se pudo registrar Clase";
@@ -95,18 +70,15 @@ class EventoController extends Controller {
             }
         }
         $profesor = ArrayHelper::map(Yii::$app->db->createCommand("select nombre,dni from vprof_per")->queryAll(), 'dni', 'nombre');
-
         return $this->render("formulario", ['titulo' => 'Crear Evento', 'model' => $model, 'msg' => $msg, "profesor" => $profesor, "deporte" => Deporte::getListadeporte()]);
     }
 
     public function actionBuscar($msg = null) {
-        $this->layout = menu();
-
+        $this->layout = Validar::menu();
         if (!isset($form)) {
             $form = new ValidarBusqueda;
         }
         $search = $search_desde = $search_hasta = null;
-
         if ($form->load(Yii::$app->request->get())) {
             if ($form->validate()) {
                 $search = Html::encode($form->q);
@@ -135,16 +107,13 @@ class EventoController extends Controller {
         }
         $count = clone $table;
         $pages = new Pagination(["pageSize" => 10, "totalCount" => $count->count()]);
-        $model = $table
-                ->offset($pages->offset)
-                ->limit($pages->limit)
-                ->all();
+        $model = $table->offset($pages->offset)->limit($pages->limit)->all();
         return $this->render("buscar", ['msg' => $msg, "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
     }
 
-    public function actionModificar($id_evento = null) {
-        $this->layout = menu();
-        if (preg_match("/^[0-9]+$/", $id_evento)) {
+    public function actionModificar($id_evento) {
+        $this->layout = Validar::menu();
+        if (Validar::num_positivo($id_evento)) {
             $model = Evento::findOne($id_evento);
             $convocados = $model->convocados;
             if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
@@ -157,25 +126,33 @@ class EventoController extends Controller {
                         if ($convocados != $model->convocados && $model->convocados) {
                             $this->render("convocados");
                         }
-                        $msg = "Evento modificado con exito";
+                        $this->msg = "Evento modificado con exito";
                         $this->redirect(['buscar', 'msg' => $msg]);
                     } else {
-                        $msg = "Error al modificar";
+                        $$this->msg = "Error al modificar";
                     }
                 } else {
                     $model->getErrors();
                 }
             }
-            $msg = null;
             $profesor = ArrayHelper::map(Yii::$app->db->createCommand("select nombre,dni from vprof_per")->queryAll(), 'dni', 'nombre');
-            return $this->render("formulario", ['convocado' => $convocados, 'titulo' => 'Modificar Evento', 'model' => $model, 'msg' => $msg, "profesor" => $profesor, 'deporte' => $model->getListadeporte()]);
+            return $this->render("formulario", ['convocado' => $convocados, 'titulo' => 'Modificar Evento', 'model' => $model, 'msg' => $this->msg, "profesor" => $profesor, 'deporte' => $model->getListadeporte()]);
         } else {
             $this->redirect(['buscar']);
         }
     }
 
+    public function actionEliminar() {
+        if (Validar::num_positivo($_POST['id_evento'])) {
+            if (Evento::deleteAll($_POST['id_evento'])) {
+                //$msg="Evento eliminado con exito";
+            }
+        }
+        $this->redirect(['evento/buscar']);
+    }
+
     public function actionClista() {
-        $this->layout = menu();
+        $this->layout = Validar::menu();
         $msg = null;
         $convocados = null;
         if (isset($_SESSION['deporte'])) {
@@ -214,14 +191,14 @@ class EventoController extends Controller {
 
     function actionConflista() {
         $dni = implode(",", $_SESSION['dni']);
-        $evento=$_SESSION['id_evento'];
+        $evento = $_SESSION['id_evento'];
         $sql = "INSERT INTO convocados (id_evento, dni,nombre) SELECT $evento ,dni,nombre FROM persona WHERE dni in ($dni)";
         Yii::$app->db->createCommand($sql)->execute();
         $this->redirect(["crear"]);
     }
 
     public function actionVerlista($id_evento, $id_deporte) {
-        $this->layout = menu();
+        $this->layout = Validar::menu();
         if (isset($_SESSION['dni'])) {
             unset($_SESSION['dni']);
         }
@@ -238,7 +215,7 @@ class EventoController extends Controller {
     }
 
     public function actionModif_agregar() {
-        $this->layout = menu();
+        $this->layout = Validar::menu();
         $deporte = $_SESSION['id_deporte'];
         $sql = "select nombre, dni,nombre_categoria from vdep_cat where id_deporte=$deporte";
         if (!isset($_SESSION['dni'])) {
@@ -252,8 +229,7 @@ class EventoController extends Controller {
     }
 
     public function actionModificarlista($sacar = null) {
-        $this->layout = menu();
-        $msg = null;
+        $this->layout = Validar::menu();
         $id_evento = $_SESSION['id_evento'];
         $id_deporte = $_SESSION['id_deporte'];
         $connection = \Yii::$app->db;
@@ -309,7 +285,7 @@ class EventoController extends Controller {
 
     public static function evento(&$eventos) {
         $evento = Evento::find()->where("fecha_inicio>=CURDATE()");
-        if ($ev = $evento->count() != 0) {
+        if ($evento->count() != 0) {
             $eventos = $evento->all();
             return true;
         }

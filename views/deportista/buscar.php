@@ -11,7 +11,7 @@ $this->title = 'SGD CAE: Buscar Deportista';
     <div class="row" style="margin-top: 5px;">
         <?php
         $f = ActiveForm::begin([
-                    "method" => "post",
+                    "method" => "get",
                     "action" => Url::toRoute("deportista/buscar"),
                     "enableClientValidation" => true,
         ]);
@@ -71,7 +71,7 @@ $this->title = 'SGD CAE: Buscar Deportista';
                                                 <div class="modal-footer">
                                                     <?= Html::beginForm(Url::toRoute("deportista/eliminar"), "POST") ?>
                                                         <input type="hidden" name="dni" value="<?= $row['dni'] ?>">
-                                                        <button type="submit" class="btn btn-primary">Eliminar</button>
+                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                                                     <?= Html::endForm() ?>
                                                 </div>

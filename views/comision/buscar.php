@@ -64,10 +64,10 @@ $this->title = 'SGD CAE: Buscar Practica';
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                                    <h4 class="modal-title">Eliminar Comisión</h4>
+                                                    <h4 class="modal-title">Eliminar Practica</h4>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <p>¿Realmente deseas eliminar la comisión <?= $row["nombre_comision"] ?>?</p>
+                                                    <p>¿Realmente deseas eliminar la practica <?= $row["nombre_comision"] ?>?</p>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <?= Html::beginForm(Url::toRoute("comision/eliminar"), "POST") ?>

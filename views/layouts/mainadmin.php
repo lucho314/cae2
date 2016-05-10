@@ -78,7 +78,7 @@ AppAsset::register($this);
             <div class="row">
                 <header class="col-xs-12 cabecera">
                     <img src="../web/imagenes/cae.png" class="logo">
-                    <a href="<?= Url::toRoute("usuario/admin") ?>"><h1>CAE: Club Atlético Estudiante</h1></a>
+                    <a href="<?= Url::toRoute("usuario/admin") ?>"><h1>C.A.E.: Club Atlético Estudiante</h1></a>
                 </header>
                 <header class="col-xs-12 menu_movil">
                     <div class="row">

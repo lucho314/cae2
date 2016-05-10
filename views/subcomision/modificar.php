@@ -44,8 +44,14 @@ $this->title = 'SGD CAE: Modificar Usuario';
                 <label for="ingresar email">E-mail:</label>
                 <?= $form->field($model, "email")->input("email", ["placeholder" => "Email", "class" => "form-control"])->label(false) ?>   
             </div>
-            <input type="submit" value="Modificar" class="btn btn-primary" style="float: right;">
+            <div class="form-group">
+                <label for="seleccione un deporte">Deporte:</label>
+                <?= $form->field($sub, 'id_deporte')->dropDownList($deporte, ['prompt' => 'Seleccione Deporte'])->label(false) ?>
+            </div>
+            <div class="botones">
+                <input type="submit" value="Modificar" class="btn btn-primary">
+            </div>
         </div>
     </div>
-    <?php $form->end() ?>
 </article>
+

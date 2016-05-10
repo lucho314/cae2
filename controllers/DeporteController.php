@@ -21,6 +21,7 @@ use app\models\Validar;
 class DeporteController extends Controller {
 
     public $layout = 'mainadmin';
+    private $msg = null;
 
     public function behaviors() {
         return [
@@ -49,19 +50,18 @@ class DeporteController extends Controller {
      * @return mixed
      */
     public function actionCrear() {
-        $msg = null;
         $model = new Deporte();
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->save()) {
-            $msg = "<div class='alert alert-info' role='contentinfo'>
+            $this->msg = "<div class='alert alert-info' role='contentinfo'>
                 <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
                 <span class='sr-only'>Error:</span>
                Deporte registrado con exito </div>";
         }
-        return $this->render('formulario', ['model' => new Deporte(), 'msg' => $msg, 'titulo' => 'Crear Deporte']);
+        return $this->render('formulario', ['model' => new Deporte(), 'msg' => $this->msg, 'titulo' => 'Crear Deporte']);
     }
 
     /**
@@ -75,7 +75,6 @@ class DeporteController extends Controller {
             return $this->redirect("deporte/buscar");
         }
         $model = Deporte::findOne($id);
-        $msg = null;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
@@ -87,12 +86,12 @@ class DeporteController extends Controller {
                 } else {
                     $msg = "no se pudo modificar el deporte";
                 }
-                $this->redirect(["buscar", "msg" => $msg]);
+                $this->redirect(["buscar", "msg" => $this->msg]);
             } else {
                 $model->getErrors();
             }
         }
-        return $this->render("formulario", ["model" => $model, "msg" => $msg, 'titulo' => 'Modificar Deporte']);
+        return $this->render("formulario", ["model" => $model, "msg" => $this->msg, 'titulo' => 'Modificar Deporte']);
     }
 
     /**
@@ -102,14 +101,14 @@ class DeporteController extends Controller {
      * @return mixed
      */
     public function actionEliminar() {
-        $msg = "Deporte no eliminado.";
+        $this->msg = "Deporte no eliminado.";
         if (isset($_POST['deporte']) && Validar::num_positivo($_POST['deporte'])) {
             $model = Deporte::findOne($_POST['deporte']);
             if ($model->delete()) {
-                $msg = "Deporte Eliminado con exito.";
+                $this->msg = "Deporte Eliminado con exito.";
             }
         }
-        return $this->redirect(['buscar', 'msg' => $msg]);
+        return $this->redirect(['buscar', 'msg' => $this->msg]);
     }
 
     public function actionInfodeporte($id) {
@@ -122,7 +121,7 @@ class DeporteController extends Controller {
         return $this->render("info", ['datos' => $datos]);
     }
 
-    public function actionBuscar($msg = null) {
+    public function actionBuscar() {
         $form = new ValidarBusqueda;
         $search = null;
         $table = Deporte::find();
@@ -137,7 +136,7 @@ class DeporteController extends Controller {
         $count = clone $table;
         $pages = new Pagination(["pageSize" => 10, "totalCount" => $count->count()]);
         $model = $table->offset($pages->offset)->limit($pages->limit)->all();
-        return $this->render("buscar", [ "pages" => $pages, "model" => $model, "form" => $form, "search" => $search, 'msg' => $msg]);
+        return $this->render("buscar", [ "pages" => $pages, "model" => $model, "form" => $form, "search" => $search, 'msg' => $this->msg]);
     }
 
     public function actionInfoprofesores($id) {
@@ -150,7 +149,6 @@ class DeporteController extends Controller {
     }
 
     public function actionInfocategoria($id) {
-        
         return $this->render("infocategoria", ['model' => CategoriaController::infocategoria($id)->all(), 'id' => $id]);
     }
 

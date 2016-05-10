@@ -11,50 +11,54 @@ $this->title = 'SGD CAE: Buscar usuario';
     <div class="row" style="margin-top: 5px;">
         <?php
         $f = ActiveForm::begin([
-                "method" => "get",
-                "action" => Url::toRoute("usuario/buscar"),
-                "enableClientValidation" => true]);
+                    "method" => "get",
+                    "action" => Url::toRoute("usuario/buscar"),
+                    "enableClientValidation" => true]);
         ?>
-
         <div class="col-xs-10 col-md-5">
             <label>Buscar:</label>
             <div class="input-group">
-                <?= $f->field($form, "q")->input("search", ['class' => 'form-control', 'placeholder' => 'DNI o Nombre de Usuario', 'style' => "margin-top:-10px;",'autofocus'=>true])->label(false) ?>
+                <?= $f->field($form, "q")->input("search", ['class' => 'form-control', 'placeholder' => 'DNI o Nombre de Usuario', 'style' => "margin-top:-10px;", 'autofocus' => true])->label(false) ?>
                 <span class="input-group-btn">
                     <?= Html::submitButton("Buscar", ["class" => "btn btn-default"]) ?>
                 </span>
             </div>
         </div>
         <div class="col-xs-2">
-            <a href="<?=Url::toRoute("usuario/nuevo")?>" class="btn btn-success" style="margin-top:29px;">Nuevo</a>
+            <a href="<?= Url::toRoute("usuario/nuevo") ?>" class="btn btn-success" style="margin-top:29px;">Nuevo</a>
         </div>
         <?php $f->end() ?> 
     </div>
     <hr>
-
     <div class="row">
         <div class="col-xs-12">
             <h3>Lista de Usuarios:</h3>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped table-condensed">
                     <thead Style="background-color:#4682B4; color:white;">
-                        <th>DNI</th>
-                        <th>Nombre de usuario</th>
-                        <th>Privilegio</th>
-                        <th>Información</th>
-                        <th>¿Modificar?</th>
-                        <th>¿Eliminar?</th>
-                        <th>Resetear</th>
+                    <th>DNI</th>
+                    <th>Nombre de usuario</th>
+                    <th>Privilegio</th>
+                    <th>Información</th>
+                    <th>¿Modificar?</th>
+                    <th>¿Eliminar?</th>
+                    <th>Resetear</th>
                     </thead>
                     <tbody>
                         <?php foreach ($model as $row): ?>
                             <tr>
-                                <td><?= $row->dni ?></td>
+                                <td><?= $row['dni'] ?></td>
                                 <td><?= $row['nombre_usuario'] ?></td>
                                 <td><?= $row['privilegio'] ?> </td>
                                 </td>
                                 <td><a href="<?= Url::toRoute(["usuario/ver", "id" => $row['dni']]) ?>">Ver</a></td>                                
-                                <td><a href="<?= Url::toRoute(["usuario/modifica", "id" => $row['dni']]) ?>">Editar</a></td>
+                                <td>
+                                    <?php if ($row['privilegio'] == 'subcomision') { ?>
+                                        <a href="<?= Url::toRoute(["subcomision/modificar", "id" => $row['dni']]) ?>">Editar</a>
+                                    <?php } else { ?>
+                                        <a href="<?= Url::toRoute(["usuario/modifica", "id" => $row['dni']]) ?>">Editar</a>
+                                    <?php } ?>
+                                </td>
                                 <td>
                                     <a href="#" data-toggle="modal" data-target="#dni<?= $row['dni'] ?>">Eliminar</a>
                                     <div class="modal fade" role="dialog" aria-hidden="true" id="dni<?= $row["dni"] ?>">

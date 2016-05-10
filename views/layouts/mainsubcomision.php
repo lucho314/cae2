@@ -67,7 +67,7 @@ AppAsset::register($this);
             <div class="row">
                 <header class="col-xs-12 cabecera">
                     <img src="../web/imagenes/cae.png" class="logo">
-                    <h1>CAE: Club Atlético Estudiante</h1>
+                    <a href="<?= Url::toRoute("usuario/index")?>"><h1>C.A.E.: Club Atlético Estudiante</h1></a>
                 </header>
                 <header class="col-xs-12 menu_movil">
                     <div class="row">
@@ -76,13 +76,8 @@ AppAsset::register($this);
                 </header>
                 <aside class="col-xs-12 col-sm-3 col-md-2 menu">
                     <ul class="container-fluid">
-                        <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-calendar"></span>Eventos<span class="glyphicon glyphicon-menu-down"></span></a>
-                            <ul class="children">
-                                <li><a href=""><span class="glyphicon glyphicon-plus"></span>Alta</a></li>
-                                <li><a href=""><span class="glyphicon glyphicon-search"></span>Buscar</a></li>
-                            </ul>
-                        </li>
-                        <li class="row"><a href=""><span class="glyphicon glyphicon-user"></span>Profesores</a></li>
+                        <li class="row"><a href="<?= Url::toRoute("evento/buscar")?>"><span class="glyphicon glyphicon-calendar"></span>Eventos</a></li>
+                        <li class="row"><a href="<?= Url::toRoute("subcomision/mostrarprof")?>"><span class="glyphicon glyphicon-user"></span>Profesores</a></li>
                         <li class="row submenu"><a href="javascript:void(0);"><span class="glyphicon glyphicon-user"></span>Mi Cuenta<span class="glyphicon glyphicon-menu-down"></span></a>
                             <ul class="children">
                                 <li><a href="<?= Url::toRoute("usuario/modificarcuenta") ?>" ><span class="glyphicon glyphicon-lock"></span>Contraseña</a></li>

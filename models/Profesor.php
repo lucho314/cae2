@@ -15,88 +15,42 @@ namespace app\models;
  * @property ProfesorDeporte[] $profesorDeportes
  * @property Deporte[] $idDeportes
  */
-class Profesor extends \app\models\Usuario
-{
+class Profesor extends \app\models\Usuario {
+
     /**
      * @inheritdoc
      */
     public $deportes;
-    public static function tableName()
-    {
+    public $email;
+
+    public static function tableName() {
         return 'profesor';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return ['deportes', 'required'];
     }
 
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'dni' => 'DNI',
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategorias()
-    {
-        return $this->hasMany(Categoria::className(), ['id_profesor_titular' => 'dni']);
+    public static function lista_prof_por_deporte() {
+        if (($id = SubComision::mi_id_deporte()) != null) {
+            return Profesor::find()->select("nombre,apellido,telefono,email")
+                            ->from("persona,profesor_deporte")
+                            ->where("persona.dni=profesor_deporte.dni")
+                            ->andWhere(["profesor_deporte.id_deporte" => $id]);
+        }
+        return null;
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategorias0()
-    {
-        return $this->hasMany(Categoria::className(), ['id_profesor_suplente' => 'dni']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEventos()
-    {
-        return $this->hasMany(Evento::className(), ['id_profesor_titular' => 'dni']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEventos0()
-    {
-        return $this->hasMany(Evento::className(), ['id_profesor_suplente' => 'dni']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPersona()
-    {
-        return $this->hasOne(Persona::className(), ['dni' => 'dni']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProfesorDeportes()
-    {
-        return $this->hasMany(ProfesorDeporte::className(), ['dni' => 'dni']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getIdDeportes()
-    {
-        return $this->hasMany(Deporte::className(), ['id_deporte' => 'id_deporte'])->viaTable('profesor_deporte', ['dni' => 'dni']);
-    }
 }

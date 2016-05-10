@@ -4,7 +4,7 @@ $this->title = 'SGD CAE: Planilla Deportista';
 ?>
 <article class="col-xs-12 col-md-10">
     <h3>Planilla: 
-        <a href="<?= Url::toRoute(["deportista/imprimir", "id" => $planilla['id_planilla']]) ?>" style="color:white; font-size:16px; margin-left:50px;">
+        <a href="<?= Url::toRoute(["deportista/imprimir", "id" => $data['dni']]) ?>" style="color:white; font-size:16px; margin-left:50px;" target="_blank">
             <span class="glyphicon glyphicon-print"></span>
         </a>
     </h3>
@@ -16,7 +16,7 @@ $this->title = 'SGD CAE: Planilla Deportista';
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="2">Nombre y Apellido:<?=" ".$data['nya']?></td>
+                    <td colspan="2">Nombre y Apellido:<?=" ".$data['nombre']." ".$data["apellido"]?></td>
                     <td colspan="3">Domicilio:<?=" ".$data['domicilio']?></td>
                 </tr>
                 <tr>

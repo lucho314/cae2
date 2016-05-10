@@ -1,9 +1,7 @@
 <?php
 
 namespace app\models;
-
 use Yii;
-
 /**
  * This is the model class for table "sub_comision".
  *
@@ -13,7 +11,7 @@ use Yii;
  * @property Persona $dni0
  * @property Deporte $idDeporte
  */
-class SubComision extends \app\models\Persona
+class SubComision extends Usuario
 {
     /**
      * @inheritdoc
@@ -50,4 +48,11 @@ class SubComision extends \app\models\Persona
     {
         return $this->hasOne(Deporte::className(), ['id_deporte' => 'id_deporte']);
     }
+    
+    public static function mi_id_deporte(){
+        /*return Subc->find()->select("select id_deporte")
+                    ->from("sub_comision")
+                    ->where(["dni"=>Yii::$app->user->identity->id]);*/
+    }
+    
 }

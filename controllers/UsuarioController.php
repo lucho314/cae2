@@ -5,7 +5,6 @@ namespace app\controllers;
 use Yii;
 use app\models\Usuario;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use yii\web\Response;
@@ -17,28 +16,27 @@ use yii\filters\AccessControl;
 use app\models\User;
 use app\models\Validar;
 
-include_once '../models/Tipo_de_menu.php';
-
 /**
  * UsuarioController implements the CRUD actions for Usuario model.
  */
 class UsuarioController extends Controller {
 
     public $layout;
+    private $msg = null;
 
     public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'admin', 'profesor', 'subcomision', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'modifica', 'modificarcuenta','buscar'],
+                'only' => ['index', 'admin', 'profesor', 'subcomision', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'modifica', 'modificarcuenta'],
                 'rules' => [
-                    ['actions' => ['buscar','index', 'admin', 'modifica', 'profesor', 'subcomision', 'login', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'logout', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
+                    ['actions' => ['index', 'admin', 'modifica', 'profesor', 'subcomision', 'login', 'nuevo', 'view', 'createadmin', 'eliminar', 'modificar', 'logout', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserAdmin(Yii::$app->user->identity->id);
                 }],
                     ['actions' => ['profesor', 'modificar', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserProfe(Yii::$app->user->identity->id);
                 }],
-                    ['actions' => ['index', 'modificar', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
+                    ['actions' => ['subcomision','index', 'modificar', 'modificarcuenta'], 'allow' => true, 'roles' => ['@'], 'matchCallback' => function () {
                     return User::isUserSubcomision(Yii::$app->user->identity->id);
                 }]
                 ],
@@ -113,13 +111,13 @@ class UsuarioController extends Controller {
     }
 
     public function actionNuevo() {
-        $this->layout = "mainadmin";
+        $this->layout = 'mainadmin';
         return $this->render("nuevo_usuario");
     }
 
     public function actionVer($id) {
-        $this->layout = "mainadmin";
-        return $this->render('ver', ['model' => $this->findModel($id)]);
+        $this->layout = 'mainadmin';
+        return $this->render('ver', ['model' => Usuario::datos_usuario($id)]);
     }
 
     /**
@@ -127,7 +125,8 @@ class UsuarioController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCrear($msg = null) {
+    public function actionCrear() {
+        $this->layout = 'mainadmin';
         $model = new Usuario();
         $model->scenario = Usuario::SCENARIO_NUEVO;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
@@ -146,15 +145,15 @@ class UsuarioController extends Controller {
                 $connection->createCommand($sql1)->execute();
                 $connection->createCommand($sql2)->execute();
                 $transaction->commit();
-                $msg = "Registracion realizada con exito";
+                $this->msg = "Registracion realizada con exito";
             } catch (\Exception $e) {
-                $msg = "Registracion no realizada";
+                $this->msg = "Registracion no realizada";
                 $transaction->rollBack();
                 throw $e;
             }
             return $this->redirect(['nuevo']);
         }
-        return $this->renderAjax('nuevo_admin', ['model' => $model, 'msg' => $msg]);
+        return $this->renderAjax('nuevo_admin', ['model' => $model, 'msg' => $this->msg]);
     }
 
     /**
@@ -164,40 +163,19 @@ class UsuarioController extends Controller {
      * @return mixed
      */
     public function actionEliminar() {
-        //$msg='Usuario no eliminado';
+        //$this->msg='Usuario no eliminado';
         if (Validar::num_positivo($_POST['dni'])) {
             $model = Usuario::findOne($_POST['dni']);
             if ($model->delete()) {
-                //$msg='Usuario eliminado con exito';
+                //$this->msg='Usuario eliminado con exito';
             }
         }
         $this->redirect('usuario/buscar');
     }
 
-    /**
-     * Finds the Usuario model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Usuario the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id) {
-        if (Validar::num_positivo($id)) {
-            $model = Usuario::find()
-                    ->select('persona.*,nombre_usuario,privilegio')
-                    ->from('persona,usuario')
-                    ->where('persona.dni=usuario.dni')
-                    ->andWhere(['usuario.dni' => $id])
-                    ->one();
-            return $model;
-        } else {
-            throw new NotFoundHttpException('La pagina requerida no existe.');
-        }
-    }
-
     public function actionBuscar() {
-        $this->layout = "mainadmin";
-        $search=null;
+        $this->layout = 'mainadmin';
+        $search = null;
         $form = new ValidarBusqueda;
         $table = Usuario::find();
         if ($form->load(Yii::$app->request->get())) {
@@ -217,33 +195,40 @@ class UsuarioController extends Controller {
     }
 
     public function actionModificar() {
-        $this->layout = menu();
-        $model = $this->findModel($id = Yii::$app->user->identity->id);
-        $model->scenario=  Usuario::SCENARIO_MODIFICAR;
-        $msg = null;
+        $this->layout = Validar::menu();
+        $model = Usuario::datos_usuario(Yii::$app->user->identity->id);
+        $model->scenario = Usuario::SCENARIO_DATOS;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
         if ($model->load(Yii::$app->request->post())) {
-            Yii::$app->db->createCommand("update persona set nombre='$model->nombre', apellido='$model->apellido',email='$model->email',telefono='$model->telefono',domicilio='$model->domicilio' where dni=$model->dni")->execute();
+            Yii::$app->db->createCommand("update persona set nombre='$model->nombre', apellido='$model->apellido', email='$model->email', telefono='$model->telefono', domicilio='$model->domicilio' where dni=$model->dni")->execute();
+            Yii::$app->db->createCommand("update usuario set email='$model->email'  where dni=$model->dni")->execute();
+            $model = Usuario::datos_usuario(Yii::$app->user->identity->id);
+            $this->msg="Datos Modificados.";
         }
-        return $this->render("modificar_usuario", ['msg' => $msg, 'model' => $model]);
+        return $this->render("modificar_usuario", ['msg' => $this->msg, 'model' => $model]);
     }
 
-    public function actionModifica($id = null) {
+    public function actionModifica($id) {
         $this->layout = "mainadmin";
-        $model = $this->findModel($id);
-        $model->scenario=  Usuario::SCENARIO_DATOS;
-        $msg = null;
-        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
+        if (Validar::num_positivo($id)) {
+            $model = Usuario::datos_usuario($id);
+            $model->scenario = Usuario::SCENARIO_DATOS;
+            if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+            }
+            if ($model->load(Yii::$app->request->post())) {
+                Yii::$app->db->createCommand("update persona set nombre='$model->nombre', apellido='$model->apellido',email='$model->email',telefono='$model->telefono',domicilio='$model->domicilio' where dni=$model->dni")->execute();
+                Yii::$app->db->createCommand("update usuario set email='$model->email' where dni=$model->dni")->execute();
+                $model = Usuario::datos_usuario($model->dni);
+            } else {
+                return $this->render("modificar_usuario", ['msg' => $this->msg, 'model' => $model]);
+            }
         }
-        if ($model->load(Yii::$app->request->post())) {
-            Yii::$app->db->createCommand("update persona set nombre='$model->nombre', apellido='$model->apellido',email='$model->email',telefono='$model->telefono',domicilio='$model->domicilio' where dni=$model->dni")->execute();
-        }
-        return $this->render("modificar_usuario", ['msg' => $msg, 'model' => $model]);
+        return $this->redirect(['usuario/buscar']);
     }
 
     public function actionLogout() {
@@ -252,8 +237,7 @@ class UsuarioController extends Controller {
     }
 
     public function actionModificarcuenta() {
-        $msg = null;
-        $this->layout = menu();
+        $this->layout = Validar::menu();
         $model = Usuario::findOne(Yii::$app->user->identity->id);
         $model->scenario = Usuario::SCENARIO_MODIFICAR;
         $model->contrasenia = null;
@@ -269,7 +253,9 @@ class UsuarioController extends Controller {
                 }
             }
         }
-        return $this->render("modificar_cuenta", ['model' => $model, 'msg' => $msg]);
+        return $this->render("modificar_cuenta", ['model' => $model, 'msg' => null]);
     }
 
 }
+
+        

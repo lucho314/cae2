@@ -1,7 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 $nota = ['4' => 'Muy Bueno', '3' => 'Bueno', '2' => 'Regular', '1' => 'Malo'];
@@ -20,7 +19,6 @@ Html::beginForm(
     <h3>Asistencia:</h3>
     <?= $msg ?>
     <hr>
-
     <div class="table-responsive">
         <table class="table table-bordered table-striped table-condensed">
             <thead Style="background-color:#4682B4; color:white;">

@@ -62,11 +62,8 @@ $form = ActiveForm::begin([
             <label for="ingresar confirmacion contraseña">Confirmar:</label>
             <?= $form->field($model, "conf_cont")->input("password", ["placeholder" => "Contraseña", "class" => "form-control"])->label(false) ?>   
         </div>
-
-        <div class="botones">
-            <input type="submit" value="Crear" class="btn btn-success">
-            <a href="<?=Url::toRoute("usuario/buscar")?>" class="btn btn-default">Cancelar</a>
-        </div>
+        
+        <input type="submit" value="Crear" class="btn btn-success" style="float: right;">
     </div>
 </div>
 <?php $form->end() ?>

@@ -32,7 +32,7 @@ $this->title = 'SGD CAE: Informacion Deportista';
             ?>
             <div class="form-group"><label>Deportes: </label><?= $deportes ?></div>
             <div class="form-group"><label>Categorias: </label><?= $categorias ?></div>
-            <a href="<?= Url::toRoute(["deportista/planilla", 'id' => $informacion['id_planilla']]) ?>" id="ver_planilla">
+            <a href="<?= Url::toRoute(["deportista/planilla",'id'=> $informacion['dni']]) ?>" id="ver_planilla">
                 <span class="glyphicon glyphicon-file"></span>Planilla Medica
             </a>
         </div>

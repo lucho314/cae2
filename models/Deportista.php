@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "deportista".
  *
@@ -29,8 +27,8 @@ class Deportista extends \app\models\Persona {
     public $deporte;
     public $categoria;
     public $NyA;
-    public $email;
     public $edad;
+    public $email;
 
     public static function tableName() {
         return 'deportista';
@@ -42,20 +40,19 @@ class Deportista extends \app\models\Persona {
     public function rules() {
         return array_merge(parent::rules(), [
             ['file', 'file',
-                'skipOnEmpty' => false,
-                'uploadRequired' => 'No has seleccionado ningún archivo', //Error
+                'skipOnEmpty' => TRUE,
                 'maxSize' => 1024 * 1024 * 1, //1 MB
                 'tooBig' => 'El tamaño máximo permitido es 1MB', //Error
-                'minSize' => 10, //10 Bytes
-                'tooSmall' => 'El tamaño mínimo permitido son 10 BYTES', //Error
+                'minSize' => 0, //10 Bytes
                 'extensions' => 'JPG',
                 'wrongExtension' => 'El archivo {file} no contiene una extensión permitida {extensions}', //Error
                 'maxFiles' => 4,
                 'tooMany' => 'El máximo de archivos permitidos son {limit}', //Error
             ],
-            [['numero_socio'], 'required'],
-            [['numero_socio'], 'integer'],
-            [['fecha_nac'], 'safe']
+            ['numero_socio', 'required'],
+            ['numero_socio', 'match', 'pattern' => "/^[0-9a-záéíóúñ]+$/", 'message' => "Número de Socio no Valido."],
+            ['numero_socio', 'match', 'pattern' => "/^.{1,7}$/", 'message' => "Ah superado el maximo de 6 caracteres."],
+            ['fecha_nac', 'match', 'pattern'=>"/^([0]+[1-9]|[1-2]+[0-9]|[3]+[0-1])+\/+([0]+[1-9]|[1]+[0-2])+\/+([1]+[9]+[5-9]|[2-9]+[0-9]+[0-9])+[0-9]$/i",'message' => "Fecha de Nacimiento no valida."],
         ]);
     }
 
@@ -64,10 +61,10 @@ class Deportista extends \app\models\Persona {
      */
     public function attributeLabels() {
         return [
-            'dni' => 'Dni',
-            'id_planilla' => 'Id Planilla',
-            'numero_socio' => 'Numero Socio',
-            'fecha_nac' => 'Fecha Nac',
+            'dni' => 'DNI',
+            'id_planilla' => '',
+            'numero_socio' => 'Número Socio',
+            'fecha_nac' => 'Fecha Nac.',
         ];
     }
 
@@ -120,4 +117,10 @@ class Deportista extends \app\models\Persona {
         return $this->hasMany(Categoria::className(), ['id_categoria' => 'id_categoria'])->viaTable('deportista_categoria', ['dni' => 'dni']);
     }
 
+    public static function datos_deportista($id){
+        return Deportista::find()->select("nombre,apellido,domicilio,telefono,email,persona.dni,numero_socio,fecha_nac,id_planilla")
+                           ->from("persona,deportista")
+                           ->where("persona.dni=deportista.dni")
+                           ->andWhere(["deportista.dni"=>$id])->one();
+    }
 }

@@ -1,7 +1,6 @@
 <?php
 
 use yii\widgets\ActiveForm;
-use yii\helpers\Url;
 
 $this->title = 'SGD CAE: Nueva Subcomisión';
 ?>
@@ -67,10 +66,7 @@ $form = ActiveForm::begin([
             <?= $form->field($sub, 'id_deporte')->dropDownList($deporte, ['prompt' => 'Seleccione Deporte'])->label(false) ?>
         </div>
 
-        <div class="botones">
-            <input type="submit" value="Crear" class="btn btn-success">
-            <a href="<?=Url::toRoute("usuario/buscar")?>" class="btn btn-default">Cancelar</a>
-        </div>
+        <input type="submit" value="Crear" class="btn btn-success" style="float: right;">
     </div>
 </div>
 <?php $form->end() ?>

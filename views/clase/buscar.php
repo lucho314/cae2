@@ -16,7 +16,7 @@ $this->title = 'SGD CAE: Buscar Asistencia';
                     "enableClientValidation" => true,
         ]);
         ?>
-        <div class="col-xs-12 col-md-5">
+        <div class="col-xs-10 col-md-5">
             <label for="buscar deporte">Buscar:</label>
             <div class="input-group">
                 <?= $f->field($form, "x")->input("date", ['class' => "form-control", 'autofocus' => true, 'style' => "margin-top:-10px;"])->label(false) ?>
@@ -26,6 +26,9 @@ $this->title = 'SGD CAE: Buscar Asistencia';
             </div>
         </div>
         <?php $f->end() ?> 
+        <div class="col-xs-2 col-md-5">
+            <a href="<?= Url::toRoute("clase/crear")?>" class="btn btn-success" style="margin-top:29px;">Nueva</a>
+        </div>
     </div>
     <hr>
     <div class="row">

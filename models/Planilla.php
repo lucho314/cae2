@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "planilla".
  *
@@ -51,21 +49,39 @@ class Planilla extends \yii\db\ActiveRecord {
         return 'planilla';
     }
 
+    public $medicamento = 'no';
+    public $alergia = 'no';
+    public $anemia = 'no';
+    public $enf_cardiologica = 'no';
+    public $asma = 'no';
+    public $presion = 'normal';
+    public $convulsiones = 'no';
+    public $trastornos_hemorragicos = 'no';
+    public $fuma = 'no';
+    public $diabetes = 'no';
+    public $tratamiento = 'no';
+    public $internaciones = 'no';
+
     /**
      * @inheritdoc
      */
     public function rules() {
         return [
-            [['grupo_sanguineo', 'medico_cabecera', 'obra_social',  'observaciones', 'medicamento', 'anemia', 'alergia', 'enf_cardiologica',
-            'asma', 'convulsiones', 'fuma', 'trastornos_hemorragicos',
-            'diabetes', 'presion', 'tratamiento'], 'required'],
-            [['medico_cabecera', 'grupo_sanguineo', 'obra_social', 'desc_medicamento', 'desc_alergia', 'desc_cardiologia', 'desc_asma', 'ultima_convulsion', 'desc_diabetes', 'desc_tratamiento', 'desc_internacion', 'nombreyapellido1', 'domicilio1', 'nombreyapellido2', 'domicilio2', 'observaciones'], 'string'],
-            [['medico_cabecera', 'grupo_sanguineo', 'obra_social', 'desc_medicamento', 'desc_alergia', 'desc_cardiologia', 'desc_asma', 'ultima_convulsion', 'desc_diabetes', 'desc_tratamiento', 'desc_internacion'], 'match', 'pattern' => "/^.{3,20}$/", 'message' => 'Mínimo 3 y máximo 30 caracteres'],
-            [['cuanto_fuma'], 'integer'],
-            [['medicamento', 'alergia', 'anemia', 'enf_cardiologica', 'asma', 'convulsiones', 'trastornos_hemorragicos', 'fuma', 'diabetes', 'tratamiento', 'internaciones'], 'string', 'max' => 2],
-            [['presion'], 'string', 'max' => 6],
-            [['telefono1', 'telefono2'], 'string', 'max' => 20],
-            ];
+            [['nombreyapellido1', 'telefono1', 'domicilio1', 'grupo_sanguineo'], 'required'],
+            [['nombreyapellido1', 'nombreyapellido2'], 'match', 'pattern' => "/^[a-záéíóúñ\s]+$/i", 'message' => "Solo se aceptan letras."],
+            [['nombreyapellido1', 'nombreyapellido2'], 'match', 'pattern' => "/^.{1,50}$/", 'message' => 'Ah superado el maximo de 50 caracteres.'],
+            [['telefono1', 'telefono2', 'cuanto_fuma'], 'match', 'pattern' => "/^[0-9]$|^[0-9]+[0-9]$/", 'message' => 'Solo se aceptan números'],
+            [['telefono1', 'telefono2'], 'match', 'pattern' => "/^.{10,10}$/", 'message' => 'Número de telefono incorrecto.'],
+            [['domicilio1', 'domicilio1'], 'match', 'pattern' => "/^[0-9a-záéíóúñ\s]+$/i", 'message' => 'Solo se aceptan números y letras.'],
+            [['domicilio1', 'domicilio1'], 'match', 'pattern' => "/^.{1,100}$/", 'message' => 'Ah superado el maximo de 100 caracteres.'],
+            ['observaciones', 'match', 'pattern' => '/^[0-9a-záéí.;,óúñ\s]+$/i', 'message' => 'Solo se aceptan números, letras y (, ; .).'],
+            ['observaciones', 'match', 'pattern' => '/^.{1,1000}$/', 'message' => 'Ah superado el maximo de 1000 caracteres.'],
+            ['grupo_sanguineo','validar_grupoSanguineo'],
+            [['medicamento','alergia','anemia','enf_cardiologica','asma','convulsiones','trastornos_hemorragicos','fuma','diabetes','tratamiento','internaciones'],'match','pattern' => '/^(no|si)$/'],
+            [['desc_medicamento','desc_alergia','desc_cardiologia','desc_asma','ultima_convulsion','desc_diabetes','desc_tratamiento','desc_internacion'],'match','pattern' => "/^[0-9a-záéíóúñ\s]+$/i",'message'=>'Solo se aceptan números y letras.'],
+            [['desc_medicamento','desc_alergia','desc_cardiologia','desc_asma','ultima_convulsion','desc_diabetes','desc_tratamiento','desc_internacion'],'match','pattern' => "/^.{1,50}/", 'message' => "Ah superado el maximo de 50 caracteres."],
+            ['presion','match', 'pattern' => "/^(baja|normal|alta)$/"]
+        ];
     }
 
     /**
@@ -73,19 +89,19 @@ class Planilla extends \yii\db\ActiveRecord {
      */
     public function attributeLabels() {
         return [
-            'id_planilla' => 'Id Planilla',
+            'id_planilla' => '',
             'medico_cabecera' => 'Medico Cabecera',
             'grupo_sanguineo' => 'Grupo Sanguineo',
             'obra_social' => 'Obra Social',
             'medicamento' => 'Medicamento',
-            'desc_medicamento' => 'Desc Medicamento',
+            'desc_medicamento' => 'Descripción de Medicamento',
             'alergia' => 'Alergia',
-            'desc_alergia' => 'Desc Alergia',
+            'desc_alergia' => 'Descripción de la Alergia',
             'anemia' => 'Anemia',
-            'enf_cardiologica' => 'Enf Cardiologica',
-            'desc_cardiologia' => 'Desc Cardiologia',
+            'enf_cardiologica' => 'Enfermedad Cardiologica',
+            'desc_cardiologia' => 'Descripcion de enfermedad Cardiologia',
             'asma' => 'Asma',
-            'desc_asma' => 'Desc Asma',
+            'desc_asma' => 'Descripción del Asma',
             'presion' => 'Presion',
             'convulsiones' => 'Convulsiones',
             'ultima_convulsion' => 'Ultima Convulsion',
@@ -93,17 +109,17 @@ class Planilla extends \yii\db\ActiveRecord {
             'fuma' => 'Fuma',
             'cuanto_fuma' => 'Cuanto Fuma',
             'diabetes' => 'Diabetes',
-            'desc_diabetes' => 'Desc Diabetes',
+            'desc_diabetes' => 'Descripción de la Diabetes',
             'tratamiento' => 'Tratamiento',
-            'desc_tratamiento' => 'Desc Tratamiento',
+            'desc_tratamiento' => 'Descripción del Tratamiento',
             'internaciones' => 'Internaciones',
-            'desc_internacion' => 'Desc Internacion',
-            'nombreyapellido1' => 'Nombreyapellido1',
-            'domicilio1' => 'Domicilio1',
-            'telefono1' => 'Telefono1',
-            'nombreyapellido2' => 'Nombreyapellido2',
-            'domicilio2' => 'Domicilio2',
-            'telefono2' => 'Telefono2',
+            'desc_internacion' => 'Descripción de la Internación',
+            'nombreyapellido1' => 'Contacto 1: Nombre y Apellido',
+            'domicilio1' => 'Contacto 1: Domicilio',
+            'telefono1' => 'Contacto 1: Telefono',
+            'nombreyapellido2' => 'Contacto 2: Nombre y Apellido',
+            'domicilio2' => 'Contacto 2: Domicilio',
+            'telefono2' => 'Contacto 2: Telefono',
             'observaciones' => 'Observaciones',
         ];
     }
@@ -113,6 +129,16 @@ class Planilla extends \yii\db\ActiveRecord {
      */
     public function getDeportistas() {
         return $this->hasOne(Deportista::className(), ['id_planilla' => 'id_planilla']);
+    }
+
+    public function validar_grupoSanguineo($attribute) {
+        $aux= Planilla::find()->select("codigo")->from("factor")
+                              ->where(["codigo"=>$this->grupo_sanguineo])->one();
+        if(count($aux)!=1){
+            $this->getErrors($attribute,"Grupo Sanguineo no valido.");
+            return false;
+        }
+        return true;
     }
 
 }

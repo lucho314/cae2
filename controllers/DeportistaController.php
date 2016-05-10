@@ -17,8 +17,8 @@ use yii\helpers\Html;
 use app\models\Planilla;
 use yii\filters\AccessControl;
 use app\models\User;
+use app\models\Validar;
 
-include_once '../models/Tipo_de_menu.php';
 require 'Imprimir.php';
 
 /**
@@ -47,23 +47,11 @@ class DeportistaController extends Controller {
         ];
     }
 
-    /**
-     * Lists all Deportista models.
-     * @return mixed
-     */
-    public function actionIndex() {
-        $searchModel = new Deportistab();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
-        ]);
-    }
+   
 
     /**
      * Displays a single Deportista model.
-     * @param integer $id
+     * @param integer $dni
      * @return mixed
      */
     public function actionInformacion($dni) {
@@ -75,7 +63,7 @@ class DeportistaController extends Controller {
                 ->where(['deportista.dni' => $dni])
                 ->one();
         if (empty($info)) {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('La Pagina Requerida no Existe.');
         }
         $info_deporte = $info->getDeportistaCategorias()->select('nombre_deporte,nombre_categoria')
                 ->innerJoin('categoria', 'categoria.id_categoria=deportista_categoria.id_categoria')
@@ -185,46 +173,14 @@ class DeportistaController extends Controller {
             return $this->render('modificar_deportista', ['model' => $model,'planilla' => $planilla,'msg' => $msg,'cant' => $cant]);
         }
     }
-
-    /**
-     * Deletes an existing Deportista model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id) {
-        $this->findModel($id)->delete();
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Deportista model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Deportista the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id) {
-        if (($model = Deportista::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
-
+    
     public function actionOpcion($id) {
-        $categorias = Categoria::find()
-                ->where(['id_deporte' => $id])
-                ->count();
-
-        $categori = Categoria::find()
-                ->where(['id_deporte' => $id])
-                ->all();
+        $categorias = Categoria::find()->where(['id_deporte' => $id])->count();
+        $categori = Categoria::find()->where(['id_deporte' => $id])->all();
 
         if ($categorias > 0) {
             foreach ($categori as $categoria) {
-
-                echo "<option value='" . $categoria->id_categoria . "'>" . $categoria->nombre_categoria . "</option>";
+                 echo "<option value='" . $categoria->id_categoria . "'>" . $categoria->nombre_categoria . "</option>";
             }
         } else {
             echo "<option>-</option>";
@@ -232,7 +188,7 @@ class DeportistaController extends Controller {
     }
 
     public function actionBuscar($opcion = null) {
-        $this->layout = menu();
+        $this->layout = Validar::menu();
         $form = new ValidarBusqueda;
         $search = null;
         $table = $this->sql_buscar($opcion);
@@ -241,21 +197,14 @@ class DeportistaController extends Controller {
                 $search = Html::encode($form->q);
                 $table->andWhere(['persona.dni' => $search])
                         ->orWhere(['LIKE', 'persona.nombre', $search])
-                        ->orWhere(['LIKE', 'persona.APELLIDO', $search]);
+                        ->orWhere(['LIKE', 'persona.apellido', $search]);
             } else {
                 $form->getErrors();
             }
         }
         $count = clone $table;
-        $pages = new Pagination([
-            "pageSize" => 10,
-            "totalCount" => $count->count(),
-        ]);
-        $model = $table
-                ->offset($pages->offset)
-                ->limit($pages->limit)
-                ->asArray()
-                ->all();
+        $pages = new Pagination(["pageSize" => 10,"totalCount" => $count->count()]);
+        $model = $table->offset($pages->offset)->limit($pages->limit)->asArray()->all();
         if (!empty($opcion)) {
             return $this->render('agregar', [ "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
         }
@@ -264,10 +213,10 @@ class DeportistaController extends Controller {
 
     /* Imprimir planilla con informacion del deportista pasado por parametro */
 
-    public function actionImprimir($id = null) {
+    public function actionImprimir($id) {
         $this->layout = "mainadmin";
         $pdf = new \Imprimirplanilla();
-        $data = $this->findModel($id);
+        $data = Deportista::datos_deportista($id);
         $planilla = Planilla::findOne($data['id_planilla']);
         $pdf->AddPage();
         $pdf->BasicTable($data, $planilla);
@@ -317,5 +266,13 @@ class DeportistaController extends Controller {
         session_start();
         $_SESSION['categoria'] = $_REQUEST['categoria'];
     }
-
+    
+    public function actionPlanilla($id){
+        $this->layout="mainadmin";
+        if(Validar::num_positivo($id)){
+            $deportista= Deportista::datos_deportista($id);
+            $planilla= Planilla::findOne($deportista['id_planilla']);
+            return $this->render("planilla",['data'=>$deportista,'planilla'=>$planilla]);
+        }
+    }
 }

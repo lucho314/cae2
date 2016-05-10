@@ -23,6 +23,7 @@ use app\models\Deporte;
 class CategoriaController extends Controller {
 
     public $layout = 'mainadmin';
+    private $msg=null;
 
     public function behaviors() {
         return [
@@ -51,7 +52,6 @@ class CategoriaController extends Controller {
     public function actionCrear() {
         $model = new Categoria();
         $model->scenario = Categoria::SCENARIO_NEW;
-        $msg = null;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
@@ -59,15 +59,15 @@ class CategoriaController extends Controller {
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate()) {
                 if ($model->insert()) {
-                    $msg = "Categoria registrada con exito.";
+                    $$this->msg = "Categoria registrada con exito.";
                 } else {
-                    $msg = "error";
+                    $this->msg = "error";
                 }
             } else {
                 $model->getErrors();
             }
         }
-        return $this->render('formulario', ['model' => new Categoria, 'msg' => $msg, 'profesor' => $model->getProfesorLista(), 'deporte' =>Deporte::getListadeporte(), 'titulo' => 'Crear Categoria']);
+        return $this->render('formulario', ['model' => new Categoria, 'msg' => $this->msg, 'profesor' => $model->getProfesorLista(), 'deporte' =>Deporte::getListadeporte(), 'titulo' => 'Crear Categoria']);
     }
 
     /**
@@ -77,7 +77,6 @@ class CategoriaController extends Controller {
      * @return mixed
      */
     public function actionModificar($id_categoria, $op = null) {
-        $msg = null;
         $model = Categoria::findOne($id_categoria);
         $model->scenario = Categoria::SCENARIO_UPDATE;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
@@ -86,15 +85,15 @@ class CategoriaController extends Controller {
         }
         if ($model->load(Yii::$app->request->post())) {
             if ($model->validate() && $model->save()) {
-                $msg = "Categoria Modificada con exito.";
+                $this->msg = "Categoria Modificada con exito.";
                 if ($op == 1) {
                     $this->redirect(['deporte/infocategoria', 'id' =>$model->id_deporte]);
                 } else {
-                    $this->redirect(['buscar', 'msg' => $msg,'id'=>$model->id_deporte]);
+                    $this->redirect(['buscar', 'msg' => $this->msg,'id'=>$model->id_deporte]);
                 }
             }
         }
-        return $this->render('formulario', ['model' => $model, 'msg' => $msg, 'profesor' => $model->getProfesorLista(), 'deporte' =>Deporte::getListadeporte(), 'titulo' => 'Modificar Categoria']);
+        return $this->render('formulario', ['model' => $model, 'msg' => $this->msg, 'profesor' => $model->getProfesorLista(), 'deporte' =>Deporte::getListadeporte(), 'titulo' => 'Modificar Categoria']);
     }
 
     /**
@@ -104,16 +103,15 @@ class CategoriaController extends Controller {
      * @return mixed
      */
     public function actionEliminar() {
-        $msg = null;
         if (isset($_POST["categoria"]) && Validar::num_positivo($_POST['categoria'])) {
             $model = Categoria::findOne($_POST["categoria"]);
             if ($model->delete()) {
-                $msg = "Categoria eliminada con exito.";
+                $this->msg = "Categoria eliminada con exito.";
             } else {
-                $msg = "Categoria no eliminada.";
+                $this->msg = "Categoria no eliminada.";
             }
         }
-        return $this->redirect(['buscar', 'msg' => $msg]);
+        return $this->redirect(['buscar', 'msg' => $this->msg]);
     }
 
     /**
@@ -135,7 +133,7 @@ class CategoriaController extends Controller {
       }
       } */
 
-    public function actionBuscar($id, $msg = null, $search = null) {
+    public function actionBuscar($id, $search = null) {
         $form = new ValidarBusqueda;
         $tabla = $this->infocategoria($id);
         if ($form->load(Yii::$app->request->get())) {
@@ -150,7 +148,7 @@ class CategoriaController extends Controller {
         $count = clone $tabla;
         $pages = new Pagination(["pageSize" => 10, "totalCount" => $count->count()]);
         $model = $tabla->asArray()->offset($pages->offset)->limit($pages->limit)->all();
-        return $this->render("buscar", ['id'=>$id,'msg' => $msg, "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
+        return $this->render("buscar", ['id'=>$id,'msg' => $this->msg, "pages" => $pages, "model" => $model, "form" => $form, "search" => $search]);
     }
 
     
